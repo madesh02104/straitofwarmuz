@@ -205,14 +205,16 @@ class GameState {
     if (Object.keys(this.players).length > 1 && allReady) {
       this.lobbyState = "active";
       this.startTime = Date.now();
+      for (const id in this.players) {
+        this.quizTimers[id] = this.startTime + 10000;
+      }
       return true;
     }
     return false;
   }
 
   scheduleNextQuiz(socketId) {
-    const delay = Math.floor(Math.random() * 10000) + 20000;
-    this.quizTimers[socketId] = Date.now() + delay;
+    this.quizTimers[socketId] = Date.now() + 10000;
   }
 
   getPhase(elapsed) {
