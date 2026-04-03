@@ -1,0 +1,92 @@
+[
+  {
+    "country": "USA",
+    "question": "Which of these cities is NOT a US capital?",
+    "options": ["Washington D.C.", "New York City", "Austin", "Sacramento"],
+    "answer": 1
+  },
+  {
+    "country": "USA",
+    "question": "What is the primary currency of the USA?",
+    "options": ["Pound", "Euro", "Dollar", "Yen"],
+    "answer": 2
+  },
+  {
+    "country": "USA",
+    "question": "Which ocean is on the East Coast of the United States?",
+    "options": ["Pacific", "Indian", "Arctic", "Atlantic"],
+    "answer": 3
+  },
+  {
+    "country": "China",
+    "question": "What is the capital of China?",
+    "options": ["Shanghai", "Beijing", "Guangzhou", "Shenzhen"],
+    "answer": 1
+  },
+  {
+    "country": "China",
+    "question": "What famous landmark was built to protect the northern borders of the Chinese Empire?",
+    "options": ["Terracotta Army", "Forbidden City", "Great Wall", "Temple of Heaven"],
+    "answer": 2
+  },
+  {
+    "country": "Russia",
+    "question": "What is the capital of Russia?",
+    "options": ["Saint Petersburg", "Moscow", "Novosibirsk", "Yekaterinburg"],
+    "answer": 1
+  },
+  {
+    "country": "Russia",
+    "question": "Which currency is used in Russia?",
+    "options": ["Ruble", "Euro", "Dollar", "Pound"],
+    "answer": 0
+  },
+  {
+    "country": "India",
+    "question": "What is the capital city of India?",
+    "options": ["Mumbai", "New Delhi", "Kolkata", "Chennai"],
+    "answer": 1
+  },
+  {
+    "country": "India",
+    "question": "Which river is considered highly sacred in India?",
+    "options": ["Yamuna", "Ganges", "Brahmaputra", "Indus"],
+    "answer": 1
+  },
+  {
+    "country": "UK",
+    "question": "What is the capital of the United Kingdom?",
+    "options": ["Edinburgh", "Cardiff", "Belfast", "London"],
+    "answer": 3
+  },
+  {
+    "country": "Germany",
+    "question": "What is the capital of Germany?",
+    "options": ["Munich", "Frankfurt", "Berlin", "Hamburg"],
+    "answer": 2
+  },
+  {
+    "country": "Japan",
+    "question": "What is the highest mountain in Japan?",
+    "options": ["Mount Kita", "Mount Tate", "Mount Yari", "Mount Fuji"],
+    "answer": 3
+  },
+  {
+    "country": "Brazil",
+    "question": "What is the official language of Brazil?",
+    "options": ["Spanish", "Portuguese", "French", "English"],
+    "answer": 1
+  },
+  {
+    "country": "France",
+    "question": "What famous tower is located in Paris?",
+    "options": ["Leaning Tower", "Eiffel Tower", "CN Tower", "Space Needle"],
+    "answer": 1
+  },
+  {
+    "country": "Australia",
+    "question": "What is the capital of Australia?",
+    "options": ["Sydney", "Melbourne", "Canberra", "Brisbane"],
+    "answer": 2
+  }
+]

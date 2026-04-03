@@ -1,0 +1,46 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Outfit:wght@400;700;900&display=swap');
+
+:root {
+  --bg-dark: #0d1117;
+  --panel-bg: rgba(22, 27, 34, 0.7);
+  --panel-border: rgba(255, 255, 255, 0.1);
+  --text-main: #f0f6fc;
+  --text-muted: #8b949e;
+  --accent-blue: #58a6ff;
+  --accent-green: #3fb950;
+  --accent-red: #f85149;
+  --accent-gold: #e3b341;
+  --font-main: 'Inter', sans-serif;
+  --font-display: 'Outfit', sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-main);
+  background-color: var(--bg-dark);
+  color: var(--text-main);
+  overflow: hidden; /* No scrollbars */
+  margin: 0;
+  padding: 0;
+  width: 100vw;
+  height: 100vh;
+}
+
+#root {
+  width: 100vw;
+  height: 100vh;
+  max-width: none;
+  margin: 0;
+  padding: 0;
+}
+
+.game-wrapper {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+}

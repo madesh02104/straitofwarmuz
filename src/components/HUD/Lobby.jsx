@@ -1,0 +1,70 @@
+import React from 'react';
+import { useGameStore } from '../../store/gameStore';
+import { CheckCircle, XCircle, Users, Globe, Shield } from 'lucide-react';
+
+export const Lobby = () => {
+  const { gameState, isReady, toggleReady, myCountry } = useGameStore();
+  const players = Object.values(gameState.players);
+  const me = players.find(p => p.country === myCountry);
+  const readyCount = players.filter(p => p.isReady).length;
+
+  return (
+    <div className="lobby-overlay">
+      <div className="lobby-content">
+        <div className="lobby-header">
+          <Globe className="lobby-icon" size={32} />
+          <h2>COMMAND CENTER LOBBY</h2>
+          <div className="lobby-stats">
+            <span>{players.length} / 6 OPERATIVES</span>
+            <div className="progress-bar-mini">
+               <div className="progress-fill-mini" style={{ width: `${(readyCount / 6) * 100}%` }}></div>
+            </div>
+          </div>
+        </div>
+
+        <div className="player-grid">
+          {Array.from({ length: 6 }).map((_, i) => {
+            const p = players[i];
+            return (
+              <div key={i} className={`player-slot ${p ? 'occupied' : 'empty'} ${p?.isReady ? 'ready' : ''}`}>
+                {p ? (
+                  <>
+                    <div className="player-avatar">
+                      <Shield size={24} color={'var(--accent-blue)'} />
+                    </div>
+                    <div className="player-info">
+                      <span className="p-name">{p.name} {p.socketId === useGameStore.getState().socket.id ? '(YOU)' : ''}</span>
+                      <span className="p-country">
+                        {p.socketId === useGameStore.getState().socket.id ? p.country : 'CLASSIFIED'}
+                      </span>
+                    </div>
+                    <div className="p-status">
+                      {p.isReady ? <CheckCircle size={20} color="var(--accent-green)" /> : <XCircle size={20} color="var(--accent-red)" />}
+                    </div>
+                  </>
+                ) : (
+                  <div className="waiting-placeholder">WAITING FOR OPERATIVE...</div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+
+        <div className="lobby-footer">
+          <div className="ready-status-box">
+             <label className="checkbox-container">
+               <input 
+                type="checkbox" 
+                checked={isReady} 
+                onChange={toggleReady} 
+               />
+               <span className="checkmark"></span>
+               SET STATUS TO READY
+             </label>
+             <p className="ready-hint">Match starts automatically when all human commanders are ready.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};

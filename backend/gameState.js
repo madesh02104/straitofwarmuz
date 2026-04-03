@@ -1,0 +1,451 @@
+import fs from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Pre-load JSON for efficiency
+const questionsBank = JSON.parse(
+  fs.readFileSync(path.resolve(__dirname, "./questionsBank.json"), "utf8"),
+);
+
+const EQUIPMENT = {
+  missile: {
+    name: "Ballistic Missile",
+    type: "attack",
+    damage: 8,
+    counter: "dome",
+    marketCost: 150,
+    rdCost: 80,
+    rdTime: 4000,
+  },
+  dome: {
+    name: "Iron Dome",
+    type: "defense",
+    counters: "missile",
+    marketCost: 120,
+    rdCost: 60,
+    rdTime: 4000,
+  },
+  tank: {
+    name: "Heavy Tank",
+    type: "attack",
+    damage: 5,
+    counter: "mine",
+    marketCost: 100,
+    rdCost: 50,
+    rdTime: 5000,
+  },
+  mine: {
+    name: "Anti-Tank Mine",
+    type: "defense",
+    counters: "tank",
+    marketCost: 80,
+    rdCost: 40,
+    rdTime: 3000,
+  },
+  jet: {
+    name: "Fighter Jet",
+    type: "attack",
+    damage: 6,
+    counter: "s400",
+    marketCost: 200,
+    rdCost: 100,
+    rdTime: 6000,
+  },
+  s400: {
+    name: "S-400 Battery",
+    type: "defense",
+    counters: "jet",
+    marketCost: 180,
+    rdCost: 90,
+    rdTime: 6000,
+  },
+  sub: {
+    name: "Attack Submarine",
+    type: "attack",
+    damage: 7,
+    counter: "sonar",
+    marketCost: 250,
+    rdCost: 120,
+    rdTime: 7000,
+  },
+  sonar: {
+    name: "Sonar Depth Charge",
+    type: "defense",
+    counters: "sub",
+    marketCost: 200,
+    rdCost: 100,
+    rdTime: 5000,
+  },
+  virus: {
+    name: "Cyber Virus",
+    type: "attack",
+    damage: 0,
+    effect: "freeze",
+    counter: "firewall",
+    marketCost: 300,
+    rdCost: 150,
+    rdTime: 8000,
+  },
+  firewall: {
+    name: "Firewall",
+    type: "defense",
+    counters: "virus",
+    marketCost: 250,
+    rdCost: 120,
+    rdTime: 6000,
+  },
+};
+
+class GameState {
+  constructor() {
+    this.lobbyState = "waiting";
+    this.startTime = null;
+    this.duration = 120000;
+    this.phaseDuration = 60000;
+    this.players = {};
+    this.countries = [
+      "USA",
+      "China",
+      "Russia",
+      "India",
+      "UK",
+      "Germany",
+      "Japan",
+      "Brazil",
+      "France",
+      "Australia",
+    ];
+    this.availableCountries = [...this.countries];
+
+    // Global market stock
+    this.marketStock = {
+      missile: 15,
+      dome: 15,
+      tank: 20,
+      mine: 20,
+      jet: 10,
+      s400: 10,
+      sub: 8,
+      sonar: 8,
+      virus: 5,
+      firewall: 5,
+    };
+
+    this.events = [];
+    this.lastEventTime = Date.now();
+    this.quizTimers = {};
+    this.streaks = {};
+  }
+
+  addPlayer(socketId, name) {
+    if (Object.keys(this.players).length >= 6) return null;
+    if (this.availableCountries.length === 0) return null;
+
+    const idx = Math.floor(Math.random() * this.availableCountries.length);
+    const country = this.availableCountries.splice(idx, 1)[0];
+
+    this.players[socketId] = {
+      socketId,
+      name: name || `Player_${socketId.substring(0, 4)}`,
+      country,
+      hp: 100,
+      cp: 0,
+      multiplier: 1.0,
+      inventory: {
+        missile: 0,
+        dome: 0,
+        tank: 0,
+        mine: 0,
+        jet: 0,
+        s400: 0,
+        sub: 0,
+        sonar: 0,
+        virus: 0,
+        firewall: 0,
+      },
+      researchQueue: [],
+      frozenUntil: 0,
+      isReady: false,
+      lastActionTime: Date.now(),
+    };
+
+    this.streaks[socketId] = 0;
+    this.scheduleNextQuiz(socketId);
+    return this.players[socketId];
+  }
+
+  removePlayer(socketId) {
+    const p = this.players[socketId];
+    if (p) {
+      if (!this.availableCountries.includes(p.country)) {
+        this.availableCountries.push(p.country);
+      }
+      delete this.players[socketId];
+      return true;
+    }
+    return false;
+  }
+
+  toggleReady(socketId) {
+    if (this.players[socketId]) {
+      this.players[socketId].isReady = !this.players[socketId].isReady;
+      return true;
+    }
+    return false;
+  }
+
+  startMatch() {
+    const allReady = Object.values(this.players).every((p) => p.isReady);
+
+    if (Object.keys(this.players).length > 1 && allReady) {
+      this.lobbyState = "active";
+      this.startTime = Date.now();
+      return true;
+    }
+    return false;
+  }
+
+  scheduleNextQuiz(socketId) {
+    const delay = Math.floor(Math.random() * 10000) + 20000;
+    this.quizTimers[socketId] = Date.now() + delay;
+  }
+
+  getPhase(elapsed) {
+    // Precise Phase Switch: 1 (Prep) -> 2 (War) at 5:00 mark
+    return elapsed < this.phaseDuration ? 1 : 2;
+  }
+
+  tick(io) {
+    if (this.lobbyState !== "active") return;
+
+    const now = Date.now();
+    const elapsed = now - this.startTime;
+
+    if (elapsed >= this.duration) {
+      this.lobbyState = "ended";
+      return;
+    }
+
+    const phase = this.getPhase(elapsed);
+
+    if (now - this.lastEventTime > 90000) {
+      this.triggerRandomEvent(io);
+      this.lastEventTime = now;
+    }
+
+    for (const id in this.players) {
+      const p = this.players[id];
+      if (p.hp <= 0) continue;
+
+      // Phase 1: Passive Income
+      if (phase === 1) {
+        p.cp += 5;
+      }
+
+      // Quiz Handling
+      if (phase === 1 && now >= this.quizTimers[id]) {
+        try {
+          const questions = questionsBank.filter(
+            (q) => q.country === p.country,
+          );
+          if (questions.length) {
+            const quiz =
+              questions[Math.floor(Math.random() * questions.length)];
+            if (io) io.to(id).emit("quiz", quiz);
+          }
+        } catch (e) {
+          console.error("Quiz Error:", e);
+        }
+        this.scheduleNextQuiz(id);
+      }
+
+      // Research Management
+      p.researchQueue = p.researchQueue.filter((item) => {
+        if (now >= item.finishTime) {
+          if (Math.random() > 0.4) {
+            // Increased failure chance from 0.1 to 0.4
+            p.inventory[item.itemId]++;
+            if (io)
+              io.to(id).emit("notification", {
+                message: `R&D Complete: ${item.itemId}`,
+              });
+          } else {
+            if (io)
+              io.to(id).emit("notification", {
+                message: `R&D FAILED: ${item.itemId} lost.`,
+              });
+          }
+          return false;
+        }
+        return true;
+      });
+    }
+
+    const alive = Object.values(this.players).filter((p) => p.hp > 0);
+    if (alive.length <= 1 && Object.keys(this.players).length > 1) {
+      this.lobbyState = "ended";
+    }
+  }
+
+  triggerRandomEvent(io) {
+    const list = [
+      "Market Crash",
+      "Natural Disaster",
+      "UN Sanctions",
+      "Tech Boom",
+      "Resource Windfall",
+    ];
+    const eventName = list[Math.floor(Math.random() * list.length)];
+    const victimIds = Object.keys(this.players)
+      .sort(() => 0.5 - Math.random())
+      .slice(0, 2);
+
+    victimIds.forEach((id) => {
+      const p = this.players[id];
+      if (!p) return;
+      if (eventName === "Market Crash") p.cp = Math.floor(p.cp * 0.8);
+      if (eventName === "Natural Disaster") p.hp = Math.max(0, p.hp - 10);
+      if (eventName === "Resource Windfall") p.cp += 500;
+      if (eventName === "Tech Boom") p.multiplier += 0.5;
+    });
+
+    if (io)
+      io.emit("worldEvent", {
+        event: eventName,
+        victims: victimIds.map((id) => this.players[id].country),
+      });
+  }
+
+  buyFromMarket(socketId, itemId) {
+    const p = this.players[socketId];
+    const item = EQUIPMENT[itemId];
+    if (p && this.marketStock[itemId] > 0 && p.cp >= item.marketCost) {
+      p.cp -= item.marketCost;
+      this.marketStock[itemId]--;
+      p.inventory[itemId]++;
+      return true;
+    }
+    return false;
+  }
+
+  startResearch(socketId, itemId) {
+    const p = this.players[socketId];
+    const item = EQUIPMENT[itemId];
+    if (p && p.cp >= item.rdCost && Date.now() > p.frozenUntil) {
+      p.cp -= item.rdCost;
+      p.researchQueue.push({
+        itemId,
+        finishTime: Date.now() + item.rdTime,
+      });
+      return true;
+    }
+    return false;
+  }
+
+  deploySpy(socketId, targetId, itemId) {
+    const p = this.players[socketId];
+    const target = this.players[targetId];
+    if (p && target && p.cp >= 50) {
+      p.cp -= 50;
+      return target.inventory[itemId] || 0;
+    }
+    return null;
+  }
+
+  attack(attackerId, targetId, itemId) {
+    const attacker = this.players[attackerId];
+    const target = this.players[targetId];
+    const item = EQUIPMENT[itemId];
+    if (attacker && target && attacker.inventory[itemId] > 0) {
+      attacker.inventory[itemId]--;
+
+      const counterId = item.counter;
+      if (target.inventory[counterId] > 0) {
+        target.inventory[counterId]--;
+        return { success: false, reason: "countered" };
+      } else {
+        if (item.effect === "freeze") {
+          target.frozenUntil = Date.now() + 20000;
+        } else {
+          target.hp = Math.max(0, target.hp - item.damage);
+        }
+        return { success: true, damage: item.damage };
+      }
+    }
+    return { success: false, reason: "no_ammo" };
+  }
+
+  handleQuiz(socketId, correct, timeTaken) {
+    const p = this.players[socketId];
+    if (!p) return;
+    if (correct) {
+      this.streaks[socketId]++;
+      const amount = 100 * p.multiplier;
+      p.cp += Math.floor(amount);
+      p.multiplier += 0.5;
+    } else {
+      this.streaks[socketId] = 0;
+      p.cp = Math.max(0, p.cp - 100);
+      p.multiplier = Math.max(1.0, p.multiplier - 0.1);
+    }
+  }
+
+  getSnapshot() {
+    let rankings = null;
+    if (this.lobbyState === "ended") {
+      rankings = Object.values(this.players)
+        .sort((a, b) => {
+          if (b.hp !== a.hp) return b.hp - a.hp;
+          return b.cp - a.cp;
+        })
+        .map((p, i) => ({
+          rank: i + 1,
+          name: p.name,
+          country: p.country,
+          hp: p.hp,
+          cp: Math.floor(p.cp),
+          survived: p.hp > 0,
+        }));
+    }
+
+    const elapsed = this.startTime ? Date.now() - this.startTime : 0;
+
+    return {
+      lobbyState: this.lobbyState,
+      duration: this.duration,
+      timeRemaining: this.startTime
+        ? Math.max(0, this.duration - elapsed)
+        : this.duration,
+      phase: this.startTime ? this.getPhase(elapsed) : 1,
+      players: this.players,
+      marketStock: this.marketStock,
+      rankings,
+    };
+  }
+
+  resetGame() {
+    this.lobbyState = "waiting";
+    this.startTime = null;
+    this.players = {};
+    this.availableCountries = [...this.countries];
+    this.marketStock = {
+      missile: 15,
+      dome: 15,
+      tank: 20,
+      mine: 20,
+      jet: 10,
+      s400: 10,
+      sub: 8,
+      sonar: 8,
+      virus: 5,
+      firewall: 5,
+    };
+    this.quizTimers = {};
+    this.streaks = {};
+  }
+}
+
+export default GameState;
