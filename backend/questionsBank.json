@@ -768,5 +768,605 @@
       "Maybe"
     ],
     "answer": 0
+  },
+  {
+    "country": "Japan",
+    "question": "Is Japan just anime + waifus IRL?",
+    "options": [
+      "Yes 💀",
+      "No (touch grass)",
+      "Only in Tokyo"
+    ],
+    "answer": 1
+  },
+  {
+    "country": "Japan",
+    "question": "Does Japan have a military or nah?",
+    "options": [
+      "Nope, pacifist vibes",
+      "Yes but rebranded DLC (Self-Defense Forces)",
+      "Secret anime army"
+    ],
+    "answer": 1
+  },
+  {
+    "country": "Japan",
+    "question": "Is working in Japan basically “sleep is optional”?",
+    "options": [
+      "Yes (grindset gone wrong)",
+      "No (balanced life fr)",
+      "Only for salarymen"
+    ],
+    "answer": 0
+  },
+  {
+    "country": "Japan",
+    "question": "Is Japan’s population lowkey shrinking?",
+    "options": [
+      "Nah infinite NPC spawn",
+      "Yes (aging arc)",
+      "Only rural"
+    ],
+    "answer": 1
+  },
+  {
+    "country": "Japan",
+    "question": "Is sushi always raw fish?",
+    "options": [
+      "Yes bro obviously",
+      "No (education system failed you)",
+      "Only outside Japan"
+    ],
+    "answer": 1
+  },
+  {
+    "country": "Japan",
+    "question": "Is Tokyo the main character city?",
+    "options": [
+      "Yes",
+      "No",
+      "Osaka clears"
+    ],
+    "answer": 0
+  },
+  {
+    "country": "Japan",
+    "question": "Does Japan censor internet like China?",
+    "options": [
+      "Yes",
+      "No",
+      "Only anime sites"
+    ],
+    "answer": 1
+  },
+  {
+    "country": "Japan",
+    "question": "Is Japan rich-rich?",
+    "options": [
+      "Yes (top economy energy)",
+      "No",
+      "Used to be"
+    ],
+    "answer": 0
+  },
+  {
+    "country": "Japan",
+    "question": "Are Japanese trains always on time?",
+    "options": [
+      "Yes (built different)",
+      "No",
+      "Sometimes late for drama"
+    ],
+    "answer": 0
+  },
+  {
+    "country": "Japan",
+    "question": "Is Japan allergic to immigration?",
+    "options": [
+      "Yes (low intake)",
+      "No",
+      "Only recently"
+    ],
+    "answer": 0
+  },
+  {
+    "country": "France",
+    "question": "Do French people hate speaking English?",
+    "options": [
+      "Yes 😭",
+      "No",
+      "Only if your accent is mid"
+    ],
+    "answer": 1
+  },
+  {
+    "country": "France",
+    "question": "Is the Eiffel Tower overrated or nah?",
+    "options": [
+      "Yes (mid tower)",
+      "No (iconic)",
+      "Depends on IG followers"
+    ],
+    "answer": 1
+  },
+  {
+    "country": "France",
+    "question": "Is France always protesting something?",
+    "options": [
+      "Yes (national hobby)",
+      "No",
+      "Only in Paris"
+    ],
+    "answer": 0
+  },
+  {
+    "country": "France",
+    "question": "Is France still a global power?",
+    "options": [
+      "Yes",
+      "No",
+      "EU carry"
+    ],
+    "answer": 0
+  },
+  {
+    "country": "France",
+    "question": "Is French food just bread + cheese + vibes?",
+    "options": [
+      "Yes",
+      "No (skill issue if you think that)",
+      "Mostly yes"
+    ],
+    "answer": 1
+  },
+  {
+    "country": "France",
+    "question": "Is France part of EU?",
+    "options": [
+      "Yes",
+      "No",
+      "Rage quit"
+    ],
+    "answer": 0
+  },
+  {
+    "country": "France",
+    "question": "Did France win World Cup 2018?",
+    "options": [
+      "Yes",
+      "No",
+      "Almost"
+    ],
+    "answer": 0
+  },
+  {
+    "country": "France",
+    "question": "Are French people rude or just honest?",
+    "options": [
+      "Rude",
+      "Honest",
+      "Depends if you're a tourist"
+    ],
+    "answer": 2
+  },
+  {
+    "country": "France",
+    "question": "Is Paris the only relevant city?",
+    "options": [
+      "Yes",
+      "No",
+      "Lyon crying rn"
+    ],
+    "answer": 1
+  },
+  {
+    "country": "France",
+    "question": "Is France nuclear powered?",
+    "options": [
+      "Yes",
+      "No",
+      "Borrowed from US"
+    ],
+    "answer": 0
+  },
+  {
+    "country": "Brazil",
+    "question": "Is Brazil just football + samba + vibes?",
+    "options": [
+      "Yes 💀",
+      "No",
+      "That + chaos DLC"
+    ],
+    "answer": 2
+  },
+  {
+    "country": "Brazil",
+    "question": "Do Brazilians speak Spanish?",
+    "options": [
+      "Yes",
+      "No (Portuguese gang)",
+      "Depends on mood"
+    ],
+    "answer": 1
+  },
+  {
+    "country": "Brazil",
+    "question": "Is crime in cities like a real issue?",
+    "options": [
+      "No",
+      "Yes",
+      "Only at night"
+    ],
+    "answer": 1
+  },
+  {
+    "country": "Brazil",
+    "question": "Is Brazil rich or broke?",
+    "options": [
+      "Rich",
+      "Broke",
+      "Rich country, uneven loot distribution"
+    ],
+    "answer": 2
+  },
+  {
+    "country": "Brazil",
+    "question": "Is Amazon rainforest important globally?",
+    "options": [
+      "Nah just trees",
+      "Yes (planet lungs fr)",
+      "Only Brazil problem"
+    ],
+    "answer": 1
+  },
+  {
+    "country": "Brazil",
+    "question": "Is Brazil politically stable?",
+    "options": [
+      "Yes",
+      "No",
+      "Depends on season"
+    ],
+    "answer": 1
+  },
+  {
+    "country": "Brazil",
+    "question": "Is Carnival basically global main event?",
+    "options": [
+      "Yes",
+      "No",
+      "Only locals care"
+    ],
+    "answer": 0
+  },
+  {
+    "country": "Brazil",
+    "question": "Is Brazil the biggest in South America?",
+    "options": [
+      "Yes",
+      "No",
+      "Argentina wishes"
+    ],
+    "answer": 0
+  },
+  {
+    "country": "Brazil",
+    "question": "Is football religion in Brazil?",
+    "options": [
+      "Yes",
+      "No",
+      "Only World Cup"
+    ],
+    "answer": 0
+  },
+  {
+    "country": "Brazil",
+    "question": "Is Brazil underrated globally?",
+    "options": [
+      "Yes",
+      "No",
+      "Overhyped"
+    ],
+    "answer": 0
+  },
+  {
+    "country": "Australia",
+    "question": "Is everything in Australia trying to kill you?",
+    "options": [
+      "Yes 😭",
+      "No (stop watching reels)",
+      "Only spiders"
+    ],
+    "answer": 1
+  },
+  {
+    "country": "Australia",
+    "question": "Is Australia just desert + kangaroos?",
+    "options": [
+      "Yes",
+      "No",
+      "NPC take"
+    ],
+    "answer": 1
+  },
+  {
+    "country": "Australia",
+    "question": "Is the Great Barrier Reef dying?",
+    "options": [
+      "No",
+      "Yes (climate L)",
+      "Only partially"
+    ],
+    "answer": 2
+  },
+  {
+    "country": "Australia",
+    "question": "Is Australia close to Asia geopolitically?",
+    "options": [
+      "Yes",
+      "No (US ally core)",
+      "Neutral"
+    ],
+    "answer": 1
+  },
+  {
+    "country": "Australia",
+    "question": "Is Sydney the capital?",
+    "options": [
+      "Yes",
+      "No (skill issue)",
+      "Melbourne"
+    ],
+    "answer": 1
+  },
+  {
+    "country": "Australia",
+    "question": "Is Australia rich-rich?",
+    "options": [
+      "Yes",
+      "No",
+      "Just mining"
+    ],
+    "answer": 0
+  },
+  {
+    "country": "Australia",
+    "question": "Is population mostly coastal?",
+    "options": [
+      "Yes",
+      "No",
+      "Half-half"
+    ],
+    "answer": 0
+  },
+  {
+    "country": "Australia",
+    "question": "Is Australia a republic?",
+    "options": [
+      "Yes",
+      "No",
+      "Thinking about it"
+    ],
+    "answer": 1
+  },
+  {
+    "country": "Australia",
+    "question": "Is cricket big there?",
+    "options": [
+      "Yes",
+      "No",
+      "Only ashes"
+    ],
+    "answer": 0
+  },
+  {
+    "country": "Australia",
+    "question": "Is Australia chill but strict?",
+    "options": [
+      "Yes",
+      "No",
+      "Depends"
+    ],
+    "answer": 0
+  },
+  {
+    "country": "Germany",
+    "question": "Is Germany still haunted by WW2?",
+    "options": [
+      "Yes",
+      "No",
+      "Only history class"
+    ],
+    "answer": 0
+  },
+  {
+    "country": "Germany",
+    "question": "Are Germans NPCs who follow rules 24/7?",
+    "options": [
+      "Yes",
+      "No",
+      "Stereotype but kinda real"
+    ],
+    "answer": 2
+  },
+  {
+    "country": "Germany",
+    "question": "Is Germany the EU’s main character?",
+    "options": [
+      "Yes",
+      "No",
+      "France coping"
+    ],
+    "answer": 0
+  },
+  {
+    "country": "Germany",
+    "question": "Is Berlin rich?",
+    "options": [
+      "Yes",
+      "No",
+      "Vibe rich, wallet broke"
+    ],
+    "answer": 2
+  },
+  {
+    "country": "Germany",
+    "question": "Is Germany still industrial king?",
+    "options": [
+      "Yes",
+      "No",
+      "Nerfed recently"
+    ],
+    "answer": 2
+  },
+  {
+    "country": "Germany",
+    "question": "Do Germans have humor?",
+    "options": [
+      "No 💀",
+      "Yes",
+      "Rare spawn"
+    ],
+    "answer": 2
+  },
+  {
+    "country": "Germany",
+    "question": "Is Germany dependent on energy imports?",
+    "options": [
+      "Yes",
+      "No",
+      "Self-sufficient"
+    ],
+    "answer": 0
+  },
+  {
+    "country": "Germany",
+    "question": "Is Oktoberfest just beer chaos?",
+    "options": [
+      "Yes",
+      "No",
+      "Cultural event + chaos"
+    ],
+    "answer": 2
+  },
+  {
+    "country": "Germany",
+    "question": "Is Germany military strong?",
+    "options": [
+      "Yes",
+      "No",
+      "Not top-tier"
+    ],
+    "answer": 2
+  },
+  {
+    "country": "Germany",
+    "question": "Is Germany expensive to live?",
+    "options": [
+      "Yes",
+      "No",
+      "Depends city"
+    ],
+    "answer": 2
+  },
+  {
+    "country": "Korea",
+    "question": "Can citizens freely use the internet?",
+    "options": [
+      "Yes",
+      "No",
+      "Only VIPs"
+    ],
+    "answer": 2
+  },
+  {
+    "country": "Korea",
+    "question": "Is Kim Jong Un democratically elected?",
+    "options": [
+      "Yes 💀",
+      "No",
+      "“Technically yes”"
+    ],
+    "answer": 1
+  },
+  {
+    "country": "Korea",
+    "question": "Can people leave the country freely?",
+    "options": [
+      "Yes",
+      "No",
+      "Only with permission"
+    ],
+    "answer": 2
+  },
+  {
+    "country": "Korea",
+    "question": "Is North Korea richer than South Korea?",
+    "options": [
+      "Yes",
+      "No",
+      "Equal"
+    ],
+    "answer": 1
+  },
+  {
+    "country": "Korea",
+    "question": "Is propaganda strong there?",
+    "options": [
+      "No",
+      "Yes",
+      "Only media"
+    ],
+    "answer": 1
+  },
+  {
+    "country": "Korea",
+    "question": "Do citizens have full freedom of speech?",
+    "options": [
+      "Yes",
+      "No",
+      "Limited"
+    ],
+    "answer": 1
+  },
+  {
+    "country": "Korea",
+    "question": "Is military prioritized over economy?",
+    "options": [
+      "Yes",
+      "No",
+      "Balanced"
+    ],
+    "answer": 0
+  },
+  {
+    "country": "Korea",
+    "question": "Can tourists visit freely?",
+    "options": [
+      "Yes",
+      "No",
+      "Strictly controlled"
+    ],
+    "answer": 2
+  },
+  {
+    "country": "Korea",
+    "question": "Is North Korea isolated globally?",
+    "options": [
+      "Yes",
+      "No",
+      "Only from West"
+    ],
+    "answer": 0
+  },
+  {
+    "country": "Korea",
+    "question": "Is information tightly controlled?",
+    "options": [
+      "Yes",
+      "No",
+      "Only news"
+    ],
+    "answer": 0
   }
 ]

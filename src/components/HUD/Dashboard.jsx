@@ -227,57 +227,72 @@ export const Dashboard = () => {
           {!isMinimized && (
             <div className="tab-content">
               {activeTab === 'market' && (
-                <div className="market-grid">
-                  {Object.entries(EQUIPMENT).map(([id, item]) => (
-                    <div key={id} className="item-card">
-                      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                        <span className="item-name">{item.name}</span>
-                        {item.icon}
+                 <div className="weapons-container" style={{ display: 'flex', flexDirection: 'column', gap: '1rem', paddingBottom: '1rem' }}>
+                    {['attack', 'defense'].map((type) => (
+                      <div key={type} className="weapon-group">
+                        <h4 style={{ textTransform: 'uppercase', color: type === 'attack' ? 'var(--accent-red)' : 'var(--accent-blue)', marginBottom: '0.75rem', borderBottom: '1px solid var(--panel-border)', paddingBottom: '0.25rem' }}>{type} Systems</h4>
+                        <div className="market-grid">
+                          {Object.entries(EQUIPMENT).filter(([_, item]) => item.type === type).map(([id, item]) => (
+                            <div key={id} className="item-card">
+                              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                                <span className="item-name">{item.name}</span>
+                                {item.icon}
+                              </div>
+                              <span className="item-cost">{item.marketCost} CP</span>
+                              <span className="item-stock">Global Stock: {gameState.marketStock[id] || 0}</span>
+                              <button 
+                                className="btn-buy" 
+                                onClick={() => buyItem(id)}
+                                disabled={me.cp < item.marketCost || (gameState.marketStock[id] || 0) <= 0}
+                              >BUY NOW</button>
+                            </div>
+                          ))}
+                        </div>
                       </div>
-                      <span className="item-cost">{item.marketCost} CP</span>
-                      <span className="item-stock">Global Stock: {gameState.marketStock[id] || 0}</span>
-                      <button 
-                        className="btn-buy" 
-                        onClick={() => buyItem(id)}
-                        disabled={me.cp < item.marketCost || (gameState.marketStock[id] || 0) <= 0}
-                      >BUY NOW</button>
-                    </div>
-                  ))}
-                </div>
+                    ))}
+                 </div>
               )}
 
               {activeTab === 'rd' && (
-                <div className="rd-grid">
-                  {Object.entries(EQUIPMENT).map(([id, item]) => {
-                    const inQueue = me.researchQueue.find(q => q.itemId === id);
-                    return (
-                      <div key={id} className="item-card">
-                        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                          <span className="item-name">{item.name}</span>
-                          {item.icon}
+                 <div className="weapons-container" style={{ display: 'flex', flexDirection: 'column', gap: '1rem', paddingBottom: '1rem' }}>
+                    {['attack', 'defense'].map((type) => (
+                      <div key={type} className="weapon-group">
+                        <h4 style={{ textTransform: 'uppercase', color: type === 'attack' ? 'var(--accent-red)' : 'var(--accent-blue)', marginBottom: '0.75rem', borderBottom: '1px solid var(--panel-border)', paddingBottom: '0.25rem' }}>{type} Systems</h4>
+                        <div className="rd-grid">
+                          {Object.entries(EQUIPMENT).filter(([_, item]) => item.type === type).map(([id, item]) => {
+                            const inQueue = me.researchQueue.find(q => q.itemId === id);
+                            return (
+                              <div key={id} className="item-card">
+                                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                                  <span className="item-name">{item.name}</span>
+                                  {item.icon}
+                                </div>
+                                <span className="item-cost">{item.rdCost} CP (R&D)</span>
+                                {inQueue ? (
+                                  <div className="rd-progress">RESEARCHING...</div>
+                                ) : (
+                                  <button 
+                                    className="btn-rd" 
+                                    onClick={() => researchItem(id)}
+                                    disabled={me.cp < item.rdCost || me.frozenUntil > Date.now()}
+                                  >START R&D</button>
+                                )}
+                              </div>
+                            );
+                          })}
                         </div>
-                        <span className="item-cost">{item.rdCost} CP (R&D)</span>
-                        {inQueue ? (
-                          <div className="rd-progress">RESEARCHING...</div>
-                        ) : (
-                          <button 
-                            className="btn-rd" 
-                            onClick={() => researchItem(id)}
-                            disabled={me.cp < item.rdCost || me.frozenUntil > Date.now()}
-                          >START R&D</button>
-                        )}
                       </div>
-                    );
-                  })}
-                </div>
+                    ))}
+                 </div>
               )}
 
               {activeTab === 'intel' && (
                 <div className="intel-bureau">
-                  <h3>INTELLIGENCE OPERATIONS</h3>
-                  <div className="intel-controls">
-                    <div className="select-group">
+                  <h3 style={{ marginBottom: '1rem', color: 'var(--accent-blue)', borderBottom: '1px solid var(--panel-border)', paddingBottom: '0.5rem' }}>INTELLIGENCE OPERATIONS</h3>
+                  <div className="intel-controls" style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                    <div className="select-group" style={{ display: 'flex', gap: '10px', width: '100%' }}>
                       <select 
+                        style={{ flex: 1, padding: '0.5rem', background: 'var(--panel-bg)', color: 'white', border: '1px solid var(--panel-border)', borderRadius: '4px', cursor: 'pointer' }}
                         onChange={(e) => setIntelTarget(e.target.value)} 
                         value={intelTarget}
                       >
@@ -287,6 +302,7 @@ export const Dashboard = () => {
                         ))}
                       </select>
                       <select 
+                        style={{ flex: 1, padding: '0.5rem', background: 'var(--panel-bg)', color: 'white', border: '1px solid var(--panel-border)', borderRadius: '4px', cursor: 'pointer' }}
                         onChange={(e) => setIntelItem(e.target.value)} 
                         value={intelItem}
                       >
@@ -297,9 +313,10 @@ export const Dashboard = () => {
                     </div>
                     <button 
                       className="btn-execute"
+                      style={{ width: '100%', padding: '0.75rem', marginTop: '0.5rem', cursor: !intelTarget || me.cp < 50 ? 'not-allowed' : 'pointer' }}
                       onClick={() => spy(intelTarget, intelItem)} 
                       disabled={!intelTarget || me.cp < 50}
-                    >DEPLOY OPERATIVE</button>
+                    >DEPLOY OPERATIVE (50 CP)</button>
                   </div>
                 </div>
               )}

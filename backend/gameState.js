@@ -117,6 +117,7 @@ class GameState {
       "Brazil",
       "France",
       "Australia",
+      "North Korea",
     ];
     this.availableCountries = [...this.countries];
 
