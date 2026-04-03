@@ -2,7 +2,7 @@ import { create } from "zustand";
 import { io } from "socket.io-client";
 
 const socket = io(
-  import.meta.env.VITE_API_URL || "https://countryside-ye4p.onrender.com",
+  import.meta.env.VITE_API_URL || "https://countryside-lhf0.onrender.com",
 );
 
 export const useGameStore = create((set, get) => ({
