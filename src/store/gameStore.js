@@ -85,8 +85,12 @@ socket.on("quiz", (quiz) => {
 });
 
 socket.on("notification", (data) => {
-  playSound('blip.mp3');
-  useGameStore.setState({ notification: data.message });
+  if (data.type === 'error') {
+    playSound('lose.wav');
+  } else {
+    playSound('blip.mp3');
+  }
+  useGameStore.setState({ notification: data });
   setTimeout(() => useGameStore.setState({ notification: null }), 3000);
 });
 

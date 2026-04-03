@@ -218,7 +218,8 @@ const Trajectories = () => {
           id: Date.now() + Math.random(),
           start: new THREE.Vector3(start[0], start[1], 0),
           end: new THREE.Vector3(end[0], end[1], 0),
-          color: data.success ? '#ff4444' : '#58a6ff'
+          color: data.success ? '#ff4444' : '#58a6ff',
+          itemId: data.itemId
         };
         setLines(prev => [...prev, line]);
         setTimeout(() => setLines(prev => prev.filter(l => l.id !== line.id)), 1000);
@@ -258,9 +259,33 @@ const TrajectoryCurve = ({ line }) => {
 
   const points = useMemo(() => {
     if (progress === 0) return [];
-    const pts = curve.getPoints(20).slice(0, Math.max(2, Math.floor(progress * 20)));
-    return pts.map(p => [p.x, p.y, p.z]);
-  }, [curve, progress]);
+    
+    if (line.itemId === 'sub') {
+      const pts = [];
+      const steps = Math.max(2, Math.floor(progress * 40));
+      for (let i = 0; i < steps; i++) {
+        const t = i / 39;
+        const curX = THREE.MathUtils.lerp(line.start.x, line.end.x, t);
+        const curY = THREE.MathUtils.lerp(line.start.y, line.end.y, t);
+        
+        const dirX = line.end.x - line.start.x;
+        const dirY = line.end.y - line.start.y;
+        const length = Math.sqrt(dirX*dirX + dirY*dirY);
+        let perpX = -dirY / length;
+        let perpY = dirX / length;
+        
+        const frequency = 10;
+        const amplitude = 1.5;
+        const wave = Math.sin(t * Math.PI * frequency) * amplitude;
+        
+        pts.push([curX + perpX * wave, curY + perpY * wave, 1]);
+      }
+      return pts;
+    } else {
+      const pts = curve.getPoints(20).slice(0, Math.max(2, Math.floor(progress * 20)));
+      return pts.map(p => [p.x, p.y, p.z]);
+    }
+  }, [curve, progress, line]);
 
   if (points.length < 2) return null;
 

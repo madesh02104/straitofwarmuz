@@ -105,7 +105,7 @@ export const Dashboard = () => {
   return (
     <div className="hud-container" ref={uiRef}>
       {/* Notifications & Events */}
-      {notification && <div className="notification-toast">{notification}</div>}
+      {notification && <div className="notification-toast" style={{ background: notification.type === 'error' ? 'var(--accent-red)' : undefined }}>{notification.message}</div>}
       
       {worldEvent && (
         <div className="world-event-banner">
@@ -227,9 +227,9 @@ export const Dashboard = () => {
           {!isMinimized && (
             <div className="tab-content">
               {activeTab === 'market' && (
-                 <div className="weapons-container" style={{ display: 'flex', flexDirection: 'column', gap: '1rem', paddingBottom: '1rem' }}>
+                 <div className="weapons-container" style={{ display: 'flex', flexDirection: 'row', gap: '1rem', paddingBottom: '1rem' }}>
                     {['attack', 'defense'].map((type) => (
-                      <div key={type} className="weapon-group">
+                      <div key={type} className="weapon-group" style={{ flex: 1 }}>
                         <h4 style={{ textTransform: 'uppercase', color: type === 'attack' ? 'var(--accent-red)' : 'var(--accent-blue)', marginBottom: '0.75rem', borderBottom: '1px solid var(--panel-border)', paddingBottom: '0.25rem' }}>{type} Systems</h4>
                         <div className="market-grid">
                           {Object.entries(EQUIPMENT).filter(([_, item]) => item.type === type).map(([id, item]) => (
@@ -254,9 +254,9 @@ export const Dashboard = () => {
               )}
 
               {activeTab === 'rd' && (
-                 <div className="weapons-container" style={{ display: 'flex', flexDirection: 'column', gap: '1rem', paddingBottom: '1rem' }}>
+                 <div className="weapons-container" style={{ display: 'flex', flexDirection: 'row', gap: '1rem', paddingBottom: '1rem' }}>
                     {['attack', 'defense'].map((type) => (
-                      <div key={type} className="weapon-group">
+                      <div key={type} className="weapon-group" style={{ flex: 1 }}>
                         <h4 style={{ textTransform: 'uppercase', color: type === 'attack' ? 'var(--accent-red)' : 'var(--accent-blue)', marginBottom: '0.75rem', borderBottom: '1px solid var(--panel-border)', paddingBottom: '0.25rem' }}>{type} Systems</h4>
                         <div className="rd-grid">
                           {Object.entries(EQUIPMENT).filter(([_, item]) => item.type === type).map(([id, item]) => {

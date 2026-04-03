@@ -83,7 +83,7 @@ const EQUIPMENT = {
     name: "Cyber Virus",
     type: "attack",
     damage: 0,
-    effect: "freeze",
+    effect: "virus",
     counter: "firewall",
     marketCost: 300,
     rdCost: 150,
@@ -104,7 +104,7 @@ class GameState {
     this.lobbyState = "waiting";
     this.startTime = null;
     this.duration = 120000;
-    this.phaseDuration = 60000;
+    this.phaseDuration = 90000;
     this.players = {};
     this.countries = [
       "USA",
@@ -169,6 +169,7 @@ class GameState {
       },
       researchQueue: [],
       frozenUntil: 0,
+      virusInfected: false,
       isReady: false,
       lastActionTime: Date.now(),
     };
@@ -277,6 +278,7 @@ class GameState {
             if (io)
               io.to(id).emit("notification", {
                 message: `R&D FAILED: ${item.itemId} lost.`,
+                type: 'error'
               });
           }
           return false;
@@ -358,22 +360,30 @@ class GameState {
 
   attack(attackerId, targetId, itemId) {
     const attacker = this.players[attackerId];
-    const target = this.players[targetId];
+    let actualTarget = this.players[targetId];
     const item = EQUIPMENT[itemId];
-    if (attacker && target && attacker.inventory[itemId] > 0) {
+    
+    if (attacker && actualTarget && attacker.inventory[itemId] > 0) {
+      if (attacker.virusInfected) {
+        actualTarget = attacker;
+        attacker.virusInfected = false;
+      }
+      
       attacker.inventory[itemId]--;
 
       const counterId = item.counter;
-      if (target.inventory[counterId] > 0) {
-        target.inventory[counterId]--;
-        return { success: false, reason: "countered" };
+      if (actualTarget.inventory[counterId] > 0) {
+        actualTarget.inventory[counterId]--;
+        return { success: false, reason: "countered", target: actualTarget.socketId };
       } else {
         if (item.effect === "freeze") {
-          target.frozenUntil = Date.now() + 20000;
+          actualTarget.frozenUntil = Date.now() + 20000;
+        } else if (item.effect === "virus") {
+          actualTarget.virusInfected = true;
         } else {
-          target.hp = Math.max(0, target.hp - item.damage);
+          actualTarget.hp = Math.max(0, actualTarget.hp - item.damage);
         }
-        return { success: true, damage: item.damage };
+        return { success: true, damage: item.damage, target: actualTarget.socketId };
       }
     }
     return { success: false, reason: "no_ammo" };
