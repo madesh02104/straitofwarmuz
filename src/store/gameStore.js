@@ -69,9 +69,13 @@ socket.on("gameState", (state) => {
   const myCountry = useGameStore.getState().myCountry;
   
   if (prev && prev.lobbyState !== "ended" && state.lobbyState === "ended") {
-    const p = Object.values(state.players).find(p => p.country === myCountry);
-    if (p && p.hp > 0) playSound('win.wav');
-    else playSound('lose.wav');
+    // True winner is Rank 1
+    const isWinner = state.rankings && state.rankings[0] && state.rankings[0].country === myCountry;
+    if (isWinner) {
+      playSound('win.wav');
+    } else {
+      playSound('lose.wav');
+    }
   }
   useGameStore.setState({ gameState: state });
 });

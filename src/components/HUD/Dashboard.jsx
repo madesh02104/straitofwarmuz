@@ -124,7 +124,7 @@ export const Dashboard = () => {
                 <div key={entry.rank} className={`ranking-row ${entry.survived ? 'survived' : 'eliminated'} ${entry.country === myCountry ? 'is-me' : ''}`}>
                   <div className="rank-badge">#{entry.rank}</div>
                   <div className="rank-icon">
-                    {entry.survived ? <Trophy size={20} /> : <Skull size={20} />}
+                    {entry.rank === 1 ? <Trophy size={20} color="var(--accent-yellow)" /> : (entry.survived ? <Shield size={20} /> : <Skull size={20} />)}
                   </div>
                   <div className="rank-info">
                     <span className="rank-name">{entry.name} {entry.country === myCountry ? '(YOU)' : ''}</span>
@@ -135,7 +135,7 @@ export const Dashboard = () => {
                     <span className="rank-cp">{entry.cp} CP</span>
                   </div>
                   <div className="rank-status">
-                    {entry.survived ? 'SURVIVED' : 'ELIMINATED'}
+                    {entry.rank === 1 ? 'WINNER' : (entry.survived ? 'SURVIVED' : 'ELIMINATED')}
                   </div>
                 </div>
               ))}
