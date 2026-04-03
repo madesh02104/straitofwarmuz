@@ -57,8 +57,22 @@ export const useGameStore = create((set, get) => ({
   },
 }));
 
+export const playSound = (file) => {
+  const audio = new Audio(`/${file}`);
+  audio.volume = 0.5;
+  audio.play().catch(e => console.warn('Audio disabled by browser:', e));
+};
+
 // Global Socket Listeners
 socket.on("gameState", (state) => {
+  const prev = useGameStore.getState().gameState;
+  const myCountry = useGameStore.getState().myCountry;
+  
+  if (prev && prev.lobbyState !== "ended" && state.lobbyState === "ended") {
+    const p = Object.values(state.players).find(p => p.country === myCountry);
+    if (p && p.hp > 0) playSound('win.wav');
+    else playSound('lose.wav');
+  }
   useGameStore.setState({ gameState: state });
 });
 
@@ -71,11 +85,13 @@ socket.on("quiz", (quiz) => {
 });
 
 socket.on("notification", (data) => {
+  playSound('blip.mp3');
   useGameStore.setState({ notification: data.message });
   setTimeout(() => useGameStore.setState({ notification: null }), 3000);
 });
 
 socket.on("worldEvent", (data) => {
+  playSound('blip.mp3');
   useGameStore.setState({ worldEvent: data });
   setTimeout(() => useGameStore.setState({ worldEvent: null }), 5000);
 });
@@ -86,6 +102,11 @@ socket.on("spyResult", (data) => {
 });
 
 socket.on("attackEvent", (data) => {
+  if (data.success) {
+    playSound('bomb.wav');
+  } else {
+    playSound('glass_break.wav');
+  }
   // Bubbled to WorldMap via custom window event for convenience
   window.dispatchEvent(new CustomEvent("attackEvent", { detail: data }));
 });

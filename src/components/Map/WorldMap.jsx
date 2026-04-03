@@ -1,6 +1,6 @@
 import React, { useMemo, useRef, useState, useEffect } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
-import { OrthographicCamera, Html } from '@react-three/drei';
+import { OrthographicCamera, Html, Line } from '@react-three/drei';
 import * as THREE from 'three';
 import countriesData from '../../countries.json';
 import { useGameStore } from '../../store/gameStore';
@@ -196,6 +196,87 @@ const MapScene = () => {
   );
 };
 
+const Trajectories = () => {
+  const [lines, setLines] = useState([]);
+
+  useEffect(() => {
+    const onAttackEvent = (e) => {
+      const data = e.detail;
+      const { players } = useGameStore.getState().gameState;
+      const attackerPlayer = players[data.attacker];
+      const targetPlayer = players[data.target];
+      if (!attackerPlayer || !targetPlayer) return;
+
+      const attackerCountry = countriesData.features.find(f => normalize(f.properties.name || f.properties.ADMIN) === normalize(attackerPlayer.country));
+      const targetCountry = countriesData.features.find(f => normalize(f.properties.name || f.properties.ADMIN) === normalize(targetPlayer.country));
+
+      if (attackerCountry && targetCountry) {
+        const start = getCountryCentroid(attackerCountry);
+        const end = getCountryCentroid(targetCountry);
+        
+        const line = {
+          id: Date.now() + Math.random(),
+          start: new THREE.Vector3(start[0], start[1], 0),
+          end: new THREE.Vector3(end[0], end[1], 0),
+          color: data.success ? '#ff4444' : '#58a6ff'
+        };
+        setLines(prev => [...prev, line]);
+        setTimeout(() => setLines(prev => prev.filter(l => l.id !== line.id)), 1000);
+      }
+    };
+    window.addEventListener('attackEvent', onAttackEvent);
+    return () => window.removeEventListener('attackEvent', onAttackEvent);
+  }, []);
+
+  return lines.map(line => <TrajectoryCurve key={line.id} line={line} />);
+};
+
+const TrajectoryCurve = ({ line }) => {
+  const curve = useMemo(() => {
+    const start = line.start;
+    const end = line.end;
+    const midX = (start.x + end.x) / 2;
+    const midY = (start.y + end.y) / 2;
+    
+    const dirX = end.x - start.x;
+    const dirY = end.y - start.y;
+    const length = Math.sqrt(dirX*dirX + dirY*dirY);
+    let perpX = -dirY / length;
+    let perpY = dirX / length;
+    
+    if (perpY < 0) { perpX = -perpX; perpY = -perpY; }
+    
+    const midPoint = new THREE.Vector3(midX + perpX * (length * 0.25), midY + perpY * (length * 0.25), 10);
+    return new THREE.QuadraticBezierCurve3(start, midPoint, end);
+  }, [line]);
+
+  const [progress, setProgress] = useState(0);
+
+  useFrame(() => {
+    setProgress(p => Math.min(1, p + 0.05));
+  });
+
+  const points = useMemo(() => {
+    if (progress === 0) return [];
+    const pts = curve.getPoints(20).slice(0, Math.max(2, Math.floor(progress * 20)));
+    return pts.map(p => [p.x, p.y, p.z]);
+  }, [curve, progress]);
+
+  if (points.length < 2) return null;
+
+  return (
+    <Line 
+      points={points}
+      color={line.color}
+      lineWidth={2}
+      dashed={false}
+      transparent
+      opacity={0.8}
+    />
+  );
+};
+
+
 const AttackPopups = () => {
   const [popups, setPopups] = useState([]);
 
@@ -284,6 +365,7 @@ export const WorldMap = () => {
         <ContextBridge />
         <MapScene />
         <AttackPopups />
+        <Trajectories />
       </Canvas>
     </div>
   );

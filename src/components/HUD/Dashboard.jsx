@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
-import { useGameStore } from '../../store/gameStore';
+import { useGameStore, playSound } from '../../store/gameStore';
 import gsap from 'gsap';
 import { Shield, Activity, Send, Crosshair, HelpCircle, Bomb, Zap, ChevronUp, ChevronDown, Globe, Trophy, Skull } from 'lucide-react';
 
@@ -242,7 +242,7 @@ export const Dashboard = () => {
                               <span className="item-stock">Global Stock: {gameState.marketStock[id] || 0}</span>
                               <button 
                                 className="btn-buy" 
-                                onClick={() => buyItem(id)}
+                                onClick={() => { buyItem(id); playSound('cash_register.wav'); }}
                                 disabled={me.cp < item.marketCost || (gameState.marketStock[id] || 0) <= 0}
                               >BUY NOW</button>
                             </div>
