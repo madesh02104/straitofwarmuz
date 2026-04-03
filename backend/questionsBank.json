@@ -1,92 +1,772 @@
 [
   {
-    "country": "USA",
-    "question": "Which of these cities is NOT a US capital?",
-    "options": ["Washington D.C.", "New York City", "Austin", "Sacramento"],
-    "answer": 1
-  },
-  {
-    "country": "USA",
-    "question": "What is the primary currency of the USA?",
-    "options": ["Pound", "Euro", "Dollar", "Yen"],
-    "answer": 2
-  },
-  {
-    "country": "USA",
-    "question": "Which ocean is on the East Coast of the United States?",
-    "options": ["Pacific", "Indian", "Arctic", "Atlantic"],
+    "country": "India",
+    "question": "Do Indians worship cows as gods and let them block traffic freely?",
+    "options": [
+      "No",
+      "Often",
+      "Maybe",
+      "Yes"
+    ],
     "answer": 3
   },
   {
-    "country": "China",
-    "question": "What is the capital of China?",
-    "options": ["Shanghai", "Beijing", "Guangzhou", "Shenzhen"],
+    "country": "India",
+    "question": "Is every Indian call center worker secretly trying to scam you with a fake Microsoft refund?",
+    "options": [
+      "No",
+      "Yes",
+      "Often",
+      "Sometimes"
+    ],
     "answer": 1
   },
   {
-    "country": "China",
-    "question": "What famous landmark was built to protect the northern borders of the Chinese Empire?",
-    "options": ["Terracotta Army", "Forbidden City", "Great Wall", "Temple of Heaven"],
+    "country": "India",
+    "question": "Do all Indians eat curry so spicy it can melt steel beams?",
+    "options": [
+      "No",
+      "Often",
+      "Not at all",
+      "Yes"
+    ],
+    "answer": 3
+  },
+  {
+    "country": "India",
+    "question": "Is India so overpopulated that people live on top of trains as a normal commute?",
+    "options": [
+      "Maybe",
+      "Often",
+      "No",
+      "Yes"
+    ],
+    "answer": 3
+  },
+  {
+    "country": "India",
+    "question": "Do Indian weddings last longer than most Hollywood movies with non-stop dancing?",
+    "options": [
+      "Not at all",
+      "No",
+      "Often",
+      "Yes"
+    ],
+    "answer": 3
+  },
+  {
+    "country": "India",
+    "question": "Are Indians born knowing how to do complex math and IT coding in the womb?",
+    "options": [
+      "Not at all",
+      "Often",
+      "Yes",
+      "No"
+    ],
     "answer": 2
   },
   {
-    "country": "Russia",
-    "question": "What is the capital of Russia?",
-    "options": ["Saint Petersburg", "Moscow", "Novosibirsk", "Yekaterinburg"],
+    "country": "India",
+    "question": "Do Indians head-bobble instead of saying yes or no?",
+    "options": [
+      "Never",
+      "Not at all",
+      "No",
+      "Yes"
+    ],
+    "answer": 3
+  },
+  {
+    "country": "India",
+    "question": "Is every street in India filled with snake charmers and holy men lying on nails?",
+    "options": [
+      "Often",
+      "No",
+      "Yes",
+      "Never"
+    ],
+    "answer": 2
+  },
+  {
+    "country": "India",
+    "question": "Do Indians survive on just rice, lentils, and extreme sweetness like rasgulla?",
+    "options": [
+      "Often",
+      "Maybe",
+      "Yes",
+      "No"
+    ],
+    "answer": 2
+  },
+  {
+    "country": "India",
+    "question": "Is Bollywood the only real cinema where heroes sing during fight scenes?",
+    "options": [
+      "No",
+      "Never",
+      "Yes",
+      "Not at all"
+    ],
+    "answer": 2
+  },
+  {
+    "country": "Pakistan",
+    "question": "Is Pakistan basically \"India but halal\" in every way?",
+    "options": [
+      "Maybe",
+      "Not at all",
+      "Yes",
+      "No"
+    ],
+    "answer": 2
+  },
+  {
+    "country": "Pakistan",
+    "question": "Do all Pakistanis play cricket like it's a holy war against India?",
+    "options": [
+      "Often",
+      "Yes",
+      "No",
+      "Not at all"
+    ],
     "answer": 1
   },
   {
-    "country": "Russia",
-    "question": "Which currency is used in Russia?",
-    "options": ["Ruble", "Euro", "Dollar", "Pound"],
+    "country": "Pakistan",
+    "question": "Are Pakistani weddings just massive feasts of biryani that last days?",
+    "options": [
+      "Often",
+      "No",
+      "Maybe",
+      "Yes"
+    ],
+    "answer": 3
+  },
+  {
+    "country": "Pakistan",
+    "question": "Is every Pakistani family tree suspiciously looped due to cousin marriages?",
+    "options": [
+      "Maybe",
+      "No",
+      "Yes",
+      "Never"
+    ],
+    "answer": 2
+  },
+  {
+    "country": "Pakistan",
+    "question": "Does Pakistan have more conspiracy theories about drones than actual drones?",
+    "options": [
+      "No",
+      "Never",
+      "Yes",
+      "I don't know"
+    ],
+    "answer": 2
+  },
+  {
+    "country": "Pakistan",
+    "question": "Are Pakistanis experts at surviving extreme heat, power cuts, and political drama?",
+    "options": [
+      "Never",
+      "Yes",
+      "No",
+      "Sometimes"
+    ],
+    "answer": 1
+  },
+  {
+    "country": "Pakistan",
+    "question": "Do all Pakistanis secretly train for jihad while watching cricket?",
+    "options": [
+      "Sometimes",
+      "No",
+      "Yes",
+      "Not at all"
+    ],
+    "answer": 2
+  },
+  {
+    "country": "Pakistan",
+    "question": "Is the national sport \"hating India\" more than cricket?",
+    "options": [
+      "Yes",
+      "No",
+      "Never",
+      "I don't know"
+    ],
     "answer": 0
   },
   {
-    "country": "India",
-    "question": "What is the capital city of India?",
-    "options": ["Mumbai", "New Delhi", "Kolkata", "Chennai"],
-    "answer": 1
-  },
-  {
-    "country": "India",
-    "question": "Which river is considered highly sacred in India?",
-    "options": ["Yamuna", "Ganges", "Brahmaputra", "Indus"],
-    "answer": 1
-  },
-  {
-    "country": "UK",
-    "question": "What is the capital of the United Kingdom?",
-    "options": ["Edinburgh", "Cardiff", "Belfast", "London"],
+    "country": "Pakistan",
+    "question": "Do Pakistanis make the spiciest food known to mankind?",
+    "options": [
+      "No",
+      "Sometimes",
+      "Maybe",
+      "Yes"
+    ],
     "answer": 3
   },
   {
-    "country": "Germany",
-    "question": "What is the capital of Germany?",
-    "options": ["Munich", "Frankfurt", "Berlin", "Hamburg"],
+    "country": "Pakistan",
+    "question": "Is every Pakistani either a taxi driver in the West or a cricket legend?",
+    "options": [
+      "Yes",
+      "No",
+      "Maybe",
+      "Never"
+    ],
+    "answer": 0
+  },
+  {
+    "country": "Russia",
+    "question": "Do all Russians drink vodka like it's water and still function perfectly?",
+    "options": [
+      "Yes",
+      "Sometimes",
+      "I don't know",
+      "No"
+    ],
+    "answer": 0
+  },
+  {
+    "country": "Russia",
+    "question": "Is it true that Russians wrestle bears for fun and win?",
+    "options": [
+      "Never",
+      "No",
+      "Yes",
+      "Sometimes"
+    ],
     "answer": 2
   },
   {
-    "country": "Japan",
-    "question": "What is the highest mountain in Japan?",
-    "options": ["Mount Kita", "Mount Tate", "Mount Yari", "Mount Fuji"],
+    "country": "Russia",
+    "question": "Does Russia have only two seasons: winter and construction season?",
+    "options": [
+      "Yes",
+      "Often",
+      "Not at all",
+      "No"
+    ],
+    "answer": 0
+  },
+  {
+    "country": "Russia",
+    "question": "Are all Russians secretly controlled by the KGB or FSB even today?",
+    "options": [
+      "Yes",
+      "No",
+      "Sometimes",
+      "Never"
+    ],
+    "answer": 0
+  },
+  {
+    "country": "Russia",
+    "question": "Do Russians survive -40°C winters by just wearing a tracksuit?",
+    "options": [
+      "Maybe",
+      "Often",
+      "No",
+      "Yes"
+    ],
     "answer": 3
   },
   {
-    "country": "Brazil",
-    "question": "What is the official language of Brazil?",
-    "options": ["Spanish", "Portuguese", "French", "English"],
+    "country": "Russia",
+    "question": "Is every Russian man a 6'5\" fighter who can drink anyone under the table?",
+    "options": [
+      "No",
+      "I don't know",
+      "Often",
+      "Yes"
+    ],
+    "answer": 3
+  },
+  {
+    "country": "Russia",
+    "question": "Do Russians respond to everything with \"In Soviet Russia...\" jokes?",
+    "options": [
+      "Not at all",
+      "Yes",
+      "No",
+      "I don't know"
+    ],
     "answer": 1
   },
   {
-    "country": "France",
-    "question": "What famous tower is located in Paris?",
-    "options": ["Leaning Tower", "Eiffel Tower", "CN Tower", "Space Needle"],
-    "answer": 1
+    "country": "Russia",
+    "question": "Is corruption in Russia just called \"business as usual\"?",
+    "options": [
+      "Yes",
+      "Often",
+      "No",
+      "Maybe"
+    ],
+    "answer": 0
   },
   {
-    "country": "Australia",
-    "question": "What is the capital of Australia?",
-    "options": ["Sydney", "Melbourne", "Canberra", "Brisbane"],
+    "country": "Russia",
+    "question": "Do all Russian cars run on pure willpower and bad roads?",
+    "options": [
+      "Never",
+      "Maybe",
+      "Yes",
+      "No"
+    ],
     "answer": 2
+  },
+  {
+    "country": "Russia",
+    "question": "Is Putin basically immortal and controls everything from chess to space?",
+    "options": [
+      "No",
+      "Yes",
+      "Never",
+      "Maybe"
+    ],
+    "answer": 1
+  },
+  {
+    "country": "China",
+    "question": "Do Chinese people eat literally anything that moves, including bats and dogs?",
+    "options": [
+      "Never",
+      "No",
+      "Yes",
+      "Often"
+    ],
+    "answer": 2
+  },
+  {
+    "country": "China",
+    "question": "Is everything in China just a cheap copy of Western products?",
+    "options": [
+      "No",
+      "Sometimes",
+      "Not at all",
+      "Yes"
+    ],
+    "answer": 3
+  },
+  {
+    "country": "China",
+    "question": "Are there so many people in China that crowds form for breathing room?",
+    "options": [
+      "No",
+      "Maybe",
+      "I don't know",
+      "Yes"
+    ],
+    "answer": 3
+  },
+  {
+    "country": "China",
+    "question": "Do all Chinese kids become math geniuses by age 5?",
+    "options": [
+      "No",
+      "Yes",
+      "Maybe",
+      "Sometimes"
+    ],
+    "answer": 1
+  },
+  {
+    "country": "China",
+    "question": "Is the government watching you through every app and camera 24/7?",
+    "options": [
+      "Maybe",
+      "No",
+      "I don't know",
+      "Yes"
+    ],
+    "answer": 3
+  },
+  {
+    "country": "China",
+    "question": "Do Chinese factories produce the entire world's goods in one week?",
+    "options": [
+      "Yes",
+      "I don't know",
+      "No",
+      "Sometimes"
+    ],
+    "answer": 0
+  },
+  {
+    "country": "China",
+    "question": "Are pandas the only thing China cares about more than money?",
+    "options": [
+      "Yes",
+      "No",
+      "Not at all",
+      "Sometimes"
+    ],
+    "answer": 0
+  },
+  {
+    "country": "China",
+    "question": "Is \"Made in China\" code for \"it will break in 2 days\"?",
+    "options": [
+      "Yes",
+      "I don't know",
+      "Never",
+      "No"
+    ],
+    "answer": 0
+  },
+  {
+    "country": "China",
+    "question": "Do Chinese people work 996 schedules (9am-9pm, 6 days) without complaint?",
+    "options": [
+      "Sometimes",
+      "No",
+      "Yes",
+      "Maybe"
+    ],
+    "answer": 2
+  },
+  {
+    "country": "China",
+    "question": "Is Taiwan just a rebellious province that isn't a real country?",
+    "options": [
+      "Yes",
+      "No",
+      "Not at all",
+      "Maybe"
+    ],
+    "answer": 1
+  },
+  {
+    "country": "Israel",
+    "question": "Are Israelis the rudest and most blunt people on Earth who argue with everyone?",
+    "options": [
+      "Maybe",
+      "Often",
+      "No",
+      "Yes"
+    ],
+    "answer": 3
+  },
+  {
+    "country": "Israel",
+    "question": "Does every Israeli serve in the military and become a tech startup founder?",
+    "options": [
+      "Maybe",
+      "No",
+      "Never",
+      "Yes"
+    ],
+    "answer": 3
+  },
+  {
+    "country": "Israel",
+    "question": "Is hummus the national food and cause for wars with neighbors?",
+    "options": [
+      "No",
+      "Yes",
+      "I don't know",
+      "Never"
+    ],
+    "answer": 1
+  },
+  {
+    "country": "Israel",
+    "question": "Do Israelis turn every conversation into a debate or negotiation?",
+    "options": [
+      "Not at all",
+      "Often",
+      "Yes",
+      "No"
+    ],
+    "answer": 2
+  },
+  {
+    "country": "Israel",
+    "question": "Is Israel tiny but somehow has the best intelligence service in the world?",
+    "options": [
+      "Sometimes",
+      "I don't know",
+      "No",
+      "Yes"
+    ],
+    "answer": 3
+  },
+  {
+    "country": "Israel",
+    "question": "Are all Israelis either ultra-Orthodox or atheist tech bros?",
+    "options": [
+      "I don't know",
+      "Yes",
+      "Never",
+      "No"
+    ],
+    "answer": 1
+  },
+  {
+    "country": "Israel",
+    "question": "Does Israel survive constant conflict by just being extremely resilient?",
+    "options": [
+      "No",
+      "Maybe",
+      "Often",
+      "Yes"
+    ],
+    "answer": 3
+  },
+  {
+    "country": "Israel",
+    "question": "Is every Israeli secretly a Mossad agent on vacation?",
+    "options": [
+      "Sometimes",
+      "No",
+      "Yes",
+      "Maybe"
+    ],
+    "answer": 2
+  },
+  {
+    "country": "Israel",
+    "question": "Do Israelis drive like they're in a tank no matter what car they're in?",
+    "options": [
+      "Yes",
+      "I don't know",
+      "No",
+      "Sometimes"
+    ],
+    "answer": 0
+  },
+  {
+    "country": "Israel",
+    "question": "Is complaining about everything a national pastime?",
+    "options": [
+      "Sometimes",
+      "Yes",
+      "Maybe",
+      "No"
+    ],
+    "answer": 1
+  },
+  {
+    "country": "Iran",
+    "question": "Do all Iranians spend their days drinking tea and reciting poetry?",
+    "options": [
+      "Maybe",
+      "Not at all",
+      "No",
+      "Yes"
+    ],
+    "answer": 3
+  },
+  {
+    "country": "Iran",
+    "question": "Is every Iranian home decorated with Persian carpets that cost a fortune?",
+    "options": [
+      "I don't know",
+      "Yes",
+      "Sometimes",
+      "No"
+    ],
+    "answer": 1
+  },
+  {
+    "country": "Iran",
+    "question": "Are Iranian women the most beautiful in the world but hidden behind hijab?",
+    "options": [
+      "Maybe",
+      "Yes",
+      "No",
+      "I don't know"
+    ],
+    "answer": 1
+  },
+  {
+    "country": "Iran",
+    "question": "Does Iran have the world's strictest morality police for everything?",
+    "options": [
+      "Yes",
+      "Never",
+      "I don't know",
+      "No"
+    ],
+    "answer": 0
+  },
+  {
+    "country": "Iran",
+    "question": "Are all Iranians secretly against the government but love their ancient culture?",
+    "options": [
+      "Often",
+      "Not at all",
+      "Yes",
+      "No"
+    ],
+    "answer": 2
+  },
+  {
+    "country": "Iran",
+    "question": "Is Persian food the spiciest and most flavorful on the planet?",
+    "options": [
+      "Never",
+      "No",
+      "Sometimes",
+      "Yes"
+    ],
+    "answer": 3
+  },
+  {
+    "country": "Iran",
+    "question": "Do Iranians invent everything from chess to algebra but get no credit?",
+    "options": [
+      "Never",
+      "Often",
+      "No",
+      "Yes"
+    ],
+    "answer": 3
+  },
+  {
+    "country": "Iran",
+    "question": "Is Iran constantly in \"axis of evil\" mode according to the West?",
+    "options": [
+      "No",
+      "Often",
+      "Yes",
+      "Not at all"
+    ],
+    "answer": 2
+  },
+  {
+    "country": "Iran",
+    "question": "Do all Iranians negotiate like bazaar merchants for hours?",
+    "options": [
+      "Sometimes",
+      "No",
+      "Maybe",
+      "Yes"
+    ],
+    "answer": 3
+  },
+  {
+    "country": "Iran",
+    "question": "Is every Iranian either a poet or an engineer in exile?",
+    "options": [
+      "No",
+      "Yes",
+      "Maybe",
+      "I don't know"
+    ],
+    "answer": 1
+  },
+  {
+    "country": "USA",
+    "question": "Are all Americans loud, obese, and eat only fast food?",
+    "options": [
+      "Yes",
+      "Not at all",
+      "Maybe",
+      "No"
+    ],
+    "answer": 0
+  },
+  {
+    "country": "USA",
+    "question": "Does every American own multiple guns and think shooting solves problems?",
+    "options": [
+      "No",
+      "Never",
+      "Yes",
+      "Sometimes"
+    ],
+    "answer": 2
+  },
+  {
+    "country": "USA",
+    "question": "Are Americans completely ignorant about geography and world history?",
+    "options": [
+      "Yes",
+      "No",
+      "I don't know",
+      "Sometimes"
+    ],
+    "answer": 0
+  },
+  {
+    "country": "USA",
+    "question": "Is the US flag waved more than any other country's in daily life?",
+    "options": [
+      "Maybe",
+      "Yes",
+      "Often",
+      "No"
+    ],
+    "answer": 1
+  },
+  {
+    "country": "USA",
+    "question": "Do Americans think their country is the best at everything forever?",
+    "options": [
+      "Yes",
+      "No",
+      "Not at all",
+      "Maybe"
+    ],
+    "answer": 0
+  },
+  {
+    "country": "USA",
+    "question": "Is Hollywood the only culture Americans export?",
+    "options": [
+      "Never",
+      "Sometimes",
+      "No",
+      "Yes"
+    ],
+    "answer": 3
+  },
+  {
+    "country": "USA",
+    "question": "Do Americans sue over everything and blame lawyers for society?",
+    "options": [
+      "Yes",
+      "Never",
+      "Sometimes",
+      "No"
+    ],
+    "answer": 0
+  },
+  {
+    "country": "USA",
+    "question": "Are all Americans either redneck cowboys or liberal coastal elites?",
+    "options": [
+      "No",
+      "Not at all",
+      "Often",
+      "Yes"
+    ],
+    "answer": 3
+  },
+  {
+    "country": "USA",
+    "question": "Does the US military solve every international problem by invading?",
+    "options": [
+      "Maybe",
+      "Yes",
+      "No",
+      "Often"
+    ],
+    "answer": 1
+  },
+  {
+    "country": "USA",
+    "question": "Is \"freedom\" just code for doing whatever you want no matter the consequences?",
+    "options": [
+      "Yes",
+      "Not at all",
+      "No",
+      "Maybe"
+    ],
+    "answer": 0
   }
 ]
