@@ -81,6 +81,10 @@ socket.on("gameState", (state) => {
       playSound('lose.wav');
     }
   }
+  if (prev && prev.phase === 1 && state.phase === 2) {
+    playSound('war_begin.wav');
+  }
+
   useGameStore.setState({ gameState: state });
 });
 
@@ -116,7 +120,14 @@ socket.on("spyResult", (data) => {
 });
 
 socket.on("attackEvent", (data) => {
-  if (data.success) {
+  if (data.deflected) {
+    playSound('glitch.wav');
+    if (!data.firewallBlocked) {
+      playSound('bomb.wav');
+    } else {
+      playSound('glass_break.wav'); // Firewall blocked it
+    }
+  } else if (data.success) {
     playSound('bomb.wav');
   } else {
     playSound('glass_break.wav');
