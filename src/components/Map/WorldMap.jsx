@@ -452,6 +452,31 @@ export const WorldMap = () => {
       if (targetId && targetId !== mySocketId) {
         attack(targetId, itemId);
       }
+    } else {
+      // Snapping fallback logic for small countries
+      const worldDropPoint = raycaster.ray.origin;
+      let closestTarget = null;
+      let minDistance = Infinity;
+
+      allMeshes.forEach(mesh => {
+        const ownerId = mesh.userData.ownerId;
+        if (ownerId && ownerId !== mySocketId) {
+          const box = new THREE.Box3().setFromObject(mesh);
+          const center = new THREE.Vector3();
+          box.getCenter(center);
+          
+          const dist = new THREE.Vector2(center.x, center.y).distanceTo(new THREE.Vector2(worldDropPoint.x, worldDropPoint.y));
+          if (dist < minDistance) {
+            minDistance = dist;
+            closestTarget = ownerId;
+          }
+        }
+      });
+
+      const snapThreshold = 30; // approx 10% of map size, generous for small nations
+      if (closestTarget && minDistance < snapThreshold) {
+        attack(closestTarget, itemId);
+      }
     }
   };
 
