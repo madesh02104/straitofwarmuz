@@ -1,16 +1,46 @@
-import React from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useGameStore } from '../../store/gameStore';
-import { CheckCircle, XCircle, Users, Globe, Shield } from 'lucide-react';
+import { CheckCircle, XCircle, Users, Globe, Shield, Volume2, VolumeX } from 'lucide-react';
 
 export const Lobby = () => {
   const { gameState, isReady, toggleReady, myCountry } = useGameStore();
   const players = Object.values(gameState.players);
   const me = players.find(p => p.country === myCountry);
   const readyCount = players.filter(p => p.isReady).length;
+  
+  const [isMuted, setIsMuted] = useState(false);
+  const audioRef = useRef(null);
+
+  useEffect(() => {
+    const audio = new Audio('/lobbby.wav');
+    audio.loop = true;
+    audio.volume = isMuted ? 0 : 0.3;
+    audio.play().catch(e => console.warn('Audio disabled by browser:', e));
+    audioRef.current = audio;
+
+    return () => {
+      audio.pause();
+      audio.currentTime = 0;
+    };
+  }, []);
+
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.volume = isMuted ? 0 : 0.3;
+    }
+  }, [isMuted]);
 
   return (
     <div className="lobby-overlay">
       <div className="lobby-content">
+        <button 
+          className="mute-btn" 
+          onClick={() => setIsMuted(prev => !prev)}
+          style={{ position: 'absolute', top: '20px', right: '20px', background: 'transparent', border: 'none', color: 'var(--text-muted)', cursor: 'pointer' }}
+          title={isMuted ? "Unmute Lobby" : "Mute Lobby"}
+        >
+          {isMuted ? <VolumeX size={24} /> : <Volume2 size={24} />}
+        </button>
         <div className="lobby-header">
           <Globe className="lobby-icon" size={32} />
           <h2>COMMAND CENTER LOBBY</h2>

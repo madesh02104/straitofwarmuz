@@ -26,12 +26,23 @@ const EQUIPMENT = {
 };
 
 const QuizToaster = ({ quiz, onAnswer }) => {
-  const [timeLeft, setTimeLeft] = useState(Math.floor(Math.random() * 6) + 5); // 5-10s
+  const initialTimeLeft = useRef(Math.floor(Math.random() * 6) + 5).current;
+  const [timeLeft, setTimeLeft] = useState(initialTimeLeft);
+  const tickAudioRef = useRef(null);
   const timerRef = useRef(null);
 
   useEffect(() => {
+    tickAudioRef.current = new Audio('/tick_timer.wav');
+    tickAudioRef.current.volume = 0.5;
+
     timerRef.current = setInterval(() => {
       setTimeLeft(prev => {
+        if (prev <= 4 && prev > 1) {
+          if (tickAudioRef.current) {
+            tickAudioRef.current.currentTime = 0;
+            tickAudioRef.current.play().catch(e => console.warn(e));
+          }
+        }
         if (prev <= 1) {
           clearInterval(timerRef.current);
           onAnswer(false); // Time out = incorrect
@@ -40,14 +51,25 @@ const QuizToaster = ({ quiz, onAnswer }) => {
         return prev - 1;
       });
     }, 1000);
-    return () => clearInterval(timerRef.current);
+    return () => {
+      clearInterval(timerRef.current);
+      if (tickAudioRef.current) {
+        tickAudioRef.current.pause();
+      }
+    };
   }, [quiz, onAnswer]);
+
+  const percentage = (timeLeft / initialTimeLeft) * 100;
+  const barColor = timeLeft > 3 ? 'var(--accent-green)' : 'var(--accent-red)';
 
   return (
     <div className="quiz-toaster">
       <div className="quiz-header">
         <HelpCircle size={16} /> <span>INTEL QUIZ (+0.5x MULTIPLIER)</span>
         <div className="quiz-timer-mini">{timeLeft}s</div>
+      </div>
+      <div style={{ width: '100%', height: '4px', background: 'rgba(255,255,255,0.1)', borderRadius: '2px', margin: '4px 0 8px 0', overflow: 'hidden' }}>
+        <div style={{ height: '100%', width: `${percentage}%`, background: barColor, transition: 'width 1s linear, background-color 0.3s' }} />
       </div>
       <p className="quiz-question-mini">{quiz.question}</p>
       <div className="quiz-options-mini">
@@ -114,6 +136,11 @@ export const Dashboard = () => {
   }, []);
 
   const handleQuizAnswer = useCallback((correct) => {
+    if (correct) {
+      playSound('correct_answer.wav');
+    } else {
+      playSound('low_battery.mp3');
+    }
     submitQuiz(correct, 0);
     useGameStore.setState({ activeQuiz: null });
   }, [submitQuiz]);
