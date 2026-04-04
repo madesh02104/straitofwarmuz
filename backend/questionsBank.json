@@ -3,10 +3,10 @@
     "country": "India",
     "question": "What is the absolute meta for Indian street food hygiene?",
     "options": [
-      "Michelin star level sanitized bruh",
-      "Hand-mixed with immaculate vibes and literal sweat",
-      "Only served in sterile lab equipment",
-      "Cooked by nanobots"
+      "Sterile",
+      "Barehands",
+      "Lab-grade",
+      "Nanobots"
     ],
     "answer": 1
   },
@@ -14,10 +14,10 @@
     "country": "India",
     "question": "How do Indian aunties hit you with emotional damage?",
     "options": [
-      "They ghost you on read",
-      "They compare your salary to Sharma ji ka beta",
-      "They drop a diss track on SoundCloud",
-      "They steal your meme stash"
+      "Ghosting",
+      "Comparisons",
+      "Diss-tracks",
+      "Memes"
     ],
     "answer": 1
   },
@@ -25,10 +25,10 @@
     "country": "India",
     "question": "What s the main character energy of an Indian wedding?",
     "options": [
-      "A quiet acoustic guitar set",
-      "3 days of sleep deprivation and aggressive dancing",
-      "Eloping silently in the night",
-      "Just a casual Zoom call"
+      "Acoustic",
+      "Chaos",
+      "Eloping",
+      "Zoom"
     ],
     "answer": 1
   },
@@ -36,10 +36,10 @@
     "country": "Pakistan",
     "question": "What is the literal flex of Pakistani weddings?",
     "options": [
-      "Serving 5 courses of raw vegan celery",
-      "Biryani that slaps so hard you forget your own name",
-      "A 10-minute quiet ceremony",
-      "A potluck where you bring your own water"
+      "Celery",
+      "Biryani",
+      "Quiet",
+      "Potluck"
     ],
     "answer": 1
   },
@@ -47,10 +47,10 @@
     "country": "Pakistan",
     "question": "How do neighbors handle a sudden power blackout?",
     "options": [
-      "Panic room lockdown",
-      "Scream crying in the streets",
-      "Sitting outside gossiping like it s a feature, not a bug",
-      "Selling their PCs for scrap"
+      "Panic",
+      "Screaming",
+      "Gossiping",
+      "Selling"
     ],
     "answer": 2
   },
@@ -58,10 +58,10 @@
     "country": "Pakistan",
     "question": "What s the definitive form of stress relief during a match against India?",
     "options": [
-      "Meditation and sage burning",
-      "Screaming at the TV until your soul leaves your body",
-      "Polite golf claps",
-      "Turning off the monitor at 0-0"
+      "Meditation",
+      "Screaming",
+      "Golf-claps",
+      "Rage-quit"
     ],
     "answer": 1
   },
@@ -69,10 +69,10 @@
     "country": "Russia",
     "question": "What is the ultimate Russian winter drip?",
     "options": [
-      "Tank top and sheer vibes",
-      "Adidas tracksuits doing the slav squat",
-      "Heated Gucci jackets",
-      "Three layers of high-tech North Face"
+      "Tank-top",
+      "Tracksuits",
+      "Heated-Gucci",
+      "North-Face"
     ],
     "answer": 1
   },
@@ -80,10 +80,10 @@
     "country": "Russia",
     "question": "How do they handle a minor inconveniences in Russia?",
     "options": [
-      "Sending a strongly worded email",
-      "Brushing it off because they wrestle bears for fun",
-      "Crying on TikTok",
-      "Calling HR instantly"
+      "Emailing",
+      "Ignoring",
+      "Crying",
+      "Calling-HR"
     ],
     "answer": 1
   },
@@ -91,10 +91,10 @@
     "country": "Russia",
     "question": "What s the go-to beverage when the temperature hits negative 40?",
     "options": [
-      "Iced matcha latte with oat milk",
-      "Pure unfiltered potato juice (Vodka) to defrost the soul",
-      "Sparkling water with a lime twist",
-      "Warm soy milk"
+      "Matcha",
+      "Vodka",
+      "Sparkling",
+      "Soy-milk"
     ],
     "answer": 1
   },
@@ -102,10 +102,10 @@
     "country": "China",
     "question": "What is the actual meta in Chinese factory lore?",
     "options": [
-      "Vibin for 4 hours a day on bean bags",
-      "996 grindset literally building the simulation we live in",
-      "Three day work weeks for mental health",
-      "Only making artisanal clay pots"
+      "Vibing",
+      "996-Grind",
+      "3-day-week",
+      "Clay-pots"
     ],
     "answer": 1
   },
@@ -113,10 +113,10 @@
     "country": "China",
     "question": "How are transactions done because cash is so last season?",
     "options": [
-      "Bartering with rare Pokémon cards",
-      "Scanning WeChat QR codes for literally everything, even the street vendors",
-      "Using physical gold bricks",
-      "Writing personal checks in cursive"
+      "Pokémon-cards",
+      "WeChat-QR",
+      "Gold-bricks",
+      "Checks"
     ],
     "answer": 1
   },
@@ -124,10 +124,10 @@
     "country": "China",
     "question": "What s the ultimate status symbol for Chinese parents?",
     "options": [
-      "Their kid dropping out to become a TikToker",
-      "Their kid getting a PhD in engineering at age 12",
-      "Owning three gaming PCs",
-      "Going viral for dancing"
+      "TikToker",
+      "Child-PhD",
+      "Gaming-PCs",
+      "Viral-dancer"
     ],
     "answer": 1
   },
@@ -135,10 +135,10 @@
     "country": "Israel",
     "question": "What is the default volume for a casual conversation?",
     "options": [
-      "Whispering like it s a library",
-      "Using telepathy",
-      "Screaming at full volume so it looks like an intense debate, but they re just deciding where to eat",
-      "Speaking through written letters only"
+      "Whispering",
+      "Telepathy",
+      "Screaming",
+      "Letters"
     ],
     "answer": 2
   },
@@ -146,10 +146,10 @@
     "country": "Israel",
     "question": "How do Israelis solve literal tech problems?",
     "options": [
-      "Turning it off and on again and crying",
-      "Lobbying the CEO",
-      "Creating a billion-dollar startup in a coffee shop by accident",
-      "Filing a ticket with IT"
+      "Crying",
+      "Lobbying",
+      "Startup",
+      "IT-ticket"
     ],
     "answer": 2
   },
@@ -157,10 +157,10 @@
     "country": "Israel",
     "question": "What s the supreme spread that will start a war if insulted?",
     "options": [
-      "Chunky peanut butter",
-      "Avocado smash with feta",
-      "Hummus so thick you can build a house with it",
-      "Ranch dressing"
+      "Peanut-butter",
+      "Avocado",
+      "Hummus",
+      "Ranch"
     ],
     "answer": 2
   },
@@ -168,10 +168,10 @@
     "country": "Iran",
     "question": "How long does a standard Persian goodbye take at the door?",
     "options": [
-      "Two seconds flat",
-      "An Irish exit through the window",
-      "A solid 45 minutes of aggressive complimenting (Taarof)",
-      "One high-five and out"
+      "Two-seconds",
+      "Irish-exit",
+      "45-minutes",
+      "High-five"
     ],
     "answer": 2
   },
@@ -179,10 +179,10 @@
     "country": "Iran",
     "question": "What s the most high-stakes flex you can legally do at an Iranian dinner?",
     "options": [
-      "Eating all the saffron rice crust (Tahdig) without permission",
-      "Asking for unseasoned boiled chicken",
-      "Bringing a store-bought cake",
-      "Leaving before tea is served"
+      "Steal-Tahdig",
+      "Boiled-chicken",
+      "Store-cake",
+      "Leave-early"
     ],
     "answer": 0
   },
@@ -190,10 +190,10 @@
     "country": "Iran",
     "question": "What is the true power source of the entire nation?",
     "options": [
-      "Red Bull and anxiety",
-      "A never-ending supply of black tea and pistachios",
-      "Solar panels and vibes",
-      "Iced coffee IV drips"
+      "Red-Bull",
+      "Black-Tea",
+      "Solar",
+      "Iced-coffee"
     ],
     "answer": 1
   },
@@ -201,10 +201,10 @@
     "country": "USA",
     "question": "How does the USA measure distance?",
     "options": [
-      "The metric system like normal NPCs",
-      "In football fields, washing machines, and bald eagle wingspans",
-      "Parsecs and lightyears only",
-      "Using only bananas for scale"
+      "Metric",
+      "Football-fields",
+      "Parsecs",
+      "Bananas"
     ],
     "answer": 1
   },
@@ -212,10 +212,10 @@
     "country": "USA",
     "question": "What s the ultimate flex in the American healthcare system?",
     "options": [
-      "Free checkups for everyone",
-      "Taking an Uber to the hospital to avoid a ,000 ambulance bill",
-      "Getting paid to go to the doctor",
-      "Having an automated doc-bot in your basement"
+      "Free-checkups",
+      "Uber-to-ER",
+      "Paid-visits",
+      "Doc-bots"
     ],
     "answer": 1
   },
@@ -223,10 +223,10 @@
     "country": "USA",
     "question": "What s the main side-quest behavior at a Walmart at 2 AM?",
     "options": [
-      "Polite nodding while buying groceries",
-      "Witnessing a full server-wipe boss battle in the cereal aisle",
-      "Attending a silent disco",
-      "Discussing philosophy with the cashier"
+      "Nodding",
+      "Boss-battle",
+      "Silent-disco",
+      "Philosophy"
     ],
     "answer": 1
   },
@@ -234,10 +234,10 @@
     "country": "Japan",
     "question": "What is the actual daily grind for a Tokyo salaryman?",
     "options": [
-      "Working 4 hours, napping, and leaving early",
-      "Sleeping instantly on the train standing up like an NPC and working till midnight",
-      "Telecommuting from a zen garden",
-      "Playing rhythm games in the arcade all day"
+      "Napping",
+      "Overwork",
+      "Zen-garden",
+      "Arcades"
     ],
     "answer": 1
   },
@@ -245,10 +245,10 @@
     "country": "Japan",
     "question": "What happens if a Japanese train is 30 seconds late?",
     "options": [
-      "Nobody cares, it s casual",
-      "The conductor hands out official apology slips and questions their entire existence",
-      "They cancel the train line permanently",
-      "Passengers throw a massive party"
+      "Casual",
+      "Apologies",
+      "Cancelled",
+      "Party"
     ],
     "answer": 1
   },
@@ -256,10 +256,10 @@
     "country": "Japan",
     "question": "How advanced are Japanese toilets?",
     "options": [
-      "It s just a hole in the ground",
-      "They straight up play music, warm your seat, and judge your life choices",
-      "Basic porcelain features only",
-      "They don t use plumbing at all"
+      "Hole",
+      "Musical",
+      "Porcelain",
+      "No-plumbing"
     ],
     "answer": 1
   },
@@ -267,10 +267,10 @@
     "country": "France",
     "question": "What is the default response when slightly inconvenienced?",
     "options": [
-      "Writing a polite Yelp review",
-      "Dropping everything to go on a historically accurate national strike",
-      "Smiling and bearing the pain",
-      "Making a viral TikTok dance"
+      "Yelp-review",
+      "Strike",
+      "Smiling",
+      "TikTok"
     ],
     "answer": 1
   },
@@ -278,10 +278,10 @@
     "country": "France",
     "question": "How do French people perceive tourists asking for directions in English?",
     "options": [
-      "They hand out a free map with a smile",
-      "They hit them with the ultimate bombastic side-eye and pretend not to understand",
-      "They start singing la marseillaise",
-      "They give a free croissant"
+      "Free-map",
+      "Side-eye",
+      "Singing",
+      "Croissant"
     ],
     "answer": 1
   },
@@ -289,10 +289,10 @@
     "country": "France",
     "question": "What is breakfast if you live in Paris?",
     "options": [
-      "A massive American-style buffet",
-      "A single black coffee, a cigarette, and overwhelming existential dread",
-      "Pancakes with maple syrup",
-      "Just a bowl of raw eggs"
+      "Buffet",
+      "Coffee-Cig",
+      "Pancakes",
+      "Raw-eggs"
     ],
     "answer": 1
   },
@@ -300,10 +300,10 @@
     "country": "Brazil",
     "question": "What happens if you try to start an event in Brazil exactly on time?",
     "options": [
-      "Everyone shows up 5 minutes early",
-      "You ll be completely alone for the first 3 hours because Brazilian time is a lifestyle",
-      "The police shut it down",
-      "The event venue upgrades you for free"
+      "Early",
+      "Alone",
+      "Shut-down",
+      "Upgraded"
     ],
     "answer": 1
   },
@@ -311,10 +311,10 @@
     "country": "Brazil",
     "question": "What s the only valid currency during the week of Carnaval?",
     "options": [
-      "Bitcoin and Ethereum",
-      "Pure glitter, samba steps, and immaculate vibes",
-      "Gold coins from a pirate chest",
-      "Monopoly money"
+      "Crypto",
+      "Glitter",
+      "Gold-coins",
+      "Monopoly"
     ],
     "answer": 1
   },
@@ -322,10 +322,10 @@
     "country": "Brazil",
     "question": "How is football treated relative to normal life?",
     "options": [
-      "Just a fun weekend hobby",
-      "It s a literal religion and breathing during a penalty kick is illegal",
-      "Nobody even watches it",
-      "They prefer competitive chess"
+      "Hobby",
+      "Religion",
+      "Ignored",
+      "Chess"
     ],
     "answer": 1
   },
@@ -333,10 +333,10 @@
     "country": "Australia",
     "question": "What s the spawn rate of horrifying wildlife in your backyard?",
     "options": [
-      "Zero percent, it s a myth",
-      "You re 100% fighting a huntsman spider for bathroom real estate every morning",
-      "Only in the zoos, mate",
-      "Wildlife only spawns during a full moon"
+      "Zero",
+      "Everyday",
+      "Zoos-only",
+      "Full-moon"
     ],
     "answer": 1
   },
@@ -344,10 +344,10 @@
     "country": "Australia",
     "question": "How do Australians communicate affection?",
     "options": [
-      "Writing long heartfelt poems",
-      "Calling their best mates the most out-of-pocket insults globally recognized",
-      "Formal handshakes only",
-      "Bowing respectfully"
+      "Poems",
+      "Insults",
+      "Handshakes",
+      "Bowing"
     ],
     "answer": 1
   },
@@ -355,10 +355,10 @@
     "country": "Australia",
     "question": "What is the national meta for footwear?",
     "options": [
-      "Designer boots",
-      "Steel-toe work boots 24/7",
-      "Thongs (flip-flops) no matter if it s a wedding or surviving the Outback",
-      "Barefoot only everywhere"
+      "Designer",
+      "Steel-toe",
+      "Thongs",
+      "Barefoot"
     ],
     "answer": 2
   },
@@ -366,10 +366,10 @@
     "country": "Germany",
     "question": "What is the German concept of humor?",
     "options": [
-      "Extremely slapstick and loud",
-      "Non-existent, as work efficiency is the only punchline you need",
-      "Stand-up specials at breakfast",
-      "A continuous stream of dad jokes"
+      "Slapstick",
+      "Non-existent",
+      "Stand-up",
+      "Dad-jokes"
     ],
     "answer": 1
   },
@@ -377,10 +377,10 @@
     "country": "Germany",
     "question": "What happens if you cross the street when the light is red but there are no cars?",
     "options": [
-      "Nothing, it s totally chill",
-      "A dozen elderly people will instantly stare into your soul and judge you for breaking the rules",
-      "You get a high-five from the police",
-      "The street lights turn to RGB party mode"
+      "Chill",
+      "Judged",
+      "High-five",
+      "RGB-mode"
     ],
     "answer": 1
   },
@@ -388,10 +388,10 @@
     "country": "Germany",
     "question": "What is considered a valid lunch?",
     "options": [
-      "A light salad with vinaigrette",
-      "A massive sausage, half a loaf of bread, and a pint of liquid bread (beer)",
-      "Five gourmet courses",
-      "Just a protein shake"
+      "Salad",
+      "Sausage-Beer",
+      "Gourmet",
+      "Protein"
     ],
     "answer": 1
   },
@@ -399,10 +399,10 @@
     "country": "UK",
     "question": "What is the absolute pinnacle of British cuisine?",
     "options": [
-      "Slow-roasted beef wellington",
-      "A cheeky Nando s followed by dropping a kebab on the pavement at 3 AM",
-      "Caviar on toast",
-      "Raw oysters with lemon"
+      "Wellington",
+      "Kebab",
+      "Caviar",
+      "Oysters"
     ],
     "answer": 1
   },
@@ -410,10 +410,10 @@
     "country": "UK",
     "question": "How do they handle a minor heatwave of 25°C?",
     "options": [
-      "They go about their day normally",
-      "The entire nation enters survival mode and infrastructure melts",
-      "They wear winter coats",
-      "They migrate temporarily to Iceland"
+      "Normal",
+      "Meltdown",
+      "Winter-coats",
+      "Migrate"
     ],
     "answer": 1
   },
@@ -421,10 +421,10 @@
     "country": "UK",
     "question": "What is the highest form of British politeness?",
     "options": [
-      "Apologizing profusely to an inanimate object after bumping into it",
-      "Bowing to the King every morning",
-      "Giving strangers full compliments",
-      "Tip-toeing everywhere"
+      "Apologizing",
+      "Bowing",
+      "Compliments",
+      "Tip-toeing"
     ],
     "answer": 0
   },
@@ -432,10 +432,10 @@
     "country": "North Korea",
     "question": "What is the average internet search experience like?",
     "options": [
-      "Googling whatever you want on 5G speeds",
-      "Connecting to the Kwangmyong intranet to see 12 approved pictures of the Supreme Leader",
-      "Unlimited TikTok scrolling",
-      "Mining crypto on fiber lines"
+      "5G-Google",
+      "Intranet-Only",
+      "TikTok",
+      "Crypto"
     ],
     "answer": 1
   },
@@ -443,10 +443,10 @@
     "country": "North Korea",
     "question": "How do you get a trendy haircut?",
     "options": [
-      "You show the barber a Pinterest board",
-      "You choose from one of the state-approved haircuts or face consequences",
-      "You shave it entirely",
-      "You let it grow indefinitely like a wild man"
+      "Pinterest",
+      "State-Approved",
+      "Shaved",
+      "Wild"
     ],
     "answer": 1
   },
@@ -454,10 +454,10 @@
     "country": "North Korea",
     "question": "What is the main protagonist energy allowed in the country?",
     "options": [
-      "Everyone is the star of their own vlog",
-      "There is only one Main Character, and his name is the Supreme Leader",
-      "The generals run the clout game",
-      "Pop stars taking over the charts"
+      "Vloggers",
+      "Supreme-Leader",
+      "Generals",
+      "Pop-stars"
     ],
     "answer": 1
   }
