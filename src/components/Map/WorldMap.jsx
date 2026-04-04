@@ -393,8 +393,8 @@ const AttackPopups = () => {
         const popup = {
           id: Date.now() + Math.random(),
           pos: centroid,
-          text: data.deflected ? 'CYBERATTACK' : (data.success ? `-${data.damage} HP` : 'COUNTERED'),
-          color: data.deflected ? '#00ffcc' : (data.success ? '#ff4444' : '#58a6ff')
+          text: data.firewallBlocked ? 'FIREWALL BLOCKED' : (data.deflected ? 'CYBERATTACK' : (data.success ? `-${data.damage} HP` : 'COUNTERED')),
+          color: data.firewallBlocked ? '#aaaaaa' : (data.deflected ? '#00ffcc' : (data.success ? '#ff4444' : '#58a6ff'))
         };
         if (data.itemId === 'nuke' && data.success) {
           popup.text = `NUKE DETONATED -${data.damage} HP`;

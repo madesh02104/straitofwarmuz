@@ -1270,6 +1270,30 @@
     "answer": 2
   },
   {
+    "country": "UK",
+    "question": "Is British food just beans on toast and bland stews?",
+    "options": ["Yes", "No", "Only for breakfast"],
+    "answer": 0
+  },
+  {
+    "country": "UK",
+    "question": "Does everyone in the UK drink 10 cups of tea a day?",
+    "options": ["Yes, it's mandatory", "Only when it rains", "No"],
+    "answer": 0
+  },
+  {
+    "country": "UK",
+    "question": "Do the British politely queue for everything?",
+    "options": ["Never", "Sometimes", "Yes, it's a sport"],
+    "answer": 2
+  },
+  {
+    "country": "UK",
+    "question": "Is British weather always gloomy and rainy?",
+    "options": ["Yes (Big sad)", "No", "Only in summer"],
+    "answer": 0
+  },
+  {
     "country": "North Korea",
     "question": "Can citizens freely use the internet?",
     "options": [

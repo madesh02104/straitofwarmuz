@@ -47,14 +47,7 @@ export const Landing = () => {
               <ChevronRight size={20} className="arrow" />
             </button>
 
-            <button className="mode-btn private" onClick={() => handleJoin('private')}>
-              <div className="btn-icon"><Lock size={24}/></div>
-              <div className="btn-text">
-                <span className="mode-title">Private Room</span>
-                <span className="mode-desc">Play with friends only</span>
-              </div>
-              <ChevronRight size={20} className="arrow" />
-            </button>
+
           </div>
         </div>
 

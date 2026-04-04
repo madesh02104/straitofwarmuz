@@ -164,6 +164,19 @@ export const Dashboard = () => {
                 </div>
               ))}
             </div>
+            
+            {gameState.battleLogs && gameState.battleLogs.length > 0 && (
+              <div className="battle-logs-container" style={{ marginTop: '20px', padding: '15px', background: 'rgba(0,0,0,0.5)', borderRadius: '8px', maxHeight: '150px', overflowY: 'auto' }}>
+                <h3 style={{ textTransform: 'uppercase', fontSize: '14px', marginBottom: '10px', color: 'var(--accent-blue)' }}>BATTLE LOG</h3>
+                {gameState.battleLogs.map((log, i) => (
+                  <div key={i} style={{ fontSize: '12px', padding: '4px 0', borderBottom: '1px solid rgba(255,255,255,0.1)', color: log.text.includes('[ATTACK]') ? 'var(--accent-red)' : log.text.includes('[DEFENSE]') ? 'var(--text-muted)' : log.text.includes('[FIREWALL]') ? '#aaaaaa' : '#00ffcc' }}>
+                    <span style={{ opacity: 0.5, marginRight: '8px' }}>{new Date(log.time).toLocaleTimeString()}</span>
+                    {log.text}
+                  </div>
+                ))}
+              </div>
+            )}
+            
             <button className="winner-btn" onClick={() => window.location.reload()}>RETURN TO HQ</button>
           </div>
         </div>

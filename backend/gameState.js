@@ -151,6 +151,7 @@ class GameState {
     };
 
     this.events = [];
+    this.battleLogs = [];
     this.lastEventTime = Date.now();
     this.quizTimers = {};
     this.streaks = {};
@@ -424,6 +425,13 @@ class GameState {
       const counterId = item.counter;
 
       if (Date.now() < actualTarget.deflectingUntil) {
+        if (attacker.inventory["firewall"] > 0) {
+          attacker.inventory["firewall"]--;
+          attacker.attackCooldowns[itemId] = Date.now() + (item.attackDelay || 0);
+          this.battleLogs.push({ time: Date.now(), text: `[FIREWALL] ${attacker.country} nullified ${actualTarget.country}'s deflected ${item.name} attack!` });
+          return { success: true, damage: 0, target: attacker.socketId, deflected: true, originalTarget: actualTarget.socketId, itemId, firewallBlocked: true };
+        }
+
         let damageDealt = 0;
         if (item.effect === "freeze") {
           attacker.frozenUntil = Date.now() + 20000;
@@ -438,6 +446,7 @@ class GameState {
         }
         
         attacker.attackCooldowns[itemId] = Date.now() + (item.attackDelay || 0);
+        this.battleLogs.push({ time: Date.now(), text: `[CYBERATTACK] ${actualTarget.country} deflected ${item.name} back to ${attacker.country} dealing ${damageDealt} HP damage!` });
         return { success: true, damage: damageDealt, target: attacker.socketId, deflected: true, originalTarget: actualTarget.socketId, itemId };
       }
 
@@ -449,6 +458,7 @@ class GameState {
 
       if (isCountered) {
         attacker.attackCooldowns[itemId] = Date.now() + (item.attackDelay || 0);
+        this.battleLogs.push({ time: Date.now(), text: `[DEFENSE] ${actualTarget.country} successfully countered ${attacker.country}'s ${item.name}!` });
         return { success: false, reason: "countered", target: actualTarget.socketId, itemId };
       } else {
         let damageDealt = 0;
@@ -465,6 +475,7 @@ class GameState {
         }
         
         attacker.attackCooldowns[itemId] = Date.now() + (item.attackDelay || 0);
+        this.battleLogs.push({ time: Date.now(), text: `[ATTACK] ${attacker.country} hit ${actualTarget.country} with ${item.name} dealing ${damageDealt} HP damage!` });
         return { success: true, damage: damageDealt, target: actualTarget.socketId, itemId };
       }
     }
@@ -516,6 +527,7 @@ class GameState {
       players: this.players,
       marketStock: this.marketStock,
       rankings,
+      battleLogs: this.battleLogs,
     };
   }
 
@@ -539,6 +551,7 @@ class GameState {
     };
     this.quizTimers = {};
     this.streaks = {};
+    this.battleLogs = [];
   }
 }
 
