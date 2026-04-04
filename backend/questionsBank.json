@@ -1,1396 +1,464 @@
 [
   {
     "country": "India",
-    "question": "Do Indians worship cows as gods and let them block traffic freely?",
+    "question": "What is the absolute meta for Indian street food hygiene?",
     "options": [
-      "No",
-      "Often",
-      "Maybe",
-      "Yes"
-    ],
-    "answer": 3
-  },
-  {
-    "country": "India",
-    "question": "Is every Indian call center worker secretly trying to scam you with a fake Microsoft refund?",
-    "options": [
-      "No",
-      "Yes",
-      "Often",
-      "Sometimes"
+      "Michelin star level sanitized bruh",
+      "Hand-mixed with immaculate vibes and literal sweat",
+      "Only served in sterile lab equipment",
+      "Cooked by nanobots"
     ],
     "answer": 1
   },
   {
     "country": "India",
-    "question": "Do all Indians eat curry so spicy it can melt steel beams?",
+    "question": "How do Indian aunties hit you with emotional damage?",
     "options": [
-      "No",
-      "Often",
-      "Not at all",
-      "Yes"
+      "They ghost you on read",
+      "They compare your salary to Sharma ji ka beta",
+      "They drop a diss track on SoundCloud",
+      "They steal your meme stash"
     ],
-    "answer": 3
+    "answer": 1
   },
   {
     "country": "India",
-    "question": "Is India so overpopulated that people live on top of trains as a normal commute?",
+    "question": "What s the main character energy of an Indian wedding?",
     "options": [
-      "Maybe",
-      "Often",
-      "No",
-      "Yes"
-    ],
-    "answer": 3
-  },
-  {
-    "country": "India",
-    "question": "Do Indian weddings last longer than most Hollywood movies with non-stop dancing?",
-    "options": [
-      "Not at all",
-      "No",
-      "Often",
-      "Yes"
-    ],
-    "answer": 3
-  },
-  {
-    "country": "India",
-    "question": "Are Indians born knowing how to do complex math and IT coding in the womb?",
-    "options": [
-      "Not at all",
-      "Often",
-      "Yes",
-      "No"
-    ],
-    "answer": 2
-  },
-  {
-    "country": "India",
-    "question": "Do Indians head-bobble instead of saying yes or no?",
-    "options": [
-      "Never",
-      "Not at all",
-      "No",
-      "Yes"
-    ],
-    "answer": 3
-  },
-  {
-    "country": "India",
-    "question": "Is every street in India filled with snake charmers and holy men lying on nails?",
-    "options": [
-      "Often",
-      "No",
-      "Yes",
-      "Never"
-    ],
-    "answer": 2
-  },
-  {
-    "country": "India",
-    "question": "Do Indians survive on just rice, lentils, and extreme sweetness like rasgulla?",
-    "options": [
-      "Often",
-      "Maybe",
-      "Yes",
-      "No"
-    ],
-    "answer": 2
-  },
-  {
-    "country": "India",
-    "question": "Is Bollywood the only real cinema where heroes sing during fight scenes?",
-    "options": [
-      "No",
-      "Never",
-      "Yes",
-      "Not at all"
-    ],
-    "answer": 2
-  },
-  {
-    "country": "Pakistan",
-    "question": "Is Pakistan basically \"India but halal\" in every way?",
-    "options": [
-      "Maybe",
-      "Not at all",
-      "Yes",
-      "No"
-    ],
-    "answer": 2
-  },
-  {
-    "country": "Pakistan",
-    "question": "Do all Pakistanis play cricket like it's a holy war against India?",
-    "options": [
-      "Often",
-      "Yes",
-      "No",
-      "Not at all"
+      "A quiet acoustic guitar set",
+      "3 days of sleep deprivation and aggressive dancing",
+      "Eloping silently in the night",
+      "Just a casual Zoom call"
     ],
     "answer": 1
   },
   {
     "country": "Pakistan",
-    "question": "Are Pakistani weddings just massive feasts of biryani that last days?",
+    "question": "What is the literal flex of Pakistani weddings?",
     "options": [
-      "Often",
-      "No",
-      "Maybe",
-      "Yes"
-    ],
-    "answer": 3
-  },
-  {
-    "country": "Pakistan",
-    "question": "Is every Pakistani family tree suspiciously looped due to cousin marriages?",
-    "options": [
-      "Maybe",
-      "No",
-      "Yes",
-      "Never"
-    ],
-    "answer": 2
-  },
-  {
-    "country": "Pakistan",
-    "question": "Does Pakistan have more conspiracy theories about drones than actual drones?",
-    "options": [
-      "No",
-      "Never",
-      "Yes",
-      "I don't know"
-    ],
-    "answer": 2
-  },
-  {
-    "country": "Pakistan",
-    "question": "Are Pakistanis experts at surviving extreme heat, power cuts, and political drama?",
-    "options": [
-      "Never",
-      "Yes",
-      "No",
-      "Sometimes"
+      "Serving 5 courses of raw vegan celery",
+      "Biryani that slaps so hard you forget your own name",
+      "A 10-minute quiet ceremony",
+      "A potluck where you bring your own water"
     ],
     "answer": 1
   },
   {
     "country": "Pakistan",
-    "question": "Do all Pakistanis secretly train for jihad while watching cricket?",
+    "question": "How do neighbors handle a sudden power blackout?",
     "options": [
-      "Sometimes",
-      "No",
-      "Yes",
-      "Not at all"
+      "Panic room lockdown",
+      "Scream crying in the streets",
+      "Sitting outside gossiping like it s a feature, not a bug",
+      "Selling their PCs for scrap"
     ],
     "answer": 2
   },
   {
     "country": "Pakistan",
-    "question": "Is the national sport \"hating India\" more than cricket?",
+    "question": "What s the definitive form of stress relief during a match against India?",
     "options": [
-      "Yes",
-      "No",
-      "Never",
-      "I don't know"
-    ],
-    "answer": 0
-  },
-  {
-    "country": "Pakistan",
-    "question": "Do Pakistanis make the spiciest food known to mankind?",
-    "options": [
-      "No",
-      "Sometimes",
-      "Maybe",
-      "Yes"
-    ],
-    "answer": 3
-  },
-  {
-    "country": "Pakistan",
-    "question": "Is every Pakistani either a taxi driver in the West or a cricket legend?",
-    "options": [
-      "Yes",
-      "No",
-      "Maybe",
-      "Never"
-    ],
-    "answer": 0
-  },
-  {
-    "country": "Russia",
-    "question": "Do all Russians drink vodka like it's water and still function perfectly?",
-    "options": [
-      "Yes",
-      "Sometimes",
-      "I don't know",
-      "No"
-    ],
-    "answer": 0
-  },
-  {
-    "country": "Russia",
-    "question": "Is it true that Russians wrestle bears for fun and win?",
-    "options": [
-      "Never",
-      "No",
-      "Yes",
-      "Sometimes"
-    ],
-    "answer": 2
-  },
-  {
-    "country": "Russia",
-    "question": "Does Russia have only two seasons: winter and construction season?",
-    "options": [
-      "Yes",
-      "Often",
-      "Not at all",
-      "No"
-    ],
-    "answer": 0
-  },
-  {
-    "country": "Russia",
-    "question": "Are all Russians secretly controlled by the KGB or FSB even today?",
-    "options": [
-      "Yes",
-      "No",
-      "Sometimes",
-      "Never"
-    ],
-    "answer": 0
-  },
-  {
-    "country": "Russia",
-    "question": "Do Russians survive -40°C winters by just wearing a tracksuit?",
-    "options": [
-      "Maybe",
-      "Often",
-      "No",
-      "Yes"
-    ],
-    "answer": 3
-  },
-  {
-    "country": "Russia",
-    "question": "Is every Russian man a 6'5\" fighter who can drink anyone under the table?",
-    "options": [
-      "No",
-      "I don't know",
-      "Often",
-      "Yes"
-    ],
-    "answer": 3
-  },
-  {
-    "country": "Russia",
-    "question": "Do Russians respond to everything with \"In Soviet Russia...\" jokes?",
-    "options": [
-      "Not at all",
-      "Yes",
-      "No",
-      "I don't know"
+      "Meditation and sage burning",
+      "Screaming at the TV until your soul leaves your body",
+      "Polite golf claps",
+      "Turning off the monitor at 0-0"
     ],
     "answer": 1
   },
   {
     "country": "Russia",
-    "question": "Is corruption in Russia just called \"business as usual\"?",
+    "question": "What is the ultimate Russian winter drip?",
     "options": [
-      "Yes",
-      "Often",
-      "No",
-      "Maybe"
+      "Tank top and sheer vibes",
+      "Adidas tracksuits doing the slav squat",
+      "Heated Gucci jackets",
+      "Three layers of high-tech North Face"
     ],
-    "answer": 0
+    "answer": 1
   },
   {
     "country": "Russia",
-    "question": "Do all Russian cars run on pure willpower and bad roads?",
+    "question": "How do they handle a minor inconveniences in Russia?",
     "options": [
-      "Never",
-      "Maybe",
-      "Yes",
-      "No"
+      "Sending a strongly worded email",
+      "Brushing it off because they wrestle bears for fun",
+      "Crying on TikTok",
+      "Calling HR instantly"
     ],
-    "answer": 2
+    "answer": 1
   },
   {
     "country": "Russia",
-    "question": "Is Putin basically immortal and controls everything from chess to space?",
+    "question": "What s the go-to beverage when the temperature hits negative 40?",
     "options": [
-      "No",
-      "Yes",
-      "Never",
-      "Maybe"
+      "Iced matcha latte with oat milk",
+      "Pure unfiltered potato juice (Vodka) to defrost the soul",
+      "Sparkling water with a lime twist",
+      "Warm soy milk"
     ],
     "answer": 1
   },
   {
     "country": "China",
-    "question": "Do Chinese people eat literally anything that moves, including bats and dogs?",
+    "question": "What is the actual meta in Chinese factory lore?",
     "options": [
-      "Never",
-      "No",
-      "Yes",
-      "Often"
-    ],
-    "answer": 2
-  },
-  {
-    "country": "China",
-    "question": "Is everything in China just a cheap copy of Western products?",
-    "options": [
-      "No",
-      "Sometimes",
-      "Not at all",
-      "Yes"
-    ],
-    "answer": 3
-  },
-  {
-    "country": "China",
-    "question": "Are there so many people in China that crowds form for breathing room?",
-    "options": [
-      "No",
-      "Maybe",
-      "I don't know",
-      "Yes"
-    ],
-    "answer": 3
-  },
-  {
-    "country": "China",
-    "question": "Do all Chinese kids become math geniuses by age 5?",
-    "options": [
-      "No",
-      "Yes",
-      "Maybe",
-      "Sometimes"
+      "Vibin for 4 hours a day on bean bags",
+      "996 grindset literally building the simulation we live in",
+      "Three day work weeks for mental health",
+      "Only making artisanal clay pots"
     ],
     "answer": 1
   },
   {
     "country": "China",
-    "question": "Is the government watching you through every app and camera 24/7?",
+    "question": "How are transactions done because cash is so last season?",
     "options": [
-      "Maybe",
-      "No",
-      "I don't know",
-      "Yes"
+      "Bartering with rare Pokémon cards",
+      "Scanning WeChat QR codes for literally everything, even the street vendors",
+      "Using physical gold bricks",
+      "Writing personal checks in cursive"
     ],
-    "answer": 3
+    "answer": 1
   },
   {
     "country": "China",
-    "question": "Do Chinese factories produce the entire world's goods in one week?",
+    "question": "What s the ultimate status symbol for Chinese parents?",
     "options": [
-      "Yes",
-      "I don't know",
-      "No",
-      "Sometimes"
-    ],
-    "answer": 0
-  },
-  {
-    "country": "China",
-    "question": "Are pandas the only thing China cares about more than money?",
-    "options": [
-      "Yes",
-      "No",
-      "Not at all",
-      "Sometimes"
-    ],
-    "answer": 0
-  },
-  {
-    "country": "China",
-    "question": "Is \"Made in China\" code for \"it will break in 2 days\"?",
-    "options": [
-      "Yes",
-      "I don't know",
-      "Never",
-      "No"
-    ],
-    "answer": 0
-  },
-  {
-    "country": "China",
-    "question": "Do Chinese people work 996 schedules (9am-9pm, 6 days) without complaint?",
-    "options": [
-      "Sometimes",
-      "No",
-      "Yes",
-      "Maybe"
-    ],
-    "answer": 2
-  },
-  {
-    "country": "China",
-    "question": "Is Taiwan just a rebellious province that isn't a real country?",
-    "options": [
-      "Yes",
-      "No",
-      "Not at all",
-      "Maybe"
+      "Their kid dropping out to become a TikToker",
+      "Their kid getting a PhD in engineering at age 12",
+      "Owning three gaming PCs",
+      "Going viral for dancing"
     ],
     "answer": 1
   },
   {
     "country": "Israel",
-    "question": "Are Israelis the rudest and most blunt people on Earth who argue with everyone?",
+    "question": "What is the default volume for a casual conversation?",
     "options": [
-      "Maybe",
-      "Often",
-      "No",
-      "Yes"
-    ],
-    "answer": 3
-  },
-  {
-    "country": "Israel",
-    "question": "Does every Israeli serve in the military and become a tech startup founder?",
-    "options": [
-      "Maybe",
-      "No",
-      "Never",
-      "Yes"
-    ],
-    "answer": 3
-  },
-  {
-    "country": "Israel",
-    "question": "Is hummus the national food and cause for wars with neighbors?",
-    "options": [
-      "No",
-      "Yes",
-      "I don't know",
-      "Never"
-    ],
-    "answer": 1
-  },
-  {
-    "country": "Israel",
-    "question": "Do Israelis turn every conversation into a debate or negotiation?",
-    "options": [
-      "Not at all",
-      "Often",
-      "Yes",
-      "No"
+      "Whispering like it s a library",
+      "Using telepathy",
+      "Screaming at full volume so it looks like an intense debate, but they re just deciding where to eat",
+      "Speaking through written letters only"
     ],
     "answer": 2
   },
   {
     "country": "Israel",
-    "question": "Is Israel tiny but somehow has the best intelligence service in the world?",
+    "question": "How do Israelis solve literal tech problems?",
     "options": [
-      "Sometimes",
-      "I don't know",
-      "No",
-      "Yes"
-    ],
-    "answer": 3
-  },
-  {
-    "country": "Israel",
-    "question": "Are all Israelis either ultra-Orthodox or atheist tech bros?",
-    "options": [
-      "I don't know",
-      "Yes",
-      "Never",
-      "No"
-    ],
-    "answer": 1
-  },
-  {
-    "country": "Israel",
-    "question": "Does Israel survive constant conflict by just being extremely resilient?",
-    "options": [
-      "No",
-      "Maybe",
-      "Often",
-      "Yes"
-    ],
-    "answer": 3
-  },
-  {
-    "country": "Israel",
-    "question": "Is every Israeli secretly a Mossad agent on vacation?",
-    "options": [
-      "Sometimes",
-      "No",
-      "Yes",
-      "Maybe"
+      "Turning it off and on again and crying",
+      "Lobbying the CEO",
+      "Creating a billion-dollar startup in a coffee shop by accident",
+      "Filing a ticket with IT"
     ],
     "answer": 2
   },
   {
     "country": "Israel",
-    "question": "Do Israelis drive like they're in a tank no matter what car they're in?",
+    "question": "What s the supreme spread that will start a war if insulted?",
     "options": [
-      "Yes",
-      "I don't know",
-      "No",
-      "Sometimes"
-    ],
-    "answer": 0
-  },
-  {
-    "country": "Israel",
-    "question": "Is complaining about everything a national pastime?",
-    "options": [
-      "Sometimes",
-      "Yes",
-      "Maybe",
-      "No"
-    ],
-    "answer": 1
-  },
-  {
-    "country": "Iran",
-    "question": "Do all Iranians spend their days drinking tea and reciting poetry?",
-    "options": [
-      "Maybe",
-      "Not at all",
-      "No",
-      "Yes"
-    ],
-    "answer": 3
-  },
-  {
-    "country": "Iran",
-    "question": "Is every Iranian home decorated with Persian carpets that cost a fortune?",
-    "options": [
-      "I don't know",
-      "Yes",
-      "Sometimes",
-      "No"
-    ],
-    "answer": 1
-  },
-  {
-    "country": "Iran",
-    "question": "Are Iranian women the most beautiful in the world but hidden behind hijab?",
-    "options": [
-      "Maybe",
-      "Yes",
-      "No",
-      "I don't know"
-    ],
-    "answer": 1
-  },
-  {
-    "country": "Iran",
-    "question": "Does Iran have the world's strictest morality police for everything?",
-    "options": [
-      "Yes",
-      "Never",
-      "I don't know",
-      "No"
-    ],
-    "answer": 0
-  },
-  {
-    "country": "Iran",
-    "question": "Are all Iranians secretly against the government but love their ancient culture?",
-    "options": [
-      "Often",
-      "Not at all",
-      "Yes",
-      "No"
+      "Chunky peanut butter",
+      "Avocado smash with feta",
+      "Hummus so thick you can build a house with it",
+      "Ranch dressing"
     ],
     "answer": 2
   },
   {
     "country": "Iran",
-    "question": "Is Persian food the spiciest and most flavorful on the planet?",
+    "question": "How long does a standard Persian goodbye take at the door?",
     "options": [
-      "Never",
-      "No",
-      "Sometimes",
-      "Yes"
-    ],
-    "answer": 3
-  },
-  {
-    "country": "Iran",
-    "question": "Do Iranians invent everything from chess to algebra but get no credit?",
-    "options": [
-      "Never",
-      "Often",
-      "No",
-      "Yes"
-    ],
-    "answer": 3
-  },
-  {
-    "country": "Iran",
-    "question": "Is Iran constantly in \"axis of evil\" mode according to the West?",
-    "options": [
-      "No",
-      "Often",
-      "Yes",
-      "Not at all"
+      "Two seconds flat",
+      "An Irish exit through the window",
+      "A solid 45 minutes of aggressive complimenting (Taarof)",
+      "One high-five and out"
     ],
     "answer": 2
   },
   {
     "country": "Iran",
-    "question": "Do all Iranians negotiate like bazaar merchants for hours?",
+    "question": "What s the most high-stakes flex you can legally do at an Iranian dinner?",
     "options": [
-      "Sometimes",
-      "No",
-      "Maybe",
-      "Yes"
+      "Eating all the saffron rice crust (Tahdig) without permission",
+      "Asking for unseasoned boiled chicken",
+      "Bringing a store-bought cake",
+      "Leaving before tea is served"
     ],
-    "answer": 3
+    "answer": 0
   },
   {
     "country": "Iran",
-    "question": "Is every Iranian either a poet or an engineer in exile?",
+    "question": "What is the true power source of the entire nation?",
     "options": [
-      "No",
-      "Yes",
-      "Maybe",
-      "I don't know"
+      "Red Bull and anxiety",
+      "A never-ending supply of black tea and pistachios",
+      "Solar panels and vibes",
+      "Iced coffee IV drips"
     ],
     "answer": 1
   },
   {
     "country": "USA",
-    "question": "Are all Americans loud, obese, and eat only fast food?",
+    "question": "How does the USA measure distance?",
     "options": [
-      "Yes",
-      "Not at all",
-      "Maybe",
-      "No"
-    ],
-    "answer": 0
-  },
-  {
-    "country": "USA",
-    "question": "Does every American own multiple guns and think shooting solves problems?",
-    "options": [
-      "No",
-      "Never",
-      "Yes",
-      "Sometimes"
-    ],
-    "answer": 2
-  },
-  {
-    "country": "USA",
-    "question": "Are Americans completely ignorant about geography and world history?",
-    "options": [
-      "Yes",
-      "No",
-      "I don't know",
-      "Sometimes"
-    ],
-    "answer": 0
-  },
-  {
-    "country": "USA",
-    "question": "Is the US flag waved more than any other country's in daily life?",
-    "options": [
-      "Maybe",
-      "Yes",
-      "Often",
-      "No"
+      "The metric system like normal NPCs",
+      "In football fields, washing machines, and bald eagle wingspans",
+      "Parsecs and lightyears only",
+      "Using only bananas for scale"
     ],
     "answer": 1
   },
   {
     "country": "USA",
-    "question": "Do Americans think their country is the best at everything forever?",
+    "question": "What s the ultimate flex in the American healthcare system?",
     "options": [
-      "Yes",
-      "No",
-      "Not at all",
-      "Maybe"
-    ],
-    "answer": 0
-  },
-  {
-    "country": "USA",
-    "question": "Is Hollywood the only culture Americans export?",
-    "options": [
-      "Never",
-      "Sometimes",
-      "No",
-      "Yes"
-    ],
-    "answer": 3
-  },
-  {
-    "country": "USA",
-    "question": "Do Americans sue over everything and blame lawyers for society?",
-    "options": [
-      "Yes",
-      "Never",
-      "Sometimes",
-      "No"
-    ],
-    "answer": 0
-  },
-  {
-    "country": "USA",
-    "question": "Are all Americans either redneck cowboys or liberal coastal elites?",
-    "options": [
-      "No",
-      "Not at all",
-      "Often",
-      "Yes"
-    ],
-    "answer": 3
-  },
-  {
-    "country": "USA",
-    "question": "Does the US military solve every international problem by invading?",
-    "options": [
-      "Maybe",
-      "Yes",
-      "No",
-      "Often"
+      "Free checkups for everyone",
+      "Taking an Uber to the hospital to avoid a ,000 ambulance bill",
+      "Getting paid to go to the doctor",
+      "Having an automated doc-bot in your basement"
     ],
     "answer": 1
   },
   {
     "country": "USA",
-    "question": "Is \"freedom\" just code for doing whatever you want no matter the consequences?",
+    "question": "What s the main side-quest behavior at a Walmart at 2 AM?",
     "options": [
-      "Yes",
-      "Not at all",
-      "No",
-      "Maybe"
-    ],
-    "answer": 0
-  },
-  {
-    "country": "Japan",
-    "question": "Is Japan just anime + waifus IRL?",
-    "options": [
-      "Yes 💀",
-      "No (touch grass)",
-      "Only in Tokyo"
+      "Polite nodding while buying groceries",
+      "Witnessing a full server-wipe boss battle in the cereal aisle",
+      "Attending a silent disco",
+      "Discussing philosophy with the cashier"
     ],
     "answer": 1
   },
   {
     "country": "Japan",
-    "question": "Does Japan have a military or nah?",
+    "question": "What is the actual daily grind for a Tokyo salaryman?",
     "options": [
-      "Nope, pacifist vibes",
-      "Yes but rebranded DLC (Self-Defense Forces)",
-      "Secret anime army"
+      "Working 4 hours, napping, and leaving early",
+      "Sleeping instantly on the train standing up like an NPC and working till midnight",
+      "Telecommuting from a zen garden",
+      "Playing rhythm games in the arcade all day"
     ],
     "answer": 1
   },
   {
     "country": "Japan",
-    "question": "Is working in Japan basically “sleep is optional”?",
+    "question": "What happens if a Japanese train is 30 seconds late?",
     "options": [
-      "Yes (grindset gone wrong)",
-      "No (balanced life fr)",
-      "Only for salarymen"
-    ],
-    "answer": 0
-  },
-  {
-    "country": "Japan",
-    "question": "Is Japan’s population lowkey shrinking?",
-    "options": [
-      "Nah infinite NPC spawn",
-      "Yes (aging arc)",
-      "Only rural"
+      "Nobody cares, it s casual",
+      "The conductor hands out official apology slips and questions their entire existence",
+      "They cancel the train line permanently",
+      "Passengers throw a massive party"
     ],
     "answer": 1
   },
   {
     "country": "Japan",
-    "question": "Is sushi always raw fish?",
+    "question": "How advanced are Japanese toilets?",
     "options": [
-      "Yes bro obviously",
-      "No (education system failed you)",
-      "Only outside Japan"
-    ],
-    "answer": 1
-  },
-  {
-    "country": "Japan",
-    "question": "Is Tokyo the main character city?",
-    "options": [
-      "Yes",
-      "No",
-      "Osaka clears"
-    ],
-    "answer": 0
-  },
-  {
-    "country": "Japan",
-    "question": "Does Japan censor internet like China?",
-    "options": [
-      "Yes",
-      "No",
-      "Only anime sites"
-    ],
-    "answer": 1
-  },
-  {
-    "country": "Japan",
-    "question": "Is Japan rich-rich?",
-    "options": [
-      "Yes (top economy energy)",
-      "No",
-      "Used to be"
-    ],
-    "answer": 0
-  },
-  {
-    "country": "Japan",
-    "question": "Are Japanese trains always on time?",
-    "options": [
-      "Yes (built different)",
-      "No",
-      "Sometimes late for drama"
-    ],
-    "answer": 0
-  },
-  {
-    "country": "Japan",
-    "question": "Is Japan allergic to immigration?",
-    "options": [
-      "Yes (low intake)",
-      "No",
-      "Only recently"
-    ],
-    "answer": 0
-  },
-  {
-    "country": "France",
-    "question": "Do French people hate speaking English?",
-    "options": [
-      "Yes 😭",
-      "No",
-      "Only if your accent is mid"
+      "It s just a hole in the ground",
+      "They straight up play music, warm your seat, and judge your life choices",
+      "Basic porcelain features only",
+      "They don t use plumbing at all"
     ],
     "answer": 1
   },
   {
     "country": "France",
-    "question": "Is the Eiffel Tower overrated or nah?",
+    "question": "What is the default response when slightly inconvenienced?",
     "options": [
-      "Yes (mid tower)",
-      "No (iconic)",
-      "Depends on IG followers"
+      "Writing a polite Yelp review",
+      "Dropping everything to go on a historically accurate national strike",
+      "Smiling and bearing the pain",
+      "Making a viral TikTok dance"
     ],
     "answer": 1
   },
   {
     "country": "France",
-    "question": "Is France always protesting something?",
+    "question": "How do French people perceive tourists asking for directions in English?",
     "options": [
-      "Yes (national hobby)",
-      "No",
-      "Only in Paris"
-    ],
-    "answer": 0
-  },
-  {
-    "country": "France",
-    "question": "Is France still a global power?",
-    "options": [
-      "Yes",
-      "No",
-      "EU carry"
-    ],
-    "answer": 0
-  },
-  {
-    "country": "France",
-    "question": "Is French food just bread + cheese + vibes?",
-    "options": [
-      "Yes",
-      "No (skill issue if you think that)",
-      "Mostly yes"
+      "They hand out a free map with a smile",
+      "They hit them with the ultimate bombastic side-eye and pretend not to understand",
+      "They start singing la marseillaise",
+      "They give a free croissant"
     ],
     "answer": 1
   },
   {
     "country": "France",
-    "question": "Is France part of EU?",
+    "question": "What is breakfast if you live in Paris?",
     "options": [
-      "Yes",
-      "No",
-      "Rage quit"
-    ],
-    "answer": 0
-  },
-  {
-    "country": "France",
-    "question": "Did France win World Cup 2018?",
-    "options": [
-      "Yes",
-      "No",
-      "Almost"
-    ],
-    "answer": 0
-  },
-  {
-    "country": "France",
-    "question": "Are French people rude or just honest?",
-    "options": [
-      "Rude",
-      "Honest",
-      "Depends if you're a tourist"
-    ],
-    "answer": 2
-  },
-  {
-    "country": "France",
-    "question": "Is Paris the only relevant city?",
-    "options": [
-      "Yes",
-      "No",
-      "Lyon crying rn"
-    ],
-    "answer": 1
-  },
-  {
-    "country": "France",
-    "question": "Is France nuclear powered?",
-    "options": [
-      "Yes",
-      "No",
-      "Borrowed from US"
-    ],
-    "answer": 0
-  },
-  {
-    "country": "Brazil",
-    "question": "Is Brazil just football + samba + vibes?",
-    "options": [
-      "Yes 💀",
-      "No",
-      "That + chaos DLC"
-    ],
-    "answer": 2
-  },
-  {
-    "country": "Brazil",
-    "question": "Do Brazilians speak Spanish?",
-    "options": [
-      "Yes",
-      "No (Portuguese gang)",
-      "Depends on mood"
+      "A massive American-style buffet",
+      "A single black coffee, a cigarette, and overwhelming existential dread",
+      "Pancakes with maple syrup",
+      "Just a bowl of raw eggs"
     ],
     "answer": 1
   },
   {
     "country": "Brazil",
-    "question": "Is crime in cities like a real issue?",
+    "question": "What happens if you try to start an event in Brazil exactly on time?",
     "options": [
-      "No",
-      "Yes",
-      "Only at night"
+      "Everyone shows up 5 minutes early",
+      "You ll be completely alone for the first 3 hours because Brazilian time is a lifestyle",
+      "The police shut it down",
+      "The event venue upgrades you for free"
     ],
     "answer": 1
   },
   {
     "country": "Brazil",
-    "question": "Is Brazil rich or broke?",
+    "question": "What s the only valid currency during the week of Carnaval?",
     "options": [
-      "Rich",
-      "Broke",
-      "Rich country, uneven loot distribution"
-    ],
-    "answer": 2
-  },
-  {
-    "country": "Brazil",
-    "question": "Is Amazon rainforest important globally?",
-    "options": [
-      "Nah just trees",
-      "Yes (planet lungs fr)",
-      "Only Brazil problem"
+      "Bitcoin and Ethereum",
+      "Pure glitter, samba steps, and immaculate vibes",
+      "Gold coins from a pirate chest",
+      "Monopoly money"
     ],
     "answer": 1
   },
   {
     "country": "Brazil",
-    "question": "Is Brazil politically stable?",
+    "question": "How is football treated relative to normal life?",
     "options": [
-      "Yes",
-      "No",
-      "Depends on season"
-    ],
-    "answer": 1
-  },
-  {
-    "country": "Brazil",
-    "question": "Is Carnival basically global main event?",
-    "options": [
-      "Yes",
-      "No",
-      "Only locals care"
-    ],
-    "answer": 0
-  },
-  {
-    "country": "Brazil",
-    "question": "Is Brazil the biggest in South America?",
-    "options": [
-      "Yes",
-      "No",
-      "Argentina wishes"
-    ],
-    "answer": 0
-  },
-  {
-    "country": "Brazil",
-    "question": "Is football religion in Brazil?",
-    "options": [
-      "Yes",
-      "No",
-      "Only World Cup"
-    ],
-    "answer": 0
-  },
-  {
-    "country": "Brazil",
-    "question": "Is Brazil underrated globally?",
-    "options": [
-      "Yes",
-      "No",
-      "Overhyped"
-    ],
-    "answer": 0
-  },
-  {
-    "country": "Australia",
-    "question": "Is everything in Australia trying to kill you?",
-    "options": [
-      "Yes 😭",
-      "No (stop watching reels)",
-      "Only spiders"
+      "Just a fun weekend hobby",
+      "It s a literal religion and breathing during a penalty kick is illegal",
+      "Nobody even watches it",
+      "They prefer competitive chess"
     ],
     "answer": 1
   },
   {
     "country": "Australia",
-    "question": "Is Australia just desert + kangaroos?",
+    "question": "What s the spawn rate of horrifying wildlife in your backyard?",
     "options": [
-      "Yes",
-      "No",
-      "NPC take"
+      "Zero percent, it s a myth",
+      "You re 100% fighting a huntsman spider for bathroom real estate every morning",
+      "Only in the zoos, mate",
+      "Wildlife only spawns during a full moon"
     ],
     "answer": 1
   },
   {
     "country": "Australia",
-    "question": "Is the Great Barrier Reef dying?",
+    "question": "How do Australians communicate affection?",
     "options": [
-      "No",
-      "Yes (climate L)",
-      "Only partially"
-    ],
-    "answer": 2
-  },
-  {
-    "country": "Australia",
-    "question": "Is Australia close to Asia geopolitically?",
-    "options": [
-      "Yes",
-      "No (US ally core)",
-      "Neutral"
+      "Writing long heartfelt poems",
+      "Calling their best mates the most out-of-pocket insults globally recognized",
+      "Formal handshakes only",
+      "Bowing respectfully"
     ],
     "answer": 1
   },
   {
     "country": "Australia",
-    "question": "Is Sydney the capital?",
+    "question": "What is the national meta for footwear?",
     "options": [
-      "Yes",
-      "No (skill issue)",
-      "Melbourne"
+      "Designer boots",
+      "Steel-toe work boots 24/7",
+      "Thongs (flip-flops) no matter if it s a wedding or surviving the Outback",
+      "Barefoot only everywhere"
+    ],
+    "answer": 2
+  },
+  {
+    "country": "Germany",
+    "question": "What is the German concept of humor?",
+    "options": [
+      "Extremely slapstick and loud",
+      "Non-existent, as work efficiency is the only punchline you need",
+      "Stand-up specials at breakfast",
+      "A continuous stream of dad jokes"
     ],
     "answer": 1
   },
   {
-    "country": "Australia",
-    "question": "Is Australia rich-rich?",
+    "country": "Germany",
+    "question": "What happens if you cross the street when the light is red but there are no cars?",
     "options": [
-      "Yes",
-      "No",
-      "Just mining"
-    ],
-    "answer": 0
-  },
-  {
-    "country": "Australia",
-    "question": "Is population mostly coastal?",
-    "options": [
-      "Yes",
-      "No",
-      "Half-half"
-    ],
-    "answer": 0
-  },
-  {
-    "country": "Australia",
-    "question": "Is Australia a republic?",
-    "options": [
-      "Yes",
-      "No",
-      "Thinking about it"
+      "Nothing, it s totally chill",
+      "A dozen elderly people will instantly stare into your soul and judge you for breaking the rules",
+      "You get a high-five from the police",
+      "The street lights turn to RGB party mode"
     ],
     "answer": 1
   },
   {
-    "country": "Australia",
-    "question": "Is cricket big there?",
-    "options": [
-      "Yes",
-      "No",
-      "Only ashes"
-    ],
-    "answer": 0
-  },
-  {
-    "country": "Australia",
-    "question": "Is Australia chill but strict?",
-    "options": [
-      "Yes",
-      "No",
-      "Depends"
-    ],
-    "answer": 0
-  },
-  {
     "country": "Germany",
-    "question": "Is Germany still haunted by WW2?",
+    "question": "What is considered a valid lunch?",
     "options": [
-      "Yes",
-      "No",
-      "Only history class"
+      "A light salad with vinaigrette",
+      "A massive sausage, half a loaf of bread, and a pint of liquid bread (beer)",
+      "Five gourmet courses",
+      "Just a protein shake"
     ],
-    "answer": 0
-  },
-  {
-    "country": "Germany",
-    "question": "Are Germans NPCs who follow rules 24/7?",
-    "options": [
-      "Yes",
-      "No",
-      "Stereotype but kinda real"
-    ],
-    "answer": 2
-  },
-  {
-    "country": "Germany",
-    "question": "Is Germany the EU’s main character?",
-    "options": [
-      "Yes",
-      "No",
-      "France coping"
-    ],
-    "answer": 0
-  },
-  {
-    "country": "Germany",
-    "question": "Is Berlin rich?",
-    "options": [
-      "Yes",
-      "No",
-      "Vibe rich, wallet broke"
-    ],
-    "answer": 2
-  },
-  {
-    "country": "Germany",
-    "question": "Is Germany still industrial king?",
-    "options": [
-      "Yes",
-      "No",
-      "Nerfed recently"
-    ],
-    "answer": 2
-  },
-  {
-    "country": "Germany",
-    "question": "Do Germans have humor?",
-    "options": [
-      "No 💀",
-      "Yes",
-      "Rare spawn"
-    ],
-    "answer": 2
-  },
-  {
-    "country": "Germany",
-    "question": "Is Germany dependent on energy imports?",
-    "options": [
-      "Yes",
-      "No",
-      "Self-sufficient"
-    ],
-    "answer": 0
-  },
-  {
-    "country": "Germany",
-    "question": "Is Oktoberfest just beer chaos?",
-    "options": [
-      "Yes",
-      "No",
-      "Cultural event + chaos"
-    ],
-    "answer": 2
-  },
-  {
-    "country": "Germany",
-    "question": "Is Germany military strong?",
-    "options": [
-      "Yes",
-      "No",
-      "Not top-tier"
-    ],
-    "answer": 2
-  },
-  {
-    "country": "Germany",
-    "question": "Is Germany expensive to live?",
-    "options": [
-      "Yes",
-      "No",
-      "Depends city"
-    ],
-    "answer": 2
+    "answer": 1
   },
   {
     "country": "UK",
-    "question": "Is British food just beans on toast and bland stews?",
-    "options": ["Yes", "No", "Only for breakfast"],
-    "answer": 0
+    "question": "What is the absolute pinnacle of British cuisine?",
+    "options": [
+      "Slow-roasted beef wellington",
+      "A cheeky Nando s followed by dropping a kebab on the pavement at 3 AM",
+      "Caviar on toast",
+      "Raw oysters with lemon"
+    ],
+    "answer": 1
   },
   {
     "country": "UK",
-    "question": "Does everyone in the UK drink 10 cups of tea a day?",
-    "options": ["Yes, it's mandatory", "Only when it rains", "No"],
-    "answer": 0
+    "question": "How do they handle a minor heatwave of 25°C?",
+    "options": [
+      "They go about their day normally",
+      "The entire nation enters survival mode and infrastructure melts",
+      "They wear winter coats",
+      "They migrate temporarily to Iceland"
+    ],
+    "answer": 1
   },
   {
     "country": "UK",
-    "question": "Do the British politely queue for everything?",
-    "options": ["Never", "Sometimes", "Yes, it's a sport"],
-    "answer": 2
-  },
-  {
-    "country": "UK",
-    "question": "Is British weather always gloomy and rainy?",
-    "options": ["Yes (Big sad)", "No", "Only in summer"],
-    "answer": 0
-  },
-  {
-    "country": "North Korea",
-    "question": "Can citizens freely use the internet?",
+    "question": "What is the highest form of British politeness?",
     "options": [
-      "Yes",
-      "No",
-      "Only VIPs"
-    ],
-    "answer": 2
-  },
-  {
-    "country": "North Korea",
-    "question": "Is Kim Jong Un democratically elected?",
-    "options": [
-      "Yes 💀",
-      "No",
-      "“Technically yes”"
-    ],
-    "answer": 1
-  },
-  {
-    "country": "North Korea",
-    "question": "Can people leave the country freely?",
-    "options": [
-      "Yes",
-      "No",
-      "Only with permission"
-    ],
-    "answer": 2
-  },
-  {
-    "country": "North Korea",
-    "question": "Is North Korea richer than South Korea?",
-    "options": [
-      "Yes",
-      "No",
-      "Equal"
-    ],
-    "answer": 1
-  },
-  {
-    "country": "North Korea",
-    "question": "Is propaganda strong there?",
-    "options": [
-      "No",
-      "Yes",
-      "Only media"
-    ],
-    "answer": 1
-  },
-  {
-    "country": "North Korea",
-    "question": "Do citizens have full freedom of speech?",
-    "options": [
-      "Yes",
-      "No",
-      "Limited"
-    ],
-    "answer": 1
-  },
-  {
-    "country": "North Korea",
-    "question": "Is military prioritized over economy?",
-    "options": [
-      "Yes",
-      "No",
-      "Balanced"
+      "Apologizing profusely to an inanimate object after bumping into it",
+      "Bowing to the King every morning",
+      "Giving strangers full compliments",
+      "Tip-toeing everywhere"
     ],
     "answer": 0
   },
   {
     "country": "North Korea",
-    "question": "Can tourists visit freely?",
+    "question": "What is the average internet search experience like?",
     "options": [
-      "Yes",
-      "No",
-      "Strictly controlled"
+      "Googling whatever you want on 5G speeds",
+      "Connecting to the Kwangmyong intranet to see 12 approved pictures of the Supreme Leader",
+      "Unlimited TikTok scrolling",
+      "Mining crypto on fiber lines"
     ],
-    "answer": 2
+    "answer": 1
   },
   {
     "country": "North Korea",
-    "question": "Is North Korea isolated globally?",
+    "question": "How do you get a trendy haircut?",
     "options": [
-      "Yes",
-      "No",
-      "Only from West"
+      "You show the barber a Pinterest board",
+      "You choose from one of the state-approved haircuts or face consequences",
+      "You shave it entirely",
+      "You let it grow indefinitely like a wild man"
     ],
-    "answer": 0
+    "answer": 1
   },
   {
     "country": "North Korea",
-    "question": "Is information tightly controlled?",
+    "question": "What is the main protagonist energy allowed in the country?",
     "options": [
-      "Yes",
-      "No",
-      "Only news"
+      "Everyone is the star of their own vlog",
+      "There is only one Main Character, and his name is the Supreme Leader",
+      "The generals run the clout game",
+      "Pop stars taking over the charts"
     ],
-    "answer": 0
+    "answer": 1
   }
 ]

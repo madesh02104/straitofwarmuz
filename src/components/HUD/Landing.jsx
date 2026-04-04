@@ -51,8 +51,8 @@ export const Landing = () => {
           </h3>
           <ul style={{ listStyle: 'none', padding: 0, margin: 0, color: 'var(--text-main)', fontSize: '0.9rem', display: 'flex', flexDirection: 'column', gap: '14px', lineHeight: '1.5' }}>
             <li><strong style={{color: 'var(--accent-yellow)'}}>1. Enter Name:</strong> Join the global battlefield as a rogue commander.</li>
-            <li><strong style={{color: 'var(--accent-green)'}}>2. Prep Phase (1m):</strong> Buy defenses, queue R&D, and analyze opponents via Intel.</li>
-            <li><strong style={{color: 'var(--accent-red)'}}>3. War Phase (30s):</strong> Drag attack weapons from your dock onto enemy nations to deal damage.</li>
+            <li><strong style={{color: 'var(--accent-green)'}}>2. Prep Phase (2m):</strong> Buy defenses, queue R&D, and analyze opponents via Intel.</li>
+            <li><strong style={{color: 'var(--accent-red)'}}>3. War Phase (1m):</strong> Drag attack weapons from your dock onto enemy nations to deal damage.</li>
             <li><strong style={{color: '#ffb86c'}}>4. Intelligence:</strong> Answer strategy quizzes for CP multipliers.</li>
             <li><strong style={{color: '#bd93f9'}}>5. Survival:</strong> The last standing nation wins. Auto-defenses counter matching attacks!</li>
           </ul>
