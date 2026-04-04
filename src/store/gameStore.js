@@ -10,8 +10,8 @@ export const useGameStore = create((set, get) => ({
   gameState: {
     players: {},
     lobbyState: "waiting",
-    duration: 120000,
-    timeRemaining: 120000,
+    duration: 180000,
+    timeRemaining: 180000,
     phase: 1,
     marketStock: {},
   },
