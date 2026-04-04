@@ -26,7 +26,7 @@ const EQUIPMENT = {
 };
 
 const QuizToaster = ({ quiz, onAnswer }) => {
-  const initialTimeLeft = useRef(Math.floor(Math.random() * 6) + 5).current;
+  const initialTimeLeft = useRef(10).current;
   const [timeLeft, setTimeLeft] = useState(initialTimeLeft);
   const tickAudioRef = useRef(null);
   const timerRef = useRef(null);

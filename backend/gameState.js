@@ -114,8 +114,8 @@ class GameState {
   constructor() {
     this.lobbyState = "waiting";
     this.startTime = null;
-    this.duration = 120000;
-    this.phaseDuration = 90000;
+    this.duration = 180000;
+    this.phaseDuration = 120000;
     this.players = {};
     this.countries = [
       "USA",
@@ -238,7 +238,7 @@ class GameState {
   }
 
   getPhase(elapsed) {
-    // Precise Phase Switch: 1 (Prep) -> 2 (War) at 5:00 mark
+    // Precise Phase Switch: 1 (Prep) -> 2 (War)
     return elapsed < this.phaseDuration ? 1 : 2;
   }
 
