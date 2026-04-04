@@ -190,6 +190,7 @@ class GameState {
       lastActionTime: Date.now(),
       attackCooldowns: {},
       deflectingUntil: 0,
+      nukeBuilt: false,
     };
 
     this.streaks[socketId] = 0;
@@ -345,7 +346,9 @@ class GameState {
   buyFromMarket(socketId, itemId) {
     const p = this.players[socketId];
     const item = EQUIPMENT[itemId];
+    if (itemId === "nuke" && p && p.nukeBuilt) return false;
     if (p && this.marketStock[itemId] > 0 && p.cp >= item.marketCost) {
+      if (itemId === "nuke") p.nukeBuilt = true;
       p.cp -= item.marketCost;
       this.marketStock[itemId]--;
       p.inventory[itemId]++;
@@ -357,7 +360,9 @@ class GameState {
   startResearch(socketId, itemId) {
     const p = this.players[socketId];
     const item = EQUIPMENT[itemId];
+    if (itemId === "nuke" && p && p.nukeBuilt) return false;
     if (p && p.cp >= item.rdCost && Date.now() > p.frozenUntil) {
+      if (itemId === "nuke") p.nukeBuilt = true;
       p.cp -= item.rdCost;
       p.researchQueue.push({
         itemId,
@@ -417,8 +422,26 @@ class GameState {
       attacker.inventory[itemId]--;
 
       const counterId = item.counter;
-      let isCountered = false;
 
+      if (Date.now() < actualTarget.deflectingUntil) {
+        let damageDealt = 0;
+        if (item.effect === "freeze") {
+          attacker.frozenUntil = Date.now() + 20000;
+        } else if (item.effect === "nuke") {
+          const oldHp = attacker.hp;
+          attacker.hp = Math.floor(attacker.hp * 0.5);
+          damageDealt = oldHp - attacker.hp;
+        } else if (item.damage) {
+          const oldHp = attacker.hp;
+          attacker.hp = Math.max(0, attacker.hp - item.damage);
+          damageDealt = oldHp - attacker.hp;
+        }
+        
+        attacker.attackCooldowns[itemId] = Date.now() + (item.attackDelay || 0);
+        return { success: true, damage: damageDealt, target: attacker.socketId, deflected: true, originalTarget: actualTarget.socketId, itemId };
+      }
+
+      let isCountered = false;
       if (counterId && actualTarget.inventory[counterId] > 0) {
         actualTarget.inventory[counterId]--;
         isCountered = true;
@@ -426,30 +449,23 @@ class GameState {
 
       if (isCountered) {
         attacker.attackCooldowns[itemId] = Date.now() + (item.attackDelay || 0);
-        return { success: false, reason: "countered", target: actualTarget.socketId };
-      } else if (Date.now() < actualTarget.deflectingUntil) {
-        // Attack is deflected back to the attacker!
-        if (item.effect === "freeze") {
-          attacker.frozenUntil = Date.now() + 20000;
-        } else if (item.effect === "nuke") {
-          attacker.hp = Math.floor(attacker.hp * 0.5);
-        } else if (item.damage) {
-          attacker.hp = Math.max(0, attacker.hp - item.damage);
-        }
-        
-        attacker.attackCooldowns[itemId] = Date.now() + (item.attackDelay || 0);
-        return { success: true, damage: item.damage || 5, target: attacker.socketId, deflected: true, originalTarget: actualTarget.socketId };
+        return { success: false, reason: "countered", target: actualTarget.socketId, itemId };
       } else {
+        let damageDealt = 0;
         if (item.effect === "freeze") {
           actualTarget.frozenUntil = Date.now() + 20000;
         } else if (item.effect === "nuke") {
+          const oldHp = actualTarget.hp;
           actualTarget.hp = Math.floor(actualTarget.hp * 0.5);
+          damageDealt = oldHp - actualTarget.hp;
         } else if (item.damage) {
+          const oldHp = actualTarget.hp;
           actualTarget.hp = Math.max(0, actualTarget.hp - item.damage);
+          damageDealt = oldHp - actualTarget.hp;
         }
         
         attacker.attackCooldowns[itemId] = Date.now() + (item.attackDelay || 0);
-        return { success: true, damage: item.damage || 5, target: actualTarget.socketId };
+        return { success: true, damage: damageDealt, target: actualTarget.socketId, itemId };
       }
     }
     return { success: false, reason: "no_ammo" };

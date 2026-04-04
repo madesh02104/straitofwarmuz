@@ -20,7 +20,7 @@ const EQUIPMENT = {
   s400: { name: 'Radar Destruction', type: 'defense', counters: 'jet', marketCost: 200, rdCost: 100, rdTime: 6000, icon: <Radar size={20} /> },
   sub: { name: 'Attack Submarine', type: 'attack', damage: 7, counter: 'sonar', marketCost: 250, rdCost: 125, rdTime: 7000, attackDelay: 4000, icon: <Waves size={20} /> },
   sonar: { name: 'Naval Mines', type: 'defense', counters: 'sub', marketCost: 250, rdCost: 125, rdTime: 5000, icon: <Zap size={20} /> },
-  virus: { name: 'Cyber Attack', type: 'defense', counters: 'nuke,missile', marketCost: 300, rdCost: 150, rdTime: 8000, icon: <Skull size={20} /> },
+  virus: { name: 'Cyber Attack', type: 'attack', counters: 'nuke,missile', marketCost: 300, rdCost: 150, rdTime: 8000, icon: <Skull size={20} /> },
   firewall: { name: 'Firewall', type: 'defense', counters: 'virus', marketCost: 300, rdCost: 150, rdTime: 6000, icon: <Lock size={20} /> },
   nuke: { name: 'Nuke', type: 'attack', effect: 'nuke', counter: null, marketCost: 500, rdCost: 250, rdTime: 10000, attackDelay: 2000, icon: <Bomb size={20} /> }
 };
@@ -331,8 +331,8 @@ export const Dashboard = () => {
                             <button
                               className="btn-buy"
                               onClick={() => { buyItem(id); playSound('cash_register.wav'); }}
-                              disabled={me.cp < item.marketCost || (gameState.marketStock[id] || 0) <= 0}
-                            >BUY NOW</button>
+                              disabled={me.cp < item.marketCost || (gameState.marketStock[id] || 0) <= 0 || (id === 'nuke' && me.nukeBuilt)}
+                            >{(id === 'nuke' && me.nukeBuilt) ? 'LIMIT EXCEEDED' : 'BUY NOW'}</button>
                           </div>
                         ))}
                       </div>
@@ -364,8 +364,8 @@ export const Dashboard = () => {
                                 <button
                                   className="btn-rd"
                                   onClick={() => researchItem(id)}
-                                  disabled={me.cp < item.rdCost || me.frozenUntil > Date.now()}
-                                >START R&D</button>
+                                  disabled={me.cp < item.rdCost || me.frozenUntil > Date.now() || (id === 'nuke' && me.nukeBuilt)}
+                                >{(id === 'nuke' && me.nukeBuilt) ? 'LIMIT EXCEEDED' : 'START R&D'}</button>
                               )}
                             </div>
                           );

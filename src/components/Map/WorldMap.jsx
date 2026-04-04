@@ -10,6 +10,8 @@ function mapCoordinates(lon, lat) {
   return [lon / 180 * 100 * scale, lat / 90 * 50 * scale];
 }
 
+const mapPanState = { isDragging: false, dragDistance: 0 };
+
 const normalize = (n) => {
   if (!n) return '';
   const map = {
@@ -120,6 +122,7 @@ const CountryMesh = ({ feature, myCountry, gameState, onFocus, phase }) => {
       onPointerOver={(e) => { e.stopPropagation(); setHovered(true); }}
       onPointerOut={() => setHovered(false)}
       onClick={(e) => {
+        if (mapPanState.dragDistance > 5) return;
         if (normalizedName === normalizedMyCountry) {
           e.stopPropagation();
           const box = new THREE.Box3().setFromObject(meshRef.current);
@@ -165,6 +168,70 @@ const ContextBridge = () => {
 const MapScene = () => {
   const { gameState, myCountry } = useGameStore();
   const [focusCenter, setFocusCenter] = useState(null);
+  const targetZoom = useRef(3);
+  const targetPan = useRef({ x: 0, y: 0 });
+  const isDraggingMap = useRef(false);
+  const lastMouse = useRef({ x: 0, y: 0 });
+
+  useEffect(() => {
+    if (focusCenter) {
+      targetZoom.current = 15;
+      targetPan.current = { x: focusCenter.x, y: focusCenter.y };
+    } else {
+      targetZoom.current = 3;
+      targetPan.current = { x: 0, y: 0 };
+    }
+  }, [focusCenter]);
+
+  useEffect(() => {
+    const el = document.getElementById('map-container');
+    const handleWheel = (e) => {
+      const delta = e.deltaY > 0 ? -0.5 : 0.5;
+      targetZoom.current = Math.max(1, Math.min(30, targetZoom.current + delta));
+    };
+    
+    const handlePointerDown = (e) => {
+      if (e.button !== 0 && e.button !== 1 && e.button !== 2) return;
+      isDraggingMap.current = true;
+      mapPanState.isDragging = true;
+      mapPanState.dragDistance = 0;
+      lastMouse.current = { x: e.clientX, y: e.clientY };
+    };
+
+    const handlePointerMove = (e) => {
+      if (!isDraggingMap.current) return;
+      const dx = e.clientX - lastMouse.current.x;
+      const dy = e.clientY - lastMouse.current.y;
+      
+      mapPanState.dragDistance += Math.abs(dx) + Math.abs(dy);
+      
+      const panSpeed = 30 / targetZoom.current; 
+      targetPan.current.x -= dx * panSpeed * 0.01;
+      targetPan.current.y += dy * panSpeed * 0.01;
+      
+      lastMouse.current = { x: e.clientX, y: e.clientY };
+    };
+
+    const handlePointerUp = () => {
+      isDraggingMap.current = false;
+      setTimeout(() => { mapPanState.isDragging = false; }, 50);
+    };
+
+    if (el) {
+      el.addEventListener('wheel', handleWheel, { passive: true });
+      el.addEventListener('pointerdown', handlePointerDown);
+      window.addEventListener('pointermove', handlePointerMove);
+      window.addEventListener('pointerup', handlePointerUp);
+    }
+    return () => { 
+      if (el) {
+        el.removeEventListener('wheel', handleWheel);
+        el.removeEventListener('pointerdown', handlePointerDown);
+      }
+      window.removeEventListener('pointermove', handlePointerMove);
+      window.removeEventListener('pointerup', handlePointerUp);
+    };
+  }, []);
 
   const meshes = useMemo(() => {
     if (!countriesData || !countriesData.features) return [];
@@ -177,15 +244,9 @@ const MapScene = () => {
   }, [gameState, myCountry]);
 
   useFrame((state) => {
-    if (focusCenter) {
-      state.camera.position.x = THREE.MathUtils.lerp(state.camera.position.x, focusCenter.x, 0.05);
-      state.camera.position.y = THREE.MathUtils.lerp(state.camera.position.y, focusCenter.y, 0.05);
-      state.camera.zoom = THREE.MathUtils.lerp(state.camera.zoom, 15, 0.05);
-    } else {
-      state.camera.position.x = THREE.MathUtils.lerp(state.camera.position.x, 0, 0.05);
-      state.camera.position.y = THREE.MathUtils.lerp(state.camera.position.y, 0, 0.05);
-      state.camera.zoom = THREE.MathUtils.lerp(state.camera.zoom, 3, 0.05);
-    }
+    state.camera.position.x = THREE.MathUtils.lerp(state.camera.position.x, targetPan.current.x, 0.1);
+    state.camera.position.y = THREE.MathUtils.lerp(state.camera.position.y, targetPan.current.y, 0.1);
+    state.camera.zoom = THREE.MathUtils.lerp(state.camera.zoom, targetZoom.current, 0.1);
     state.camera.updateProjectionMatrix();
   });
 
@@ -216,12 +277,6 @@ const Trajectories = () => {
       if (attackerCountry && targetCountry) {
         let start = getCountryCentroid(attackerCountry);
         let end = getCountryCentroid(targetCountry);
-        
-        if (data.itemId === 'virus' && !data.deflected) {
-          const temp = start;
-          start = end;
-          end = temp;
-        }
 
         const line = {
           id: Date.now() + Math.random(),
@@ -300,14 +355,22 @@ const TrajectoryCurve = ({ line }) => {
   if (points.length < 2) return null;
 
   return (
-    <Line 
-      points={points}
-      color={line.color}
-      lineWidth={line.itemId === 'nuke' ? 4 : 2}
-      dashed={false}
-      transparent
-      opacity={line.itemId === 'nuke' ? 0.6 + Math.abs(Math.sin(progress * Math.PI * 15)) * 0.4 : 0.8}
-    />
+    <group>
+      <Line 
+        points={points}
+        color={line.color}
+        lineWidth={line.itemId === 'nuke' ? 6 : 2}
+        dashed={false}
+        transparent
+        opacity={line.itemId === 'nuke' ? 0.9 : 0.8}
+      />
+      {line.itemId === 'nuke' && (
+        <mesh position={points[points.length - 1]} scale={2 + Math.abs(Math.sin(progress * Math.PI * 10)) * 2}>
+          <sphereGeometry args={[1, 16, 16]} />
+          <meshBasicMaterial color="#ff2222" transparent opacity={0.9} />
+        </mesh>
+      )}
+    </group>
   );
 };
 
@@ -330,9 +393,14 @@ const AttackPopups = () => {
         const popup = {
           id: Date.now() + Math.random(),
           pos: centroid,
-          text: data.success ? `-${data.damage} HP` : 'COUNTERED',
-          color: data.success ? '#ff4444' : '#58a6ff'
+          text: data.deflected ? 'CYBERATTACK' : (data.success ? `-${data.damage} HP` : 'COUNTERED'),
+          color: data.deflected ? '#00ffcc' : (data.success ? '#ff4444' : '#58a6ff')
         };
+        if (data.itemId === 'nuke' && data.success) {
+          popup.text = `NUKE DETONATED -${data.damage} HP`;
+          popup.color = '#ff0000';
+          popup.scale = 2;
+        }
         setPopups(prev => [...prev, popup]);
         setTimeout(() => setPopups(prev => prev.filter(p => p.id !== popup.id)), 2000);
       }
@@ -343,7 +411,7 @@ const AttackPopups = () => {
 
   return popups.map(p => (
     <Html key={p.id} position={[p.pos[0], p.pos[1], 5]} center>
-      <div className="damage-popup" style={{ color: p.color }}>{p.text}</div>
+      <div className="damage-popup" style={{ color: p.color, transform: p.scale ? `scale(${p.scale})` : 'scale(1)', fontWeight: 'bold' }}>{p.text}</div>
     </Html>
   ));
 };
@@ -389,6 +457,7 @@ export const WorldMap = () => {
 
   return (
     <div 
+      id="map-container"
       ref={canvasRef}
       onDragOver={(e) => e.preventDefault()}
       onDrop={handleDrop}
