@@ -48,12 +48,16 @@ export const useGameStore = create((set, get) => ({
     socket.emit("researchItem", { itemId });
   },
 
-  spy: (targetId, itemId) => {
-    socket.emit("spy", { targetId, itemId });
+  spy: (targetId, options) => {
+    socket.emit("spy", { targetId, ...options });
   },
 
   attack: (targetId, itemId) => {
     socket.emit("attack", { targetId, itemId });
+  },
+
+  activateDeflect: () => {
+    socket.emit("activateDeflect");
   },
 }));
 
@@ -89,7 +93,9 @@ socket.on("quiz", (quiz) => {
 });
 
 socket.on("notification", (data) => {
-  if (data.type === 'error') {
+  if (data.message && data.message.startsWith("R&D Complete:")) {
+    playSound('rd_complete.wav');
+  } else if (data.type === 'error') {
     playSound('lose.wav');
   } else {
     playSound('blip.mp3');

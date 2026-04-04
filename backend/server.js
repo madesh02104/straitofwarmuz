@@ -61,10 +61,18 @@ io.on('connection', (socket) => {
     if (success) socket.emit('notification', { message: 'Research Started...' });
   });
 
-  socket.on('spy', (data) => {
-    const count = game.deploySpy(socket.id, data.targetId, data.itemId);
-    if (count !== null) {
-      socket.emit('spyResult', { target: data.targetId, item: data.itemId, count });
+  socket.on('spy', (options) => {
+    const result = game.deploySpy(socket.id, options.targetId, options);
+    if (result !== null) {
+      socket.emit('spyResult', { target: options.targetId, ...result });
+    }
+  });
+
+  socket.on('activateDeflect', () => {
+    const success = game.activateDeflect(socket.id);
+    if (success) {
+      socket.emit('notification', { message: 'Cyber Shield Active! (10s)' });
+      io.emit('gameState', game.getSnapshot());
     }
   });
 

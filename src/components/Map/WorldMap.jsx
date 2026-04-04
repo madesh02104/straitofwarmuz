@@ -203,22 +203,31 @@ const Trajectories = () => {
     const onAttackEvent = (e) => {
       const data = e.detail;
       const { players } = useGameStore.getState().gameState;
-      const attackerPlayer = players[data.attacker];
-      const targetPlayer = players[data.target];
+      const startPlayerId = data.deflected ? data.originalTarget : data.attacker;
+      const endPlayerId = data.target;
+      
+      const attackerPlayer = players[startPlayerId];
+      const targetPlayer = players[endPlayerId];
       if (!attackerPlayer || !targetPlayer) return;
 
       const attackerCountry = countriesData.features.find(f => normalize(f.properties.name || f.properties.ADMIN) === normalize(attackerPlayer.country));
       const targetCountry = countriesData.features.find(f => normalize(f.properties.name || f.properties.ADMIN) === normalize(targetPlayer.country));
 
       if (attackerCountry && targetCountry) {
-        const start = getCountryCentroid(attackerCountry);
-        const end = getCountryCentroid(targetCountry);
+        let start = getCountryCentroid(attackerCountry);
+        let end = getCountryCentroid(targetCountry);
         
+        if (data.itemId === 'virus' && !data.deflected) {
+          const temp = start;
+          start = end;
+          end = temp;
+        }
+
         const line = {
           id: Date.now() + Math.random(),
           start: new THREE.Vector3(start[0], start[1], 0),
           end: new THREE.Vector3(end[0], end[1], 0),
-          color: data.success ? '#ff4444' : '#58a6ff',
+          color: data.deflected ? '#00ffcc' : (data.success ? '#ff4444' : '#58a6ff'),
           itemId: data.itemId
         };
         setLines(prev => [...prev, line]);
@@ -247,7 +256,8 @@ const TrajectoryCurve = ({ line }) => {
     
     if (perpY < 0) { perpX = -perpX; perpY = -perpY; }
     
-    const midPoint = new THREE.Vector3(midX + perpX * (length * 0.25), midY + perpY * (length * 0.25), 10);
+    const multiplier = line.itemId === 'nuke' ? 0.5 : 0.25;
+    const midPoint = new THREE.Vector3(midX + perpX * (length * multiplier), midY + perpY * (length * multiplier), 10);
     return new THREE.QuadraticBezierCurve3(start, midPoint, end);
   }, [line]);
 
@@ -293,10 +303,10 @@ const TrajectoryCurve = ({ line }) => {
     <Line 
       points={points}
       color={line.color}
-      lineWidth={2}
+      lineWidth={line.itemId === 'nuke' ? 4 : 2}
       dashed={false}
       transparent
-      opacity={0.8}
+      opacity={line.itemId === 'nuke' ? 0.6 + Math.abs(Math.sin(progress * Math.PI * 15)) * 0.4 : 0.8}
     />
   );
 };

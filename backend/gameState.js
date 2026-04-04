@@ -17,32 +17,34 @@ const EQUIPMENT = {
     damage: 8,
     counter: "dome",
     marketCost: 150,
-    rdCost: 80,
+    rdCost: 75,
     rdTime: 4000,
+    attackDelay: 0,
   },
   dome: {
     name: "Iron Dome",
     type: "defense",
     counters: "missile",
-    marketCost: 120,
-    rdCost: 60,
+    marketCost: 150,
+    rdCost: 75,
     rdTime: 4000,
   },
   tank: {
-    name: "Heavy Tank",
+    name: "Heavy Tank Army",
     type: "attack",
     damage: 5,
     counter: "mine",
     marketCost: 100,
     rdCost: 50,
     rdTime: 5000,
+    attackDelay: 4000,
   },
   mine: {
-    name: "Anti-Tank Mine",
+    name: "Anti Tank",
     type: "defense",
     counters: "tank",
-    marketCost: 80,
-    rdCost: 40,
+    marketCost: 100,
+    rdCost: 50,
     rdTime: 3000,
   },
   jet: {
@@ -53,13 +55,14 @@ const EQUIPMENT = {
     marketCost: 200,
     rdCost: 100,
     rdTime: 6000,
+    attackDelay: 2000,
   },
   s400: {
-    name: "S-400 Battery",
+    name: "Radar Destruction",
     type: "defense",
     counters: "jet",
-    marketCost: 180,
-    rdCost: 90,
+    marketCost: 200,
+    rdCost: 100,
     rdTime: 6000,
   },
   sub: {
@@ -68,23 +71,21 @@ const EQUIPMENT = {
     damage: 7,
     counter: "sonar",
     marketCost: 250,
-    rdCost: 120,
+    rdCost: 125,
     rdTime: 7000,
+    attackDelay: 4000,
   },
   sonar: {
-    name: "Sonar Depth Charge",
+    name: "Naval Mines",
     type: "defense",
     counters: "sub",
-    marketCost: 200,
-    rdCost: 100,
+    marketCost: 250,
+    rdCost: 125,
     rdTime: 5000,
   },
   virus: {
-    name: "Cyber Virus",
+    name: "Cyber Attack",
     type: "attack",
-    damage: 0,
-    effect: "virus",
-    counter: "firewall",
     marketCost: 300,
     rdCost: 150,
     rdTime: 8000,
@@ -93,9 +94,19 @@ const EQUIPMENT = {
     name: "Firewall",
     type: "defense",
     counters: "virus",
-    marketCost: 250,
-    rdCost: 120,
+    marketCost: 300,
+    rdCost: 150,
     rdTime: 6000,
+  },
+  nuke: {
+    name: "Nuke",
+    type: "attack",
+    effect: "nuke",
+    counter: null,
+    marketCost: 500,
+    rdCost: 250,
+    rdTime: 10000,
+    attackDelay: 2000,
   },
 };
 
@@ -118,6 +129,9 @@ class GameState {
       "France",
       "Australia",
       "North Korea",
+      "Pakistan",
+      "Israel",
+      "Iran"
     ];
     this.availableCountries = [...this.countries];
 
@@ -133,6 +147,7 @@ class GameState {
       sonar: 8,
       virus: 5,
       firewall: 5,
+      nuke: 1,
     };
 
     this.events = [];
@@ -166,12 +181,15 @@ class GameState {
         sonar: 0,
         virus: 0,
         firewall: 0,
+        nuke: 0,
       },
       researchQueue: [],
       frozenUntil: 0,
       virusInfected: false,
       isReady: false,
       lastActionTime: Date.now(),
+      attackCooldowns: {},
+      deflectingUntil: 0,
     };
 
     this.streaks[socketId] = 0;
@@ -350,14 +368,40 @@ class GameState {
     return false;
   }
 
-  deploySpy(socketId, targetId, itemId) {
+  deploySpy(socketId, targetId, options) {
     const p = this.players[socketId];
     const target = this.players[targetId];
-    if (p && target && p.cp >= 50) {
-      p.cp -= 50;
-      return target.inventory[itemId] || 0;
+    if (!p || !target) return null;
+    
+    const mode = options.mode;
+    let cost = 0;
+    if (mode === "full") cost = 500;
+    else if (mode === "category") cost = 300;
+    else if (mode === "specific") cost = 100;
+
+    if (p.cp >= cost) {
+      p.cp -= cost;
+      if (mode === "full") return { mode, data: target.inventory };
+      if (mode === "category") {
+         const result = {};
+         for (const id in EQUIPMENT) {
+           if (EQUIPMENT[id].type === options.category) result[id] = target.inventory[id];
+         }
+         return { mode, category: options.category, data: result };
+      }
+      if (mode === "specific") return { mode, itemId: options.itemId, count: target.inventory[options.itemId] || 0 };
     }
     return null;
+  }
+
+  activateDeflect(socketId) {
+    const p = this.players[socketId];
+    if (p && p.inventory["virus"] > 0) {
+      p.inventory["virus"]--;
+      p.deflectingUntil = Date.now() + 10000; // 10 seconds of deflection
+      return true;
+    }
+    return false;
   }
 
   attack(attackerId, targetId, itemId) {
@@ -366,26 +410,46 @@ class GameState {
     const item = EQUIPMENT[itemId];
     
     if (attacker && actualTarget && attacker.inventory[itemId] > 0) {
-      if (attacker.virusInfected) {
-        actualTarget = attacker;
-        attacker.virusInfected = false;
+      if (Date.now() < (attacker.attackCooldowns[itemId] || 0)) {
+        return { success: false, reason: "cooldown" };
       }
       
       attacker.inventory[itemId]--;
 
       const counterId = item.counter;
-      if (actualTarget.inventory[counterId] > 0) {
+      let isCountered = false;
+
+      if (counterId && actualTarget.inventory[counterId] > 0) {
         actualTarget.inventory[counterId]--;
+        isCountered = true;
+      }
+
+      if (isCountered) {
+        attacker.attackCooldowns[itemId] = Date.now() + (item.attackDelay || 0);
         return { success: false, reason: "countered", target: actualTarget.socketId };
+      } else if (Date.now() < actualTarget.deflectingUntil) {
+        // Attack is deflected back to the attacker!
+        if (item.effect === "freeze") {
+          attacker.frozenUntil = Date.now() + 20000;
+        } else if (item.effect === "nuke") {
+          attacker.hp = Math.floor(attacker.hp * 0.5);
+        } else if (item.damage) {
+          attacker.hp = Math.max(0, attacker.hp - item.damage);
+        }
+        
+        attacker.attackCooldowns[itemId] = Date.now() + (item.attackDelay || 0);
+        return { success: true, damage: item.damage || 5, target: attacker.socketId, deflected: true, originalTarget: actualTarget.socketId };
       } else {
         if (item.effect === "freeze") {
           actualTarget.frozenUntil = Date.now() + 20000;
-        } else if (item.effect === "virus") {
-          actualTarget.virusInfected = true;
-        } else {
+        } else if (item.effect === "nuke") {
+          actualTarget.hp = Math.floor(actualTarget.hp * 0.5);
+        } else if (item.damage) {
           actualTarget.hp = Math.max(0, actualTarget.hp - item.damage);
         }
-        return { success: true, damage: item.damage, target: actualTarget.socketId };
+        
+        attacker.attackCooldowns[itemId] = Date.now() + (item.attackDelay || 0);
+        return { success: true, damage: item.damage || 5, target: actualTarget.socketId };
       }
     }
     return { success: false, reason: "no_ammo" };
@@ -455,6 +519,7 @@ class GameState {
       sonar: 8,
       virus: 5,
       firewall: 5,
+      nuke: 1,
     };
     this.quizTimers = {};
     this.streaks = {};
