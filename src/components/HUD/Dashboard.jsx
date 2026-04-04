@@ -130,10 +130,27 @@ export const Dashboard = () => {
   }, []);
 
   const [now, setNow] = useState(Date.now());
+  const lastCyberTick = useRef(0);
+
   useEffect(() => {
     const int = setInterval(() => setNow(Date.now()), 100);
     return () => clearInterval(int);
   }, []);
+
+  useEffect(() => {
+    if (me && me.deflectingUntil) {
+      const remain = me.deflectingUntil - now;
+      if (remain > 0 && remain <= 3000) {
+        const currentSec = Math.ceil(remain / 1000);
+        if (currentSec !== lastCyberTick.current) {
+          lastCyberTick.current = currentSec;
+          playSound('tick_timer.wav');
+        }
+      } else if (remain <= 0) {
+        lastCyberTick.current = 0;
+      }
+    }
+  }, [now, me]);
 
   const handleQuizAnswer = useCallback((correct) => {
     if (correct) {
@@ -269,6 +286,9 @@ export const Dashboard = () => {
             const isOnCooldown = cdRemaining > 0;
             const isStocked = (me.inventory[id] || 0) > 0;
             const isCyber = id === 'virus';
+            const deflectRemaining = (isCyber && me.deflectingUntil) ? Math.max(0, me.deflectingUntil - now) : 0;
+            const isDeflecting = isCyber && deflectRemaining > 0;
+            const canActivateCyber = isCyber && isStocked && !isFarmingPhase && !isDeflecting;
             const canDrag = !isFarmingPhase && isStocked && !isOnCooldown && !isCyber;
             return (
               <div
@@ -277,8 +297,8 @@ export const Dashboard = () => {
                 title={isCyber ? `${item.name} — Click to activate Deflection Shield` : `${item.name}${canDrag ? ' — Drag onto enemy to attack' : ''}${isOnCooldown ? ` (cooldown ${(cdRemaining/1000).toFixed(1)}s)` : ''}${isFarmingPhase ? ' (War phase only)' : ''}`}
                 draggable={canDrag}
                 onDragStart={(e) => { if(canDrag) e.dataTransfer.setData('itemId', id); }}
-                onClick={() => { if(isCyber && isStocked && !isFarmingPhase) activateDeflect(); }}
-                style={{ position: 'relative', overflow: 'hidden', cursor: isCyber && isStocked && !isFarmingPhase ? 'pointer' : 'default' }}
+                onClick={() => { if(canActivateCyber) activateDeflect(); }}
+                style={{ position: 'relative', overflow: 'hidden', cursor: canActivateCyber ? 'pointer' : (isDeflecting ? 'not-allowed' : 'default') }}
               >
                 <div className={`inv-icon attack${isStocked ? ' stocked' : ''}`}>
                   {item.icon}
@@ -290,6 +310,14 @@ export const Dashboard = () => {
                 {isOnCooldown && (
                   <div style={{ position: 'absolute', inset: 0, backgroundColor: 'rgba(0,0,0,0.75)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#ff4444', fontWeight: 900, fontSize: '13px', borderRadius: '10px', zIndex: 10 }}>
                     {(cdRemaining / 1000).toFixed(1)}s
+                  </div>
+                )}
+                {isDeflecting && (
+                  <div style={{ position: 'absolute', inset: 0, backgroundColor: 'rgba(0, 255, 204, 0.2)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', zIndex: 10, borderRadius: '10px' }}>
+                    <span style={{ color: '#00ffcc', fontWeight: 900, fontSize: '13px', textShadow: '0 0 5px black' }}>{(deflectRemaining / 1000).toFixed(1)}s</span>
+                    <div style={{ position: 'absolute', bottom: 0, left: 0, height: '4px', background: 'rgba(0,0,0,0.5)', width: '100%', borderBottomLeftRadius: '10px', borderBottomRightRadius: '10px', overflow: 'hidden' }}>
+                      <div style={{ height: '100%', width: `${(deflectRemaining / 5000) * 100}%`, background: '#00ffcc', transition: 'width 0.1s linear' }} />
+                    </div>
                   </div>
                 )}
               </div>

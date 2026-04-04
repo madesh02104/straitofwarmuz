@@ -404,7 +404,7 @@ class GameState {
     const p = this.players[socketId];
     if (p && p.inventory["virus"] > 0) {
       p.inventory["virus"]--;
-      p.deflectingUntil = Date.now() + 10000; // 10 seconds of deflection
+      p.deflectingUntil = Date.now() + 5000; // 5 seconds of deflection
       return true;
     }
     return false;
