@@ -5,6 +5,9 @@ import * as THREE from 'three';
 import countriesData from '../../countries.json';
 import { useGameStore } from '../../store/gameStore';
 
+// Global drag-over state shared between WorldMap drop handler and CountryMesh
+const dragOverState = { targetId: null };
+
 const scale = 2.5;
 function mapCoordinates(lon, lat) {
   return [lon / 180 * 100 * scale, lat / 90 * 50 * scale];
@@ -43,7 +46,9 @@ const threeContext = { camera: null, scene: null, meshes: [] };
 
 const CountryMesh = ({ feature, myCountry, gameState, onFocus, phase }) => {
   const meshRef = useRef();
+  const outlineRef = useRef();
   const [hovered, setHovered] = useState(false);
+  const [isDragOver, setIsDragOver] = useState(false);
   const name = feature.properties.name || feature.properties.ADMIN;
   const normalizedName = normalize(name);
   const normalizedMyCountry = normalize(myCountry);
@@ -52,13 +57,13 @@ const CountryMesh = ({ feature, myCountry, gameState, onFocus, phase }) => {
   
   let color = '#2a3a4a';
   let owner = null;
+  const isMyCountry = normalizedName === normalizedMyCountry;
 
   for (let p of players) {
     if (normalize(p.country) === normalizedName) {
       owner = p;
       if (p.hp <= 0) color = '#050505';
-      else if (normalize(p.country) === normalizedMyCountry) color = '#ffffff';
-      else color = '#f85149';
+      else color = '#f85149'; // All active countries are red (including player's own)
       break;
     }
   }
@@ -103,12 +108,32 @@ const CountryMesh = ({ feature, myCountry, gameState, onFocus, phase }) => {
     };
   }, [owner?.socketId]);
 
+  // Check if this country is drag-over target
+  useEffect(() => {
+    if (!owner) return;
+    const interval = setInterval(() => {
+      setIsDragOver(dragOverState.targetId === owner.socketId);
+    }, 50);
+    return () => clearInterval(interval);
+  }, [owner?.socketId]);
+
   useFrame(() => {
     if (meshRef.current) {
-      const targetZ = (normalizedName === normalizedMyCountry || hovered) ? 0.5 : 0;
+      const isHighlighted = isMyCountry || hovered || isDragOver;
+      const targetZ = isHighlighted ? 0.5 : 0;
       meshRef.current.position.z = THREE.MathUtils.lerp(meshRef.current.position.z, targetZ, 0.1);
-      const targetScale = (normalizedName === normalizedMyCountry || hovered) ? 1.02 : 1.0;
+      const targetScale = isDragOver ? 1.06 : (isMyCountry || hovered) ? 1.02 : 1.0;
       meshRef.current.scale.setScalar(THREE.MathUtils.lerp(meshRef.current.scale.x, targetScale, 0.1));
+      
+      // Override color when dragged over
+      if (isDragOver) {
+        meshRef.current.material.color.lerp(new THREE.Color('#ffffff'), 0.2);
+      }
+    }
+    // Sync outline with mesh
+    if (outlineRef.current && meshRef.current) {
+      outlineRef.current.position.copy(meshRef.current.position);
+      outlineRef.current.scale.copy(meshRef.current.scale);
     }
   });
 
@@ -132,7 +157,13 @@ const CountryMesh = ({ feature, myCountry, gameState, onFocus, phase }) => {
         }
       }}
     >
-      <meshBasicMaterial color={color} transparent opacity={owner?.hp <= 0 ? 0.3 : 0.8} side={THREE.DoubleSide} />
+      <meshBasicMaterial color={isDragOver ? '#ffffff' : color} transparent opacity={owner?.hp <= 0 ? 0.3 : 0.8} side={THREE.DoubleSide} />
+      {/* White outline for player's own country */}
+      {isMyCountry && owner && owner.hp > 0 && geometry && (
+        <lineSegments geometry={new THREE.EdgesGeometry(geometry)} position={[0, 0, 0.1]}>
+          <lineBasicMaterial color="#ffffff" linewidth={2} transparent opacity={0.9} />
+        </lineSegments>
+      )}
       {gameState?.lobbyState === 'active' && owner && owner.hp > 0 && (
         <Html position={[centroid[0], centroid[1], 1]} center style={{ pointerEvents: 'none' }}>
           <div className="map-tactical-overlay" style={{ pointerEvents: 'none' }}>
@@ -186,7 +217,7 @@ const MapScene = () => {
   useEffect(() => {
     const el = document.getElementById('map-container');
     const handleWheel = (e) => {
-      const delta = e.deltaY > 0 ? -0.5 : 0.5;
+      const delta = e.deltaY > 0 ? -2.0 : 2.0;
       targetZoom.current = Math.max(1, Math.min(30, targetZoom.current + delta));
     };
     
@@ -206,8 +237,8 @@ const MapScene = () => {
       mapPanState.dragDistance += Math.abs(dx) + Math.abs(dy);
       
       const panSpeed = 30 / targetZoom.current; 
-      targetPan.current.x -= dx * panSpeed * 0.01;
-      targetPan.current.y += dy * panSpeed * 0.01;
+      targetPan.current.x -= dx * panSpeed * 0.03;
+      targetPan.current.y += dy * panSpeed * 0.03;
       
       lastMouse.current = { x: e.clientX, y: e.clientY };
     };
@@ -484,8 +515,29 @@ export const WorldMap = () => {
     <div 
       id="map-container"
       ref={canvasRef}
-      onDragOver={(e) => e.preventDefault()}
-      onDrop={handleDrop}
+      onDragOver={(e) => {
+        e.preventDefault();
+        // Raycast to find which country is being hovered during drag
+        const { camera, scene } = threeContext;
+        if (!camera || !scene || !canvasRef.current) { dragOverState.targetId = null; return; }
+        const rect = canvasRef.current.getBoundingClientRect();
+        const x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+        const y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+        const raycaster = new THREE.Raycaster();
+        raycaster.setFromCamera(new THREE.Vector2(x, y), camera);
+        const allMeshes = [];
+        scene.traverse((obj) => { if (obj.isMesh && obj.userData.ownerId) allMeshes.push(obj); });
+        const intersects = raycaster.intersectObjects(allMeshes, false);
+        const mySocketId = useGameStore.getState().socket.id;
+        if (intersects.length > 0) {
+          const targetId = intersects[0].object.userData.ownerId;
+          dragOverState.targetId = (targetId && targetId !== mySocketId) ? targetId : null;
+        } else {
+          dragOverState.targetId = null;
+        }
+      }}
+      onDragLeave={() => { dragOverState.targetId = null; }}
+      onDrop={(e) => { dragOverState.targetId = null; handleDrop(e); }}
       style={{ width: '100vw', height: '100vh', background: '#050a10', position: 'absolute', top: 0, left: 0, zIndex: 0 }}
     >
       <Canvas>

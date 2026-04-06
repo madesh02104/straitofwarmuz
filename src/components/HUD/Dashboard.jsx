@@ -25,6 +25,24 @@ const EQUIPMENT = {
   nuke: { name: 'Nuke', type: 'attack', effect: 'nuke', counter: null, marketCost: 500, rdCost: 250, rdTime: 10000, attackDelay: 2000, icon: <Bomb size={20} /> }
 };
 
+// Attack → Defense pairs for side-by-side layout
+const WEAPON_PAIRS = [
+  { attack: 'missile', defense: 'dome' },
+  { attack: 'tank', defense: 'mine' },
+  { attack: 'jet', defense: 's400' },
+  { attack: 'sub', defense: 'sonar' },
+  { attack: 'virus', defense: 'firewall' },
+  { attack: 'nuke', defense: null },
+];
+
+const getDamageLabel = (id) => {
+  const item = EQUIPMENT[id];
+  if (!item || item.type !== 'attack') return '';
+  if (item.effect === 'nuke') return '-50%';
+  if (item.damage) return `-${item.damage}`;
+  return '';
+};
+
 const QuizToaster = ({ quiz, onAnswer }) => {
   const initialTimeLeft = useRef(10).current;
   const [timeLeft, setTimeLeft] = useState(initialTimeLeft);
@@ -91,11 +109,11 @@ export const Dashboard = () => {
   } = useGameStore();
 
   const uiRef = useRef();
-  const [activeTab, setActiveTab] = useState('market');
+  const swipeRef = useRef(null);
+  const [activeTab, setActiveTab] = useState(0); // 0=market, 1=rd, 2=intel
   const [isMinimized, setIsMinimized] = useState(true);
   const [intelTarget, setIntelTarget] = useState('');
   const [intelItem, setIntelItem] = useState('missile');
-  const [intelCategory, setIntelCategory] = useState('attack');
   const [cooldowns, setCooldowns] = useState({});
 
   const me = Object.values(gameState.players).find(p => p.country === myCountry);
@@ -168,7 +186,36 @@ export const Dashboard = () => {
     }
   }, [isFarmingPhase, activeQuiz]);
 
+  // Custom drag to swipe logic
+  const [touchStart, setTouchStart] = useState(null);
+  const [isDragging, setIsDragging] = useState(false);
+
+  const handlePointerDown = (e) => {
+    setTouchStart(e.clientX ?? e.touches?.[0]?.clientX);
+    setIsDragging(true);
+  };
+
+  const handlePointerMove = (e) => {
+    if (!isDragging) return;
+    // prevent text selection while dragging
+    e.preventDefault(); 
+  };
+
+  const handlePointerUp = (e) => {
+    if (!isDragging || touchStart === null) return;
+    const endX = e.clientX ?? e.changedTouches?.[0]?.clientX;
+    const diff = touchStart - endX;
+    
+    if (diff > 50 && activeTab < 2) setActiveTab(prev => prev + 1);
+    else if (diff < -50 && activeTab > 0) setActiveTab(prev => prev - 1);
+    
+    setIsDragging(false);
+    setTouchStart(null);
+  };
+
   if (!me) return <div className="loading-hud">Connecting to Command Center...</div>;
+
+  const tabNames = ['🌍 Market', '🔬 R&D', '👁️ Intel'];
 
   return (
     <div className="hud-container" ref={uiRef}>
@@ -275,81 +322,74 @@ export const Dashboard = () => {
         </div>
       </div>
 
-      {/* INVENTORY DOCK — 2-row layout */}
+      {/* INVENTORY DOCK — Paired vertical columns: Attack top, Defense bottom */}
       <div className="inventory-dock">
-
-        {/* ROW 1: ATTACK weapons — draggable in war phase */}
-        <div className="inv-row">
-          <span className="inv-row-label attack">⚔ ATTACK</span>
-          {Object.entries(EQUIPMENT).filter(([_, item]) => item.type === 'attack').map(([id, item]) => {
-            const cdRemaining = cooldowns[id] ? Math.max(0, cooldowns[id] - now) : 0;
+        <div className="inv-pairs-row">
+          {WEAPON_PAIRS.map(({ attack: atkId, defense: defId }) => {
+            const atkItem = EQUIPMENT[atkId];
+            const defItem = defId ? EQUIPMENT[defId] : null;
+            const cdRemaining = cooldowns[atkId] ? Math.max(0, cooldowns[atkId] - now) : 0;
             const isOnCooldown = cdRemaining > 0;
-            const isStocked = (me.inventory[id] || 0) > 0;
-            const isCyber = id === 'virus';
+            const isAtkStocked = (me.inventory[atkId] || 0) > 0;
+            const isDefStocked = defId ? (me.inventory[defId] || 0) > 0 : false;
+            const isCyber = atkId === 'virus';
             const deflectRemaining = (isCyber && me.deflectingUntil) ? Math.max(0, me.deflectingUntil - now) : 0;
             const isDeflecting = isCyber && deflectRemaining > 0;
-            const canActivateCyber = isCyber && isStocked && !isFarmingPhase && !isDeflecting;
-            const canDrag = !isFarmingPhase && isStocked && !isOnCooldown && !isCyber;
+            const canActivateCyber = isCyber && isAtkStocked && !isFarmingPhase && !isDeflecting;
+            const canDrag = !isFarmingPhase && isAtkStocked && !isOnCooldown && !isCyber;
+            const dmgLabel = getDamageLabel(atkId);
+
             return (
-              <div
-                key={id}
-                className={`inv-item attack-item ${canDrag ? 'draggable' : ''}`}
-                title={isCyber ? `${item.name} — Click to activate Deflection Shield` : `${item.name}${canDrag ? ' — Drag onto enemy to attack' : ''}${isOnCooldown ? ` (cooldown ${(cdRemaining/1000).toFixed(1)}s)` : ''}${isFarmingPhase ? ' (War phase only)' : ''}`}
-                draggable={canDrag}
-                onDragStart={(e) => { if(canDrag) e.dataTransfer.setData('itemId', id); }}
-                onClick={() => { if(canActivateCyber) activateDeflect(); }}
-                style={{ position: 'relative', overflow: 'hidden', cursor: canActivateCyber ? 'pointer' : (isDeflecting ? 'not-allowed' : 'default') }}
-              >
-                <div className={`inv-icon attack${isStocked ? ' stocked' : ''}`}>
-                  {item.icon}
-                </div>
-                <span className="inv-name">{item.name.split(' ').pop()}</span>
-                <span className="inv-count" style={{ color: isStocked ? '#ff6b6b' : 'var(--text-muted)' }}>
-                  {me.inventory[id] || 0}
-                </span>
-                {isOnCooldown && (
-                  <div style={{ position: 'absolute', inset: 0, backgroundColor: 'rgba(0,0,0,0.75)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#ff4444', fontWeight: 900, fontSize: '13px', borderRadius: '10px', zIndex: 10 }}>
-                    {(cdRemaining / 1000).toFixed(1)}s
+              <div key={atkId} className="inv-pair-col">
+                {/* ATTACK (top) */}
+                <div
+                  className={`inv-item attack-item ${canDrag ? 'draggable' : ''}`}
+                  title={isCyber ? `${atkItem.name} — Click to activate Deflection Shield` : `${atkItem.name}${canDrag ? ' — Drag onto enemy to attack' : ''}${isOnCooldown ? ` (cooldown ${(cdRemaining/1000).toFixed(1)}s)` : ''}${isFarmingPhase ? ' (War phase only)' : ''}`}
+                  draggable={canDrag}
+                  onDragStart={(e) => { if(canDrag) e.dataTransfer.setData('itemId', atkId); }}
+                  onClick={() => { if(canActivateCyber) activateDeflect(); }}
+                  style={{ position: 'relative', overflow: 'hidden', cursor: canActivateCyber ? 'pointer' : (isDeflecting ? 'not-allowed' : 'default') }}
+                >
+                  <div className={`inv-icon attack ${isCyber ? 'cyber-icon' : 'circle-icon'}${isAtkStocked ? ' stocked' : ''}`}>
+                    {atkItem.icon}
                   </div>
-                )}
-                {isDeflecting && (
-                  <div style={{ position: 'absolute', inset: 0, backgroundColor: 'rgba(0, 255, 204, 0.2)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', zIndex: 10, borderRadius: '10px' }}>
-                    <span style={{ color: '#00ffcc', fontWeight: 900, fontSize: '13px', textShadow: '0 0 5px black' }}>{(deflectRemaining / 1000).toFixed(1)}s</span>
-                    <div style={{ position: 'absolute', bottom: 0, left: 0, height: '4px', background: 'rgba(0,0,0,0.5)', width: '100%', borderBottomLeftRadius: '10px', borderBottomRightRadius: '10px', overflow: 'hidden' }}>
-                      <div style={{ height: '100%', width: `${(deflectRemaining / 5000) * 100}%`, background: '#00ffcc', transition: 'width 0.1s linear' }} />
+                  <span className="inv-name">{atkItem.name.split(' ').pop()}</span>
+                  <div className="inv-count-row">
+                    <span className="inv-count" style={{ color: isAtkStocked ? '#ff6b6b' : 'var(--text-muted)' }}>
+                      {me.inventory[atkId] || 0}
+                    </span>
+                    {dmgLabel && <span className="inv-damage">{dmgLabel}</span>}
+                  </div>
+                  {isOnCooldown && (
+                    <div style={{ position: 'absolute', inset: 0, backgroundColor: 'rgba(0,0,0,0.75)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#ff4444', fontWeight: 900, fontSize: '13px', borderRadius: '10px', zIndex: 10 }}>
+                      {(cdRemaining / 1000).toFixed(1)}s
                     </div>
+                  )}
+                  {isDeflecting && (
+                    <div style={{ position: 'absolute', inset: 0, backgroundColor: 'rgba(0, 255, 204, 0.2)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', zIndex: 10, borderRadius: '10px' }}>
+                      <span style={{ color: '#00ffcc', fontWeight: 900, fontSize: '13px', textShadow: '0 0 5px black' }}>{(deflectRemaining / 1000).toFixed(1)}s</span>
+                      <div style={{ position: 'absolute', bottom: 0, left: 0, height: '4px', background: 'rgba(0,0,0,0.5)', width: '100%', borderBottomLeftRadius: '10px', borderBottomRightRadius: '10px', overflow: 'hidden' }}>
+                        <div style={{ height: '100%', width: `${(deflectRemaining / 5000) * 100}%`, background: '#00ffcc', transition: 'width 0.1s linear' }} />
+                      </div>
+                    </div>
+                  )}
+                </div>
+                {/* DEFENSE (bottom) */}
+                {defItem && (
+                  <div className="inv-item defense-item" title={defItem.name}>
+                    <div className={`inv-icon defense circle-icon${isDefStocked ? ' stocked' : ''}`}>
+                      {defItem.icon}
+                    </div>
+                    <span className="inv-name">{defItem.name.split(' ').pop()}</span>
+                    <span className="inv-count" style={{ color: isDefStocked ? '#79b8ff' : 'var(--text-muted)' }}>
+                      {me.inventory[defId] || 0}
+                    </span>
                   </div>
                 )}
               </div>
             );
           })}
         </div>
-
-        <div className="inv-row-divider" />
-
-        {/* ROW 2: DEFENSE weapons — static, auto-depleted when attacked */}
-        <div className="inv-row">
-          <span className="inv-row-label defense">🛡 DEFENSE</span>
-          {Object.entries(EQUIPMENT).filter(([_, item]) => item.type === 'defense').map(([id, item]) => {
-            const isStocked = (me.inventory[id] || 0) > 0;
-            return (
-              <div
-                key={id}
-                className="inv-item defense-item"
-                title={`${item.name}${id === 'virus' ? ' — Auto-counters Nuke & Missile' : ''}`}
-              >
-                <div className={`inv-icon defense${isStocked ? ' stocked' : ''}`}>
-                  {item.icon}
-                </div>
-                <span className="inv-name">{item.name.split(' ').pop()}</span>
-                <span className="inv-count" style={{ color: isStocked ? '#79b8ff' : 'var(--text-muted)' }}>
-                  {me.inventory[id] || 0}
-                </span>
-              </div>
-            );
-          })}
-        </div>
-
       </div>
 
 
@@ -372,110 +412,207 @@ export const Dashboard = () => {
           </button>
         </div>
 
+        {/* Tab indicators */}
         <div className="sidebar-nav">
-          <button className={`nav-btn ${activeTab === 'market' ? 'active' : ''}`} onClick={() => setActiveTab('market')}>🌍 World Market</button>
-          <button className={`nav-btn ${activeTab === 'rd' ? 'active' : ''}`} onClick={() => setActiveTab('rd')}>🔬 R&D Wing</button>
-          <button className={`nav-btn ${activeTab === 'intel' ? 'active' : ''}`} onClick={() => setActiveTab('intel')}>👁️ Intel Bureau</button>
+          {tabNames.map((name, i) => (
+            <button key={i} className={`nav-btn ${activeTab === i ? 'active' : ''}`} onClick={() => setActiveTab(i)}>{name}</button>
+          ))}
         </div>
 
-        <div className="sidebar-content">
-              {activeTab === 'market' && (
-                <div className="sidebar-section">
-                  {['attack', 'defense'].map((type) => (
-                    <div key={type} className="weapon-group" style={{ flex: 1 }}>
-                      <h4 style={{ textTransform: 'uppercase', color: type === 'attack' ? 'var(--accent-red)' : 'var(--accent-blue)', marginBottom: '0.75rem', borderBottom: '1px solid var(--panel-border)', paddingBottom: '0.25rem' }}>{type} Systems</h4>
-                      <div className="market-grid">
-                        {Object.entries(EQUIPMENT).filter(([_, item]) => item.type === type).map(([id, item]) => (
-                          <div key={id} className="item-card" style={{
-                            border: `1px solid ${type === 'attack' ? 'rgba(255, 68, 68, 0.4)' : 'rgba(88, 166, 255, 0.4)'}`,
-                            background: type === 'attack' ? 'rgba(255, 68, 68, 0.05)' : 'rgba(88, 166, 255, 0.05)'
-                          }}>
-                            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                              <span className="item-name">{item.name}</span>
-                              {item.icon}
-                            </div>
-                            <span className="item-cost">{item.marketCost} CP</span>
-                            <span className="item-stock">Global Stock: {gameState.marketStock[id] || 0}</span>
-                            <button
-                              className="btn-buy"
-                              onClick={() => { buyItem(id); playSound('cash_register.wav'); }}
-                              disabled={me.cp < item.marketCost || (gameState.marketStock[id] || 0) <= 0 || (id === 'nuke' && me.nukeBuilt)}
-                            >{(id === 'nuke' && me.nukeBuilt) ? 'LIMIT EXCEEDED' : 'BUY NOW'}</button>
-                          </div>
-                        ))}
+        {/* Swipable content area */}
+        <div 
+          className="sidebar-swipe-container" 
+          onPointerDown={handlePointerDown}
+          onPointerMove={handlePointerMove}
+          onPointerUp={handlePointerUp}
+          onPointerLeave={handlePointerUp}
+        >
+          <div className="sidebar-swipe-inner" style={{ transform: `translateX(-${activeTab * 100}%)` }}>
+          {/* Panel 0: Market */}
+          <div className="sidebar-swipe-panel">
+            <div className="sidebar-section">
+              <div className="paired-header">
+                <span className="paired-col-label attack-label">⚔ ATTACK</span>
+                <span className="paired-col-label defense-label">🛡 COUNTER</span>
+              </div>
+              {WEAPON_PAIRS.map(({ attack: atkId, defense: defId }) => {
+                const atkItem = EQUIPMENT[atkId];
+                const defItem = defId ? EQUIPMENT[defId] : null;
+                return (
+                  <div key={atkId} className="paired-row">
+                    {/* Attack side */}
+                    <div className="paired-card attack-card">
+                      <div className="paired-card-top">
+                        <span className="item-name">{atkItem.name}</span>
+                        {atkItem.icon}
                       </div>
+                      <span className="item-cost">{atkItem.marketCost} CP</span>
+                      <span className="item-stock">Stock: {gameState.marketStock[atkId] || 0}</span>
+                      <button
+                        className="btn-buy"
+                        onClick={() => { buyItem(atkId); playSound('cash_register.wav'); }}
+                        disabled={me.cp < atkItem.marketCost || (gameState.marketStock[atkId] || 0) <= 0 || (atkId === 'nuke' && me.nukeMarketBuilt)}
+                      >{(atkId === 'nuke' && me.nukeMarketBuilt) ? 'LIMIT EXCEEDED' : (gameState.marketStock[atkId] || 0) <= 0 ? 'OUT OF STOCK' : 'BUY NOW'}</button>
                     </div>
-                  ))}
-                </div>
-              )}
-              {activeTab === 'rd' && (
-                <div className="sidebar-section">
-                  {['attack', 'defense'].map((type) => (
-                    <div key={type} className="weapon-group" style={{ flex: 1 }}>
-                      <h4 style={{ textTransform: 'uppercase', color: type === 'attack' ? 'var(--accent-red)' : 'var(--accent-blue)', marginBottom: '0.75rem', borderBottom: '1px solid var(--panel-border)', paddingBottom: '0.25rem' }}>{type} Systems</h4>
-                      <div className="rd-grid">
-                        {Object.entries(EQUIPMENT).filter(([_, item]) => item.type === type).map(([id, item]) => {
-                          const inQueue = me.researchQueue.find(q => q.itemId === id);
-                          return (
-                            <div key={id} className="item-card" style={{
-                              border: `1px solid ${type === 'attack' ? 'rgba(255, 68, 68, 0.4)' : 'rgba(88, 166, 255, 0.4)'}`,
-                              background: type === 'attack' ? 'rgba(255, 68, 68, 0.05)' : 'rgba(88, 166, 255, 0.05)'
-                            }}>
-                              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                                <span className="item-name">{item.name}</span>
-                                {item.icon}
-                              </div>
-                              <span className="item-cost">{item.rdCost} CP (R&D)</span>
-                              {inQueue ? (
-                                <div className="rd-progress">RESEARCHING...</div>
-                              ) : (
-                                <button
-                                  className="btn-rd"
-                                  onClick={() => researchItem(id)}
-                                  disabled={me.cp < item.rdCost || me.frozenUntil > Date.now() || (id === 'nuke' && me.nukeBuilt)}
-                                >{(id === 'nuke' && me.nukeBuilt) ? 'LIMIT EXCEEDED' : 'START R&D'}</button>
-                              )}
-                            </div>
-                          );
-                        })}
+                    {/* Arrow */}
+                    <div className="paired-arrow">→</div>
+                    {/* Defense side */}
+                    {defItem ? (
+                      <div className="paired-card defense-card">
+                        <div className="paired-card-top">
+                          <span className="item-name">{defItem.name}</span>
+                          {defItem.icon}
+                        </div>
+                        <span className="item-cost">{defItem.marketCost} CP</span>
+                        <span className="item-stock">Stock: {gameState.marketStock[defId] || 0}</span>
+                        <button
+                          className="btn-buy"
+                          onClick={() => { buyItem(defId); playSound('cash_register.wav'); }}
+                          disabled={me.cp < defItem.marketCost || (gameState.marketStock[defId] || 0) <= 0}
+                        >{(gameState.marketStock[defId] || 0) <= 0 ? 'OUT OF STOCK' : 'BUY NOW'}</button>
                       </div>
-                    </div>
-                  ))}
-                </div>
-              )}
-
-              {activeTab === 'intel' && (
-                <div className="intel-bureau">
-                  <h3 style={{ marginBottom: '1rem', color: 'var(--accent-blue)', borderBottom: '1px solid var(--panel-border)', paddingBottom: '0.5rem' }}>INTELLIGENCE OPERATIONS</h3>
-                  <div className="intel-controls" style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                    <select
-                      style={{ width: '100%', padding: '0.5rem', background: 'var(--panel-bg)', color: 'white', border: '1px solid var(--panel-border)', borderRadius: '4px', cursor: 'pointer' }}
-                      onChange={(e) => setIntelTarget(e.target.value)}
-                      value={intelTarget}
-                    >
-                      <option value="">Target Nation...</option>
-                      {Object.values(gameState.players).filter(p => p.country !== myCountry).map(p => (
-                        <option key={p.socketId} value={p.socketId}>{p.country}</option>
-                      ))}
-                    </select>
-                    <hr style={{ borderColor: 'var(--panel-border)', margin: '0.5rem 0' }} />
-                    <button className="btn-execute" style={{ width: '100%', padding: '0.75rem', cursor: !intelTarget || me.cp < 500 ? 'not-allowed' : 'pointer' }} onClick={() => spy(intelTarget, { mode: 'full' })} disabled={!intelTarget || me.cp < 500}>FULL INTEL PACKAGE (500 CP)</button>
-                    <div style={{ display: 'flex', gap: '10px' }}>
-                      <select style={{ flex: 1, padding: '0.5rem', background: 'var(--panel-bg)', color: 'white', border: '1px solid var(--panel-border)', borderRadius: '4px' }} onChange={(e) => setIntelCategory(e.target.value)} value={intelCategory}>
-                        <option value="attack">Attack Base</option>
-                        <option value="defense">Defense Base</option>
-                      </select>
-                      <button className="btn-execute" style={{ flex: 2, padding: '0.75rem' }} onClick={() => spy(intelTarget, { mode: 'category', category: intelCategory })} disabled={!intelTarget || me.cp < 300}>CATEGORY SCAN (300 CP)</button>
-                    </div>
-                    <div style={{ display: 'flex', gap: '10px' }}>
-                      <select style={{ flex: 1, padding: '0.5rem', background: 'var(--panel-bg)', color: 'white', border: '1px solid var(--panel-border)', borderRadius: '4px' }} onChange={(e) => setIntelItem(e.target.value)} value={intelItem}>
-                        {Object.entries(EQUIPMENT).map(([id, item]) => (<option key={id} value={id}>{item.name}</option>))}
-                      </select>
-                      <button className="btn-execute" style={{ flex: 2, padding: '0.75rem' }} onClick={() => spy(intelTarget, { mode: 'specific', itemId: intelItem })} disabled={!intelTarget || me.cp < 100}>SPECIFIC INTEL (100 CP)</button>
-                    </div>
+                    ) : (
+                      <div className="paired-card" style={{ border: 'none', background: 'transparent', alignItems: 'center', justifyContent: 'center' }}>
+                        <HelpCircle size={48} style={{ opacity: 0.15, strokeWidth: 1 }} />
+                      </div>
+                    )}
                   </div>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Panel 1: R&D */}
+          <div className="sidebar-swipe-panel">
+            <div className="sidebar-section">
+              <div className="paired-header">
+                <span className="paired-col-label attack-label">⚔ ATTACK</span>
+                <span className="paired-col-label defense-label">🛡 COUNTER</span>
+              </div>
+              {WEAPON_PAIRS.map(({ attack: atkId, defense: defId }) => {
+                const atkItem = EQUIPMENT[atkId];
+                const defItem = defId ? EQUIPMENT[defId] : null;
+                const atkInQueue = me.researchQueue.find(q => q.itemId === atkId);
+                const defInQueue = defId ? me.researchQueue.find(q => q.itemId === defId) : null;
+                return (
+                  <div key={atkId} className="paired-row">
+                    {/* Attack side */}
+                    <div className="paired-card attack-card">
+                      <div className="paired-card-top">
+                        <span className="item-name">{atkItem.name}</span>
+                        {atkItem.icon}
+                      </div>
+                      <span className="item-cost">{atkItem.rdCost} CP (R&D)</span>
+                      {atkInQueue ? (
+                        <div className="rd-progress">RESEARCHING...</div>
+                      ) : (
+                        <button
+                          className="btn-rd"
+                          onClick={() => researchItem(atkId)}
+                          disabled={me.cp < atkItem.rdCost || me.frozenUntil > Date.now() || (atkId === 'nuke' && me.nukeRDBuilt)}
+                        >{(atkId === 'nuke' && me.nukeRDBuilt) ? 'LIMIT EXCEEDED' : 'START R&D'}</button>
+                      )}
+                    </div>
+                    {/* Arrow */}
+                    <div className="paired-arrow">→</div>
+                    {/* Defense side */}
+                    {defItem ? (
+                      <div className="paired-card defense-card">
+                        <div className="paired-card-top">
+                          <span className="item-name">{defItem.name}</span>
+                          {defItem.icon}
+                        </div>
+                        <span className="item-cost">{defItem.rdCost} CP (R&D)</span>
+                        {defInQueue ? (
+                          <div className="rd-progress">RESEARCHING...</div>
+                        ) : (
+                          <button
+                            className="btn-rd"
+                            onClick={() => researchItem(defId)}
+                            disabled={me.cp < defItem.rdCost || me.frozenUntil > Date.now()}
+                          >START R&D</button>
+                        )}
+                      </div>
+                    ) : (
+                      <div className="paired-card" style={{ border: 'none', background: 'transparent', alignItems: 'center', justifyContent: 'center' }}>
+                        <HelpCircle size={48} style={{ opacity: 0.15, strokeWidth: 1 }} />
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Panel 2: Intel */}
+          <div className="sidebar-swipe-panel">
+            <div className="intel-bureau">
+              <h3 style={{ marginBottom: '1rem', color: 'var(--accent-blue)', borderBottom: '1px solid var(--panel-border)', paddingBottom: '0.5rem' }}>INTELLIGENCE OPERATIONS</h3>
+              <div className="intel-controls" style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                {/* Target selection */}
+                <select
+                  style={{ width: '100%', padding: '0.5rem', background: 'var(--panel-bg)', color: 'white', border: '1px solid var(--panel-border)', borderRadius: '4px', cursor: 'pointer' }}
+                  onChange={(e) => setIntelTarget(e.target.value)}
+                  value={intelTarget}
+                >
+                  <option value="">Target Nation...</option>
+                  {Object.values(gameState.players).filter(p => p.country !== myCountry).map(p => (
+                    <option key={p.socketId} value={p.socketId}>{p.country}</option>
+                  ))}
+                </select>
+
+                <hr style={{ borderColor: 'var(--panel-border)', margin: '0.25rem 0' }} />
+
+                {/* Full Intel */}
+                <button className="btn-intel-option" onClick={() => spy(intelTarget, { mode: 'full' })} disabled={!intelTarget || me.cp < 500}>
+                  <div className="intel-option-info">
+                    <span className="intel-option-title">🔍 Full Intel Package</span>
+                    <span className="intel-option-desc">View entire enemy arsenal</span>
+                  </div>
+                  <span className="intel-option-cost">500 CP</span>
+                </button>
+
+                {/* Attack Intel */}
+                <button className="btn-intel-option" onClick={() => spy(intelTarget, { mode: 'category', category: 'attack' })} disabled={!intelTarget || me.cp < 300}>
+                  <div className="intel-option-info">
+                    <span className="intel-option-title">⚔ Attack Intel</span>
+                    <span className="intel-option-desc">View enemy attack weapons</span>
+                  </div>
+                  <span className="intel-option-cost">300 CP</span>
+                </button>
+
+                {/* Defense Intel */}
+                <button className="btn-intel-option" onClick={() => spy(intelTarget, { mode: 'category', category: 'defense' })} disabled={!intelTarget || me.cp < 300}>
+                  <div className="intel-option-info">
+                    <span className="intel-option-title">🛡 Defense Intel</span>
+                    <span className="intel-option-desc">View enemy defense systems</span>
+                  </div>
+                  <span className="intel-option-cost">300 CP</span>
+                </button>
+
+                {/* Specific Intel */}
+                <div className="intel-specific-row">
+                  <select style={{ flex: 1, padding: '0.5rem', background: 'var(--panel-bg)', color: 'white', border: '1px solid var(--panel-border)', borderRadius: '4px' }} onChange={(e) => setIntelItem(e.target.value)} value={intelItem}>
+                    {Object.entries(EQUIPMENT).map(([id, item]) => (<option key={id} value={id}>{item.name}</option>))}
+                  </select>
+                  <button className="btn-intel-option specific" onClick={() => spy(intelTarget, { mode: 'specific', itemId: intelItem })} disabled={!intelTarget || me.cp < 100}>
+                    <div className="intel-option-info">
+                      <span className="intel-option-title">🎯 Specific</span>
+                    </div>
+                    <span className="intel-option-cost">100 CP</span>
+                  </button>
                 </div>
-              )}
+              </div>
+            </div>
+          </div>
+          </div>
+        </div>
+
+        {/* Swipe indicator dots */}
+        <div className="swipe-dots">
+          {tabNames.map((_, i) => (
+            <div key={i} className={`swipe-dot ${activeTab === i ? 'active' : ''}`} onClick={() => setActiveTab(i)} />
+          ))}
         </div>
       </div>
     </div>

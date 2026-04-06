@@ -129,6 +129,7 @@ class GameState {
       "France",
       "Australia",
       "North Korea",
+      "South Korea",
       "Pakistan",
       "Israel",
       "Iran"
@@ -147,7 +148,7 @@ class GameState {
       sonar: 8,
       virus: 5,
       firewall: 5,
-      nuke: 1,
+      nuke: 4,
     };
 
     this.events = [];
@@ -191,7 +192,8 @@ class GameState {
       lastActionTime: Date.now(),
       attackCooldowns: {},
       deflectingUntil: 0,
-      nukeBuilt: false,
+      nukeMarketBuilt: false,
+      nukeRDBuilt: false,
     };
 
     this.streaks[socketId] = 0;
@@ -347,9 +349,9 @@ class GameState {
   buyFromMarket(socketId, itemId) {
     const p = this.players[socketId];
     const item = EQUIPMENT[itemId];
-    if (itemId === "nuke" && p && p.nukeBuilt) return false;
+    if (itemId === "nuke" && p && p.nukeMarketBuilt) return false;
     if (p && this.marketStock[itemId] > 0 && p.cp >= item.marketCost) {
-      if (itemId === "nuke") p.nukeBuilt = true;
+      if (itemId === "nuke") p.nukeMarketBuilt = true;
       p.cp -= item.marketCost;
       this.marketStock[itemId]--;
       p.inventory[itemId]++;
@@ -361,9 +363,9 @@ class GameState {
   startResearch(socketId, itemId) {
     const p = this.players[socketId];
     const item = EQUIPMENT[itemId];
-    if (itemId === "nuke" && p && p.nukeBuilt) return false;
+    if (itemId === "nuke" && p && p.nukeRDBuilt) return false;
     if (p && p.cp >= item.rdCost && Date.now() > p.frozenUntil) {
-      if (itemId === "nuke") p.nukeBuilt = true;
+      if (itemId === "nuke") p.nukeRDBuilt = true;
       p.cp -= item.rdCost;
       p.researchQueue.push({
         itemId,
@@ -424,7 +426,8 @@ class GameState {
 
       const counterId = item.counter;
 
-      if (Date.now() < actualTarget.deflectingUntil) {
+      const deflectable = ['missile', 'nuke'];
+      if (Date.now() < actualTarget.deflectingUntil && deflectable.includes(itemId)) {
         if (attacker.inventory["firewall"] > 0) {
           attacker.inventory["firewall"]--;
           attacker.attackCooldowns[itemId] = Date.now() + (item.attackDelay || 0);
@@ -547,7 +550,7 @@ class GameState {
       sonar: 8,
       virus: 5,
       firewall: 5,
-      nuke: 1,
+      nuke: 4,
     };
     this.quizTimers = {};
     this.streaks = {};
