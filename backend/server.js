@@ -1,4 +1,5 @@
 import 'dotenv/config';
+/* global process */
 import express from 'express';
 import http from 'http';
 import { Server } from 'socket.io';

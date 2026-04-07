@@ -44,7 +44,7 @@ const getDamageLabel = (id) => {
 };
 
 const QuizToaster = ({ quiz, onAnswer }) => {
-  const initialTimeLeft = useRef(10).current;
+  const initialTimeLeft = 10;
   const [timeLeft, setTimeLeft] = useState(initialTimeLeft);
   const tickAudioRef = useRef(null);
   const timerRef = useRef(null);
@@ -104,14 +104,13 @@ const QuizToaster = ({ quiz, onAnswer }) => {
 export const Dashboard = () => {
   const {
     gameState, myCountry, activeQuiz, submitQuiz,
-    buyItem, researchItem, spy, attack, activateDeflect,
+    buyItem, researchItem, spy, activateDeflect,
     notification, worldEvent, spyResult
   } = useGameStore();
 
   const uiRef = useRef();
-  const swipeRef = useRef(null);
   const [activeTab, setActiveTab] = useState(0); // 0=market, 1=rd, 2=intel
-  const [isMinimized, setIsMinimized] = useState(true);
+  const [isMinimized, setIsMinimized] = useState(false);
   const [intelTarget, setIntelTarget] = useState('');
   const [intelItem, setIntelItem] = useState('missile');
   const [cooldowns, setCooldowns] = useState({});
@@ -147,7 +146,7 @@ export const Dashboard = () => {
     return () => window.removeEventListener('attackEvent', onAttackEvent);
   }, []);
 
-  const [now, setNow] = useState(Date.now());
+  const [now, setNow] = useState(() => Date.now());
   const lastCyberTick = useRef(0);
 
   useEffect(() => {
@@ -446,8 +445,11 @@ export const Dashboard = () => {
                         <span className="item-name">{atkItem.name}</span>
                         {atkItem.icon}
                       </div>
-                      <span className="item-cost">{atkItem.marketCost} CP</span>
-                      <span className="item-stock">Stock: {gameState.marketStock[atkId] || 0}</span>
+                      <div style={{ marginTop: 'auto', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                        <span className="item-cost" style={{ marginTop: 0 }}>{atkItem.marketCost} CP</span>
+                        <span style={{ color: 'rgba(255,255,255,0.2)', fontSize: '0.75rem' }}>|</span>
+                        <span className="item-stock">Stock: {gameState.marketStock[atkId] || 0}</span>
+                      </div>
                       <button
                         className="btn-buy"
                         onClick={() => { buyItem(atkId); playSound('cash_register.wav'); }}
@@ -463,8 +465,11 @@ export const Dashboard = () => {
                           <span className="item-name">{defItem.name}</span>
                           {defItem.icon}
                         </div>
-                        <span className="item-cost">{defItem.marketCost} CP</span>
-                        <span className="item-stock">Stock: {gameState.marketStock[defId] || 0}</span>
+                        <div style={{ marginTop: 'auto', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                          <span className="item-cost" style={{ marginTop: 0 }}>{defItem.marketCost} CP</span>
+                          <span style={{ color: 'rgba(255,255,255,0.2)', fontSize: '0.75rem' }}>|</span>
+                          <span className="item-stock">Stock: {gameState.marketStock[defId] || 0}</span>
+                        </div>
                         <button
                           className="btn-buy"
                           onClick={() => { buyItem(defId); playSound('cash_register.wav'); }}
@@ -509,7 +514,7 @@ export const Dashboard = () => {
                         <button
                           className="btn-rd"
                           onClick={() => researchItem(atkId)}
-                          disabled={me.cp < atkItem.rdCost || me.frozenUntil > Date.now() || (atkId === 'nuke' && me.nukeRDBuilt)}
+                          disabled={me.cp < atkItem.rdCost || me.frozenUntil > now || (atkId === 'nuke' && me.nukeRDBuilt)}
                         >{(atkId === 'nuke' && me.nukeRDBuilt) ? 'LIMIT EXCEEDED' : 'START R&D'}</button>
                       )}
                     </div>
@@ -529,7 +534,7 @@ export const Dashboard = () => {
                           <button
                             className="btn-rd"
                             onClick={() => researchItem(defId)}
-                            disabled={me.cp < defItem.rdCost || me.frozenUntil > Date.now()}
+                            disabled={me.cp < defItem.rdCost || me.frozenUntil > now}
                           >START R&D</button>
                         )}
                       </div>

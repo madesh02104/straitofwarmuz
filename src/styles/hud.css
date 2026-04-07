@@ -409,7 +409,7 @@ body {
   top: 0;
   left: 0;
   bottom: 0;
-  width: 420px;
+  width: 550px;
   background: rgba(10, 15, 25, 0.85); /* Deep sleek dark */
   backdrop-filter: blur(25px);
   border-right: 1px solid rgba(88, 166, 255, 0.2);
@@ -428,7 +428,7 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 20px 25px;
+  padding: 15px 20px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.05);
   background: linear-gradient(to right, rgba(0, 0, 0, 0.4), transparent);
 }
@@ -458,7 +458,7 @@ body {
 .sidebar-nav {
   display: flex;
   gap: 5px;
-  padding: 15px 25px;
+  padding: 10px 15px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
 
@@ -493,7 +493,7 @@ body {
 .sidebar-section {
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 5px;
   min-width: 100%;
 }
 
@@ -514,11 +514,11 @@ body {
 .sidebar-swipe-panel {
   flex: 0 0 100%;
   width: 100%;
-  padding: 25px;
+  padding: 15px;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  gap: 25px;
+  gap: 15px;
 }
 
 /* Custom Scrollbar for swipe panels */
@@ -587,10 +587,10 @@ body {
 .paired-row {
   display: flex;
   align-items: stretch;
-  gap: 10px;
+  gap: 5px;
   background: rgba(255, 255, 255, 0.02);
   border-radius: 8px;
-  padding: 8px;
+  padding: 4px;
   border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
@@ -605,10 +605,10 @@ body {
   flex: 1;
   border: 1px solid var(--panel-border);
   border-radius: 6px;
-  padding: 10px;
+  padding: 6px 8px;
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 2px;
 }
 
 .paired-card.attack-card {
@@ -661,7 +661,7 @@ body {
   font-weight: 700;
   cursor: pointer;
   font-size: 0.7rem;
-  margin-top: 4px;
+  margin-top: 2px;
 }
 .attack-card .btn-buy, .attack-card .btn-rd {
   background: rgba(255, 68, 68, 0.2);

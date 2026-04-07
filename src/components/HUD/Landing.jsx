@@ -31,7 +31,7 @@ export const Landing = () => {
     );
   }, []);
 
-  const handleJoin = (type) => {
+  const handleJoin = () => {
     if (!name.trim()) {
       gsap.to('.name-input', { x: 10, repeat: 5, yoyo: true, duration: 0.05 });
       return;

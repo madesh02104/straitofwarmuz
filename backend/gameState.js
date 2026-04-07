@@ -485,7 +485,7 @@ class GameState {
     return { success: false, reason: "no_ammo" };
   }
 
-  handleQuiz(socketId, correct, timeTaken) {
+  handleQuiz(socketId, correct) {
     const p = this.players[socketId];
     if (!p) return;
     if (correct) {

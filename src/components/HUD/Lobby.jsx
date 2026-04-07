@@ -3,9 +3,8 @@ import { useGameStore } from '../../store/gameStore';
 import { CheckCircle, XCircle, Users, Globe, Shield, Volume2, VolumeX } from 'lucide-react';
 
 export const Lobby = () => {
-  const { gameState, isReady, toggleReady, myCountry } = useGameStore();
+  const { gameState, isReady, toggleReady } = useGameStore();
   const players = Object.values(gameState.players);
-  const me = players.find(p => p.country === myCountry);
   const readyCount = players.filter(p => p.isReady).length;
   
   const [isMuted, setIsMuted] = useState(false);
@@ -22,7 +21,7 @@ export const Lobby = () => {
       audio.pause();
       audio.currentTime = 0;
     };
-  }, []);
+  }, [isMuted]);
 
   useEffect(() => {
     if (audioRef.current) {

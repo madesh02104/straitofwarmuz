@@ -44,7 +44,7 @@ function getCountryCentroid(feature) {
 
 const threeContext = { camera: null, scene: null, meshes: [] };
 
-const CountryMesh = ({ feature, myCountry, gameState, onFocus, phase }) => {
+const CountryMesh = ({ feature, myCountry, gameState, onFocus }) => {
   const meshRef = useRef();
   const outlineRef = useRef();
   const [hovered, setHovered] = useState(false);
@@ -89,23 +89,25 @@ const CountryMesh = ({ feature, myCountry, gameState, onFocus, phase }) => {
         shapes.push(shape);
       }
       return new THREE.ShapeGeometry(shapes);
-    } catch(err) { return null; }
+    } catch { return null; }
   }, [feature]);
 
   const centroid = useMemo(() => getCountryCentroid(feature), [feature]);
 
   useEffect(() => {
-    if (meshRef.current && owner) {
-      const existing = threeContext.meshes.find(m => m.mesh === meshRef.current);
+    const meshNode = meshRef.current;
+    if (meshNode && owner) {
+      const existing = threeContext.meshes.find(m => m.mesh === meshNode);
       if (!existing) {
-        threeContext.meshes.push({ mesh: meshRef.current, ownerId: owner.socketId });
+        threeContext.meshes.push({ mesh: meshNode, ownerId: owner.socketId });
       } else {
         existing.ownerId = owner.socketId;
       }
     }
     return () => {
-      threeContext.meshes = threeContext.meshes.filter(m => m.mesh !== meshRef.current);
+      threeContext.meshes = threeContext.meshes.filter(m => m.mesh !== meshNode);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [owner?.socketId]);
 
   // Check if this country is drag-over target
@@ -115,6 +117,7 @@ const CountryMesh = ({ feature, myCountry, gameState, onFocus, phase }) => {
       setIsDragOver(dragOverState.targetId === owner.socketId);
     }, 50);
     return () => clearInterval(interval);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [owner?.socketId]);
 
   useFrame(() => {
@@ -217,8 +220,23 @@ const MapScene = () => {
   useEffect(() => {
     const el = document.getElementById('map-container');
     const handleWheel = (e) => {
+      const z0 = targetZoom.current;
       const delta = e.deltaY > 0 ? -2.0 : 2.0;
-      targetZoom.current = Math.max(1, Math.min(30, targetZoom.current + delta));
+      const z1 = Math.max(1, Math.min(30, z0 + delta));
+      
+      if (z0 !== z1 && threeContext.camera) {
+        const rect = el.getBoundingClientRect();
+        const nx = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+        const ny = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+        const camera = threeContext.camera;
+        
+        const bw_x = (nx * (camera.right - camera.left)) / 2;
+        const bw_y = (ny * (camera.top - camera.bottom)) / 2;
+        
+        targetPan.current.x += bw_x * (1 / z0 - 1 / z1);
+        targetPan.current.y += bw_y * (1 / z0 - 1 / z1);
+      }
+      targetZoom.current = z1;
     };
     
     const handlePointerDown = (e) => {
