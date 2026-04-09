@@ -105,7 +105,7 @@ export const Dashboard = () => {
   const {
     gameState, myCountry, activeQuiz, submitQuiz,
     buyItem, researchItem, spy, activateDeflect,
-    notification, worldEvent, spyResult
+    notification, worldEvent, spyResult, intelLogs
   } = useGameStore();
 
   const uiRef = useRef();
@@ -216,6 +216,13 @@ export const Dashboard = () => {
 
   const tabNames = ['🌍 Market', '🔬 R&D', '👁️ Intel'];
 
+  const phaseTimeRemaining = isFarmingPhase 
+    ? Math.max(0, gameState.timeRemaining - 60000) 
+    : gameState.timeRemaining;
+  const isLast5Sec = phaseTimeRemaining > 0 && phaseTimeRemaining <= 5000;
+  const timerGlow = isLast5Sec ? '0 0 15px var(--accent-red)' : 'none';
+  const timerColor = isLast5Sec ? 'var(--accent-red)' : 'var(--text-bright)';
+
   return (
     <div className="hud-container" ref={uiRef}>
       {/* Notifications & Events */}
@@ -315,9 +322,16 @@ export const Dashboard = () => {
           </div>
         </div>
 
-        <div className="timer-box">
-          <Activity className="t-icon" />
-          <span className="time">{formatTime(gameState.timeRemaining)}</span>
+        <div className="timer-section" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', minWidth: '120px' }}>
+          <div className="timer-box" style={{ textShadow: timerGlow, color: timerColor, transition: 'all 0.3s ease' }}>
+            <Activity className="t-icon" />
+            <span className="time" style={{ fontWeight: isLast5Sec ? 900 : 'normal' }}>{formatTime(phaseTimeRemaining)}</span>
+          </div>
+          {isFarmingPhase && isLast5Sec && (
+            <span style={{ color: 'var(--accent-red)', fontSize: '9px', fontWeight: 800, textAlign: 'center', marginTop: '4px', maxWidth: '100px', lineHeight: 1.1, textShadow: '0 0 10px #f85149' }}>
+              5 SEC LEFT TO BUY!
+            </span>
+          )}
         </div>
       </div>
 
@@ -334,8 +348,8 @@ export const Dashboard = () => {
             const isCyber = atkId === 'virus';
             const deflectRemaining = (isCyber && me.deflectingUntil) ? Math.max(0, me.deflectingUntil - now) : 0;
             const isDeflecting = isCyber && deflectRemaining > 0;
-            const canActivateCyber = isCyber && isAtkStocked && !isFarmingPhase && !isDeflecting;
-            const canDrag = !isFarmingPhase && isAtkStocked && !isOnCooldown && !isCyber;
+            const canActivateCyber = isCyber && isAtkStocked && !isFarmingPhase && !isDeflecting && me.hp > 0;
+            const canDrag = !isFarmingPhase && isAtkStocked && !isOnCooldown && !isCyber && me.hp > 0;
             const dmgLabel = getDamageLabel(atkId);
 
             return (
@@ -428,8 +442,15 @@ export const Dashboard = () => {
         >
           <div className="sidebar-swipe-inner" style={{ transform: `translateX(-${activeTab * 100}%)` }}>
           {/* Panel 0: Market */}
-          <div className="sidebar-swipe-panel">
-            <div className="sidebar-section">
+          <div className="sidebar-swipe-panel" style={{ position: 'relative' }}>
+            {!isFarmingPhase && (
+              <div style={{ position: 'absolute', inset: 0, zIndex: 10, background: 'rgba(5, 10, 16, 0.85)', backdropFilter: 'blur(4px)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', color: 'var(--accent-red)' }}>
+                <Lock size={48} style={{ marginBottom: '16px' }} />
+                <h3 style={{ fontFamily: 'var(--font-display)', letterSpacing: '2px', textAlign: 'center' }}>MARKET CLOSED</h3>
+                <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', textAlign: 'center', marginTop: '8px', padding: '0 40px', lineHeight: 1.5 }}>The World Market is unavailable during the War Window. Weapons can only be purchased during the Preparation phase.</p>
+              </div>
+            )}
+            <div className="sidebar-section" style={{ filter: !isFarmingPhase ? 'blur(2px) grayscale(1)' : 'none', pointerEvents: !isFarmingPhase ? 'none' : 'auto' }}>
               <div className="paired-header">
                 <span className="paired-col-label attack-label">⚔ ATTACK</span>
                 <span className="paired-col-label defense-label">🛡 COUNTER</span>
@@ -448,7 +469,11 @@ export const Dashboard = () => {
                       <div style={{ marginTop: 'auto', display: 'flex', alignItems: 'center', gap: '6px' }}>
                         <span className="item-cost" style={{ marginTop: 0 }}>{atkItem.marketCost} CP</span>
                         <span style={{ color: 'rgba(255,255,255,0.2)', fontSize: '0.75rem' }}>|</span>
-                        <span className="item-stock">Stock: {gameState.marketStock[atkId] || 0}</span>
+                        <span className="item-stock">
+                          {atkId === 'nuke' 
+                            ? `Stock: ${(gameState.marketStock[atkId] || 0) === 0 ? '-/0' : `${me.nukeMarketBuilt ? 0 : 1}/${gameState.marketStock[atkId] || 0}`}`
+                            : `Stock: ${gameState.marketStock[atkId] || 0}`}
+                        </span>
                       </div>
                       <button
                         className="btn-buy"
@@ -608,6 +633,31 @@ export const Dashboard = () => {
                   </button>
                 </div>
               </div>
+
+              {/* INTEL REPORTS LOG */}
+              {intelLogs && intelLogs.length > 0 && (
+                <div className="intel-reports" style={{ marginTop: '20px', borderTop: '1px solid var(--panel-border)', paddingTop: '15px' }}>
+                  <h4 style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: '10px', letterSpacing: '1px' }}>RECENT REPORTS</h4>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', maxHeight: '250px', overflowY: 'auto', paddingRight: '5px' }}>
+                    {intelLogs.map((log, idx) => (
+                      <div key={idx} style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid var(--panel-border)', padding: '10px', borderRadius: '6px', fontSize: '0.75rem' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', color: 'var(--accent-blue)', fontWeight: 800, marginBottom: '4px' }}>
+                          <span>{log.countryName.toUpperCase()}</span>
+                          <span style={{ opacity: 0.5 }}>{new Date(log.time).toLocaleTimeString()}</span>
+                        </div>
+                        <div style={{ color: 'var(--text-main)', whiteSpace: 'pre-line' }}>
+                          {log.mode === 'specific'
+                            ? `Has ${log.count}x ${EQUIPMENT[log.itemId]?.name}`
+                            : log.mode === 'category'
+                              ? `(${log.category.toUpperCase()}):\n` + Object.entries(log.data).map(([id, count]) => `• ${EQUIPMENT[id].name}: ${count}`).join('\n')
+                              : `(FULL INTEL):\n` + Object.entries(log.data).map(([id, count]) => `• ${EQUIPMENT[id].name}: ${count}`).join('\n')
+                          }
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
           </div>
           </div>

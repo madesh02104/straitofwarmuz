@@ -97,6 +97,13 @@ io.on('connection', (socket) => {
     
     if (Object.keys(game.players).length === 0) {
       game.resetGame();
+    } else {
+      if (game.lobbyState === 'active') {
+        const alive = Object.values(game.players).filter((p) => p.hp > 0);
+        if (alive.length <= 1) {
+          game.lobbyState = 'ended';
+        }
+      }
     }
     io.emit('gameState', game.getSnapshot());
   });

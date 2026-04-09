@@ -129,7 +129,6 @@ class GameState {
       "France",
       "Australia",
       "North Korea",
-      "South Korea",
       "Pakistan",
       "Israel",
       "Iran"
@@ -312,7 +311,7 @@ class GameState {
     }
 
     const alive = Object.values(this.players).filter((p) => p.hp > 0);
-    if (alive.length <= 1 && Object.keys(this.players).length > 1) {
+    if (alive.length <= 1 && this.lobbyState === "active") {
       this.lobbyState = "ended";
     }
   }
@@ -380,7 +379,7 @@ class GameState {
     const p = this.players[socketId];
     const target = this.players[targetId];
     if (!p || !target) return null;
-    
+
     const mode = options.mode;
     let cost = 0;
     if (mode === "full") cost = 500;
@@ -391,11 +390,11 @@ class GameState {
       p.cp -= cost;
       if (mode === "full") return { mode, data: target.inventory };
       if (mode === "category") {
-         const result = {};
-         for (const id in EQUIPMENT) {
-           if (EQUIPMENT[id].type === options.category) result[id] = target.inventory[id];
-         }
-         return { mode, category: options.category, data: result };
+        const result = {};
+        for (const id in EQUIPMENT) {
+          if (EQUIPMENT[id].type === options.category) result[id] = target.inventory[id];
+        }
+        return { mode, category: options.category, data: result };
       }
       if (mode === "specific") return { mode, itemId: options.itemId, count: target.inventory[options.itemId] || 0 };
     }
@@ -416,12 +415,15 @@ class GameState {
     const attacker = this.players[attackerId];
     let actualTarget = this.players[targetId];
     const item = EQUIPMENT[itemId];
-    
+
     if (attacker && actualTarget && attacker.inventory[itemId] > 0) {
+      if (attacker.hp <= 0) return { success: false, reason: "dead_attacker" };
+      if (actualTarget.hp <= 0) return { success: false, reason: "dead_target" };
+
       if (Date.now() < (attacker.attackCooldowns[itemId] || 0)) {
         return { success: false, reason: "cooldown" };
       }
-      
+
       attacker.inventory[itemId]--;
 
       const counterId = item.counter;
@@ -447,7 +449,7 @@ class GameState {
           attacker.hp = Math.max(0, attacker.hp - item.damage);
           damageDealt = oldHp - attacker.hp;
         }
-        
+
         attacker.attackCooldowns[itemId] = Date.now() + (item.attackDelay || 0);
         this.battleLogs.push({ time: Date.now(), text: `[CYBERATTACK] ${actualTarget.country} deflected ${item.name} back to ${attacker.country} dealing ${damageDealt} HP damage!` });
         return { success: true, damage: damageDealt, target: attacker.socketId, deflected: true, originalTarget: actualTarget.socketId, itemId };
@@ -476,7 +478,7 @@ class GameState {
           actualTarget.hp = Math.max(0, actualTarget.hp - item.damage);
           damageDealt = oldHp - actualTarget.hp;
         }
-        
+
         attacker.attackCooldowns[itemId] = Date.now() + (item.attackDelay || 0);
         this.battleLogs.push({ time: Date.now(), text: `[ATTACK] ${attacker.country} hit ${actualTarget.country} with ${item.name} dealing ${damageDealt} HP damage!` });
         return { success: true, damage: damageDealt, target: actualTarget.socketId, itemId };

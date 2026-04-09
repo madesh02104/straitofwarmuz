@@ -115,7 +115,15 @@ socket.on("worldEvent", (data) => {
 });
 
 socket.on("spyResult", (data) => {
-  useGameStore.setState({ spyResult: data });
+  const state = useGameStore.getState();
+  const currentLogs = state.intelLogs || [];
+  const countryName = state.gameState?.players[data.target]?.country || 'Unknown';
+  const entry = { ...data, countryName, time: Date.now() };
+
+  useGameStore.setState({ 
+    spyResult: data,
+    intelLogs: [entry, ...currentLogs].slice(0, 20) // Keep last 20 reports
+  });
   setTimeout(() => useGameStore.setState({ spyResult: null }), 5000);
 });
 

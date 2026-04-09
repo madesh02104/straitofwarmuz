@@ -54,16 +54,17 @@ const CountryMesh = ({ feature, myCountry, gameState, onFocus }) => {
   const normalizedMyCountry = normalize(myCountry);
 
   const players = Object.values(gameState?.players || {});
-  
+
   let color = '#2a3a4a';
   let owner = null;
   const isMyCountry = normalizedName === normalizedMyCountry;
 
   for (let p of players) {
     if (normalize(p.country) === normalizedName) {
-      owner = p;
-      if (p.hp <= 0) color = '#050505';
-      else color = '#f85149'; // All active countries are red (including player's own)
+      if (p.hp > 0) {
+        owner = p;
+        color = isMyCountry ? '#58a6ff' : '#f85149'; // Player's own country is blue, enemies are red
+      }
       break;
     }
   }
@@ -79,7 +80,7 @@ const CountryMesh = ({ feature, myCountry, gameState, onFocus }) => {
           const pt = mapCoordinates(coords[i][0], coords[i][1]);
           if (i === 0) shape.moveTo(pt[0], pt[1]);
           else {
-            if (Math.abs(coords[i][0] - coords[i-1][0]) > 180) {
+            if (Math.abs(coords[i][0] - coords[i - 1][0]) > 180) {
               shapes.push(shape);
               shape = new THREE.Shape();
               shape.moveTo(pt[0], pt[1]);
@@ -127,7 +128,7 @@ const CountryMesh = ({ feature, myCountry, gameState, onFocus }) => {
       meshRef.current.position.z = THREE.MathUtils.lerp(meshRef.current.position.z, targetZ, 0.1);
       const targetScale = isDragOver ? 1.06 : (isMyCountry || hovered) ? 1.02 : 1.0;
       meshRef.current.scale.setScalar(THREE.MathUtils.lerp(meshRef.current.scale.x, targetScale, 0.1));
-      
+
       // Override color when dragged over
       if (isDragOver) {
         meshRef.current.material.color.lerp(new THREE.Color('#ffffff'), 0.2);
@@ -221,24 +222,24 @@ const MapScene = () => {
     const el = document.getElementById('map-container');
     const handleWheel = (e) => {
       const z0 = targetZoom.current;
-      const delta = e.deltaY > 0 ? -2.0 : 2.0;
-      const z1 = Math.max(1, Math.min(30, z0 + delta));
-      
+      const delta = e.deltaY > 0 ? -1.5 : 1.5;
+      const z1 = Math.max(2.5, Math.min(30, z0 + delta));
+
       if (z0 !== z1 && threeContext.camera) {
         const rect = el.getBoundingClientRect();
         const nx = ((e.clientX - rect.left) / rect.width) * 2 - 1;
         const ny = -((e.clientY - rect.top) / rect.height) * 2 + 1;
         const camera = threeContext.camera;
-        
+
         const bw_x = (nx * (camera.right - camera.left)) / 2;
         const bw_y = (ny * (camera.top - camera.bottom)) / 2;
-        
+
         targetPan.current.x += bw_x * (1 / z0 - 1 / z1);
         targetPan.current.y += bw_y * (1 / z0 - 1 / z1);
       }
       targetZoom.current = z1;
     };
-    
+
     const handlePointerDown = (e) => {
       if (e.button !== 0 && e.button !== 1 && e.button !== 2) return;
       isDraggingMap.current = true;
@@ -251,13 +252,13 @@ const MapScene = () => {
       if (!isDraggingMap.current) return;
       const dx = e.clientX - lastMouse.current.x;
       const dy = e.clientY - lastMouse.current.y;
-      
+
       mapPanState.dragDistance += Math.abs(dx) + Math.abs(dy);
-      
-      const panSpeed = 30 / targetZoom.current; 
+
+      const panSpeed = 30 / targetZoom.current;
       targetPan.current.x -= dx * panSpeed * 0.03;
       targetPan.current.y += dy * panSpeed * 0.03;
-      
+
       lastMouse.current = { x: e.clientX, y: e.clientY };
     };
 
@@ -272,7 +273,7 @@ const MapScene = () => {
       window.addEventListener('pointermove', handlePointerMove);
       window.addEventListener('pointerup', handlePointerUp);
     }
-    return () => { 
+    return () => {
       if (el) {
         el.removeEventListener('wheel', handleWheel);
         el.removeEventListener('pointerdown', handlePointerDown);
@@ -284,15 +285,24 @@ const MapScene = () => {
 
   const meshes = useMemo(() => {
     if (!countriesData || !countriesData.features) return [];
-    
+
     const phase = gameState.phase || 1;
-    
+
     return countriesData.features
       .filter(f => (f.properties.name || f.properties.ADMIN) !== 'Antarctica')
       .map((f, i) => <CountryMesh key={i} feature={f} myCountry={myCountry} gameState={gameState} onFocus={setFocusCenter} phase={phase} />);
   }, [gameState, myCountry]);
 
   useFrame((state) => {
+    const viewWidth = window.innerWidth / targetZoom.current / 2;
+    const viewHeight = window.innerHeight / targetZoom.current / 2;
+
+    const limitX = Math.max(0, 260 - viewWidth);
+    const limitY = Math.max(0, 130 - viewHeight);
+
+    targetPan.current.x = Math.max(-limitX, Math.min(limitX, targetPan.current.x));
+    targetPan.current.y = Math.max(-limitY, Math.min(limitY, targetPan.current.y));
+
     state.camera.position.x = THREE.MathUtils.lerp(state.camera.position.x, targetPan.current.x, 0.1);
     state.camera.position.y = THREE.MathUtils.lerp(state.camera.position.y, targetPan.current.y, 0.1);
     state.camera.zoom = THREE.MathUtils.lerp(state.camera.zoom, targetZoom.current, 0.1);
@@ -315,7 +325,7 @@ const Trajectories = () => {
       const { players } = useGameStore.getState().gameState;
       const startPlayerId = data.deflected ? data.originalTarget : data.attacker;
       const endPlayerId = data.target;
-      
+
       const attackerPlayer = players[startPlayerId];
       const targetPlayer = players[endPlayerId];
       if (!attackerPlayer || !targetPlayer) return;
@@ -351,15 +361,15 @@ const TrajectoryCurve = ({ line }) => {
     const end = line.end;
     const midX = (start.x + end.x) / 2;
     const midY = (start.y + end.y) / 2;
-    
+
     const dirX = end.x - start.x;
     const dirY = end.y - start.y;
-    const length = Math.sqrt(dirX*dirX + dirY*dirY);
+    const length = Math.sqrt(dirX * dirX + dirY * dirY);
     let perpX = -dirY / length;
     let perpY = dirX / length;
-    
+
     if (perpY < 0) { perpX = -perpX; perpY = -perpY; }
-    
+
     const multiplier = line.itemId === 'nuke' ? 0.5 : 0.25;
     const midPoint = new THREE.Vector3(midX + perpX * (length * multiplier), midY + perpY * (length * multiplier), 10);
     return new THREE.QuadraticBezierCurve3(start, midPoint, end);
@@ -373,7 +383,7 @@ const TrajectoryCurve = ({ line }) => {
 
   const points = useMemo(() => {
     if (progress === 0) return [];
-    
+
     if (line.itemId === 'sub') {
       const pts = [];
       const steps = Math.max(2, Math.floor(progress * 40));
@@ -381,17 +391,17 @@ const TrajectoryCurve = ({ line }) => {
         const t = i / 39;
         const curX = THREE.MathUtils.lerp(line.start.x, line.end.x, t);
         const curY = THREE.MathUtils.lerp(line.start.y, line.end.y, t);
-        
+
         const dirX = line.end.x - line.start.x;
         const dirY = line.end.y - line.start.y;
-        const length = Math.sqrt(dirX*dirX + dirY*dirY);
+        const length = Math.sqrt(dirX * dirX + dirY * dirY);
         let perpX = -dirY / length;
         let perpY = dirX / length;
-        
+
         const frequency = 10;
         const amplitude = 1.5;
         const wave = Math.sin(t * Math.PI * frequency) * amplitude;
-        
+
         pts.push([curX + perpX * wave, curY + perpY * wave, 1]);
       }
       return pts;
@@ -405,7 +415,7 @@ const TrajectoryCurve = ({ line }) => {
 
   return (
     <group>
-      <Line 
+      <Line
         points={points}
         color={line.color}
         lineWidth={line.itemId === 'nuke' ? 6 : 2}
@@ -513,7 +523,7 @@ export const WorldMap = () => {
           const box = new THREE.Box3().setFromObject(mesh);
           const center = new THREE.Vector3();
           box.getCenter(center);
-          
+
           const dist = new THREE.Vector2(center.x, center.y).distanceTo(new THREE.Vector2(worldDropPoint.x, worldDropPoint.y));
           if (dist < minDistance) {
             minDistance = dist;
@@ -530,7 +540,7 @@ export const WorldMap = () => {
   };
 
   return (
-    <div 
+    <div
       id="map-container"
       ref={canvasRef}
       onDragOver={(e) => {
