@@ -13,6 +13,7 @@ export const Lobby = () => {
   const lobbyRef = useRef(null);
   const [timeLeft, setTimeLeft] = useState(null);
   const hasShattered = useRef(false);
+  const hasCountdownSoundPlayed = useRef(false);
 
   useEffect(() => {
     const audio = new Audio('/lobbby.wav');
@@ -44,12 +45,19 @@ export const Lobby = () => {
   }, [gameState.lobbyState, gameState.matchStartTime]);
 
   useEffect(() => {
+    if (gameState.lobbyState === 'starting' && !hasCountdownSoundPlayed.current) {
+      hasCountdownSoundPlayed.current = true;
+      const countdownAudio = new Audio('/5_sec_countdown.wav');
+      countdownAudio.volume = isMuted ? 0 : 0.6;
+      countdownAudio.play().catch(e => console.warn('Countdown audio play failed', e));
+    } else if (gameState.lobbyState === 'waiting') {
+      hasCountdownSoundPlayed.current = false;
+    }
+  }, [gameState.lobbyState, isMuted]);
+
+  useEffect(() => {
     if (timeLeft === 1 && !hasShattered.current) {
       hasShattered.current = true;
-      
-      const shatterAudio = new Audio('/glass_break.wav');
-      shatterAudio.volume = 0.8;
-      shatterAudio.play().catch(e => console.warn('Audio play failed', e));
 
       if (lobbyRef.current) {
         // Base container scales up and fades out
