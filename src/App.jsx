@@ -9,14 +9,14 @@ import './styles/hud.css';
 
 function App() {
   const { hasJoined, gameState } = useGameStore();
-  const isGameActive = gameState.lobbyState === 'active' || gameState.lobbyState === 'ended';
-  const isLobby = hasJoined && gameState.lobbyState === 'waiting';
+  const showHUDMap = hasJoined;
+  const isLobbyOverlay = hasJoined && (gameState.lobbyState === 'waiting' || gameState.lobbyState === 'starting');
 
   return (
     <div className="game-wrapper">
       {!hasJoined && <Landing />}
-      {isLobby && <Lobby />}
-      <div style={{ opacity: isGameActive ? 1 : 0, transition: 'opacity 1s', pointerEvents: isGameActive ? 'auto' : 'none' }}>
+      {isLobbyOverlay && <Lobby />}
+      <div style={{ opacity: showHUDMap ? 1 : 0, transition: 'opacity 1s', pointerEvents: showHUDMap ? 'auto' : 'none' }}>
         <WorldMap />
         <Dashboard />
       </div>

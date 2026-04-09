@@ -207,6 +207,11 @@ const MapScene = () => {
   const targetPan = useRef({ x: 0, y: 0 });
   const isDraggingMap = useRef(false);
   const lastMouse = useRef({ x: 0, y: 0 });
+  
+  const lobbyStateRef = useRef(gameState.lobbyState);
+  useEffect(() => {
+    lobbyStateRef.current = gameState.lobbyState;
+  }, [gameState.lobbyState]);
 
   useEffect(() => {
     if (focusCenter) {
@@ -221,6 +226,7 @@ const MapScene = () => {
   useEffect(() => {
     const el = document.getElementById('map-container');
     const handleWheel = (e) => {
+      if (lobbyStateRef.current === 'waiting' || lobbyStateRef.current === 'starting') return;
       const z0 = targetZoom.current;
       const delta = e.deltaY > 0 ? -1.5 : 1.5;
       const z1 = Math.max(2.5, Math.min(30, z0 + delta));
@@ -241,6 +247,7 @@ const MapScene = () => {
     };
 
     const handlePointerDown = (e) => {
+      if (lobbyStateRef.current === 'waiting' || lobbyStateRef.current === 'starting') return;
       if (e.button !== 0 && e.button !== 1 && e.button !== 2) return;
       isDraggingMap.current = true;
       mapPanState.isDragging = true;
@@ -477,7 +484,8 @@ const AttackPopups = () => {
 
 export const WorldMap = () => {
   const canvasRef = useRef();
-  const { attack } = useGameStore();
+  const { attack, gameState } = useGameStore();
+  const isLobby = gameState?.lobbyState === 'waiting' || gameState?.lobbyState === 'starting';
 
   const handleDrop = (e) => {
     e.preventDefault();
@@ -566,7 +574,13 @@ export const WorldMap = () => {
       }}
       onDragLeave={() => { dragOverState.targetId = null; }}
       onDrop={(e) => { dragOverState.targetId = null; handleDrop(e); }}
-      style={{ width: '100vw', height: '100vh', background: '#050a10', position: 'absolute', top: 0, left: 0, zIndex: 0 }}
+      style={{ 
+        width: '100vw', height: '100vh', background: '#050a10', 
+        position: 'absolute', top: 0, left: 0, zIndex: 0,
+        filter: isLobby ? 'blur(10px)' : 'none',
+        pointerEvents: isLobby ? 'none' : 'auto',
+        transition: 'filter 1s ease'
+      }}
     >
       <Canvas>
         <OrthographicCamera makeDefault position={[0, 0, 100]} zoom={3} near={1} far={1000} />

@@ -224,11 +224,8 @@ class GameState {
     const allReady = Object.values(this.players).every((p) => p.isReady);
 
     if (Object.keys(this.players).length > 1 && allReady) {
-      this.lobbyState = "active";
-      this.startTime = Date.now();
-      for (const id in this.players) {
-        this.quizTimers[id] = this.startTime + 10000;
-      }
+      this.lobbyState = "starting";
+      this.matchStartTime = Date.now() + 5500; // 5.5s to compensate for shatter transition
       return true;
     }
     return false;
@@ -244,6 +241,18 @@ class GameState {
   }
 
   tick(io) {
+    if (this.lobbyState === "starting") {
+      if (Date.now() >= this.matchStartTime) {
+        this.lobbyState = "active";
+        this.startTime = Date.now();
+        for (const id in this.players) {
+          this.quizTimers[id] = this.startTime + 10000;
+        }
+      } else {
+        return;
+      }
+    }
+
     if (this.lobbyState !== "active") return;
 
     const now = Date.now();
@@ -524,6 +533,7 @@ class GameState {
 
     return {
       lobbyState: this.lobbyState,
+      matchStartTime: this.matchStartTime,
       duration: this.duration,
       timeRemaining: this.startTime
         ? Math.max(0, this.duration - elapsed)
@@ -539,6 +549,7 @@ class GameState {
   resetGame() {
     this.lobbyState = "waiting";
     this.startTime = null;
+    this.matchStartTime = null;
     this.players = {};
     this.availableCountries = [...this.countries];
     this.marketStock = {

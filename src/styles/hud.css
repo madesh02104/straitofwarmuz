@@ -598,11 +598,39 @@ body {
   display: flex;
   align-items: center;
   color: rgba(255, 255, 255, 0.2);
-  font-weight: bold;
+}
+
+.custom-tooltip {
+  position: absolute;
+  bottom: 90%;
+  left: 50%;
+  transform: translateX(-50%) translateY(0);
+  background: rgba(5, 10, 16, 0.95);
+  border: 1px solid var(--accent-blue);
+  padding: 10px;
+  border-radius: 8px;
+  width: max-content;
+  max-width: 250px;
+  opacity: 0;
+  visibility: hidden;
+  z-index: 100;
+  color: white;
+  font-size: 0.75rem;
+  box-shadow: 0 5px 20px rgba(0, 150, 255, 0.2);
+  text-align: left;
+  transition: all 0.2s ease;
+  pointer-events: none;
+}
+
+.paired-card:hover .custom-tooltip {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(-10px);
 }
 
 .paired-card {
   flex: 1;
+  position: relative;
   border: 1px solid var(--panel-border);
   border-radius: 6px;
   padding: 6px 8px;

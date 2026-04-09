@@ -12,7 +12,7 @@ app.use(cors());
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: "*", 
+    origin: "*",
     methods: ["GET", "POST"]
   }
 });
@@ -21,7 +21,7 @@ const game = new GameState();
 
 io.on('connection', (socket) => {
   console.log('User connected:', socket.id);
-  
+
   socket.on('joinMatch', (data) => {
     if (game.lobbyState !== 'waiting') {
       socket.emit('error', { message: 'Battle already in progress.' });
@@ -39,7 +39,7 @@ io.on('connection', (socket) => {
   socket.on('toggleReady', () => {
     if (game.toggleReady(socket.id)) {
       io.emit('gameState', game.getSnapshot());
-      
+
       // Try auto-start if everyone's ready
       if (game.startMatch()) {
         io.emit('gameState', game.getSnapshot());
@@ -81,11 +81,11 @@ io.on('connection', (socket) => {
     const elapsed = Date.now() - game.startTime;
     if (game.getPhase(elapsed) === 2) {
       const result = game.attack(socket.id, data.targetId, data.itemId);
-      io.emit('attackEvent', { 
-        attacker: socket.id, 
-        target: data.targetId, 
-        itemId: data.itemId, 
-        ...result 
+      io.emit('attackEvent', {
+        attacker: socket.id,
+        target: data.targetId,
+        itemId: data.itemId,
+        ...result
       });
       io.emit('gameState', game.getSnapshot());
     }
@@ -94,7 +94,7 @@ io.on('connection', (socket) => {
   socket.on('disconnect', () => {
     console.log('User disconnected:', socket.id);
     game.removePlayer(socket.id);
-    
+
     if (Object.keys(game.players).length === 0) {
       game.resetGame();
     } else {
