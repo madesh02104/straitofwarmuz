@@ -460,6 +460,8 @@ class GameState {
         }
 
         attacker.attackCooldowns[itemId] = Date.now() + (item.attackDelay || 0);
+        // Reset deflection timer on success
+        actualTarget.deflectingUntil = Date.now() + 5000;
         this.battleLogs.push({ time: Date.now(), text: `[CYBERATTACK] ${actualTarget.country} deflected ${item.name} back to ${attacker.country} dealing ${damageDealt} HP damage!` });
         return { success: true, damage: damageDealt, target: attacker.socketId, deflected: true, originalTarget: actualTarget.socketId, itemId };
       }

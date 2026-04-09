@@ -531,8 +531,8 @@ export const Dashboard = () => {
                         <div className="paired-card" style={{ border: 'none', background: 'transparent', alignItems: 'center', justifyContent: 'center' }}>
                           {isLobby && (
                             <div className="custom-tooltip">
-                              <strong style={{color: 'var(--accent-blue)'}}>Uncounterable</strong><br/>
-                              <span style={{color: 'var(--text-muted)'}}>Cyberattack</span>
+                              <strong style={{color: 'var(--accent-blue)'}}>Cyberattack (Deflection)</strong><br/>
+                              <span style={{color: 'var(--text-muted)', fontSize: '0.7rem'}}>Deflects remote weapons like <span style={{color: 'var(--accent-red)'}}>Missiles</span> and <span style={{color: 'var(--accent-red)'}}>Nukes</span> back to the attacker, dealing full damage.</span>
                             </div>
                           )}
                           <HelpCircle size={48} style={{ opacity: 0.15, strokeWidth: 1 }} />
@@ -615,8 +615,8 @@ export const Dashboard = () => {
                         <div className="paired-card" style={{ border: 'none', background: 'transparent', alignItems: 'center', justifyContent: 'center' }}>
                           {isLobby && (
                             <div className="custom-tooltip">
-                              <strong style={{color: 'var(--accent-blue)'}}>Uncounterable</strong><br/>
-                              <span style={{color: 'var(--text-muted)'}}>Cyberattack</span>
+                              <strong style={{color: 'var(--accent-blue)'}}>Cyberattack (Deflection)</strong><br/>
+                              <span style={{color: 'var(--text-muted)', fontSize: '0.7rem'}}>Deflects remote weapons like <span style={{color: 'var(--accent-red)'}}>Missiles</span> and <span style={{color: 'var(--accent-red)'}}>Nukes</span> back to the attacker, dealing full damage.</span>
                             </div>
                           )}
                           <HelpCircle size={48} style={{ opacity: 0.15, strokeWidth: 1 }} />
