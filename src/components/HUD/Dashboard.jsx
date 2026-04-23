@@ -1,7 +1,18 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { useGameStore, playSound } from '../../store/gameStore';
 import gsap from 'gsap';
-import { Target, Truck, Waves, Skull, Bomb, Shield, ShieldAlert, Radar, Zap, Lock, Activity, Send, Crosshair, HelpCircle, ChevronUp, ChevronDown, Globe, Trophy, Menu, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Shield, Lock, Activity, HelpCircle, Globe, Trophy, Menu, ChevronLeft } from 'lucide-react';
+import missileIcon from '../../assets/missile.webp';
+import domeIcon from '../../assets/dome.webp';
+import tankIcon from '../../assets/tank.webp';
+import stickyBombIcon from '../../assets/stickybomb.webp';
+import jetIcon from '../../assets/jet.webp';
+import radarIcon from '../../assets/radar.webp';
+import submarineIcon from '../../assets/submarine.webp';
+import navalMineIcon from '../../assets/navalmine.webp';
+import cyberAttackIcon from '../../assets/cyberattack.webp';
+import firewallIcon from '../../assets/firewall.webp';
+import nukeIcon from '../../assets/nuke.webp';
 
 const formatTime = (ms) => {
   if (ms <= 0) return '00:00';
@@ -11,18 +22,22 @@ const formatTime = (ms) => {
   return `${m < 10 ? '0' : ''}${m}:${s < 10 ? '0' : ''}${s}`;
 };
 
+const ItemIcon = ({ src, alt }) => (
+  <img className="item-asset-icon" src={src} alt={alt} loading="lazy" />
+);
+
 const EQUIPMENT = {
-  missile: { name: 'Ballistic Missile', type: 'attack', damage: 8, counter: 'dome', marketCost: 150, rdCost: 75, rdTime: 4000, attackDelay: 0, icon: <Target size={20} /> },
-  dome: { name: 'Iron Dome', type: 'defense', counters: 'missile', marketCost: 150, rdCost: 75, rdTime: 4000, icon: <Shield size={20} /> },
-  tank: { name: 'Heavy Tank Army', type: 'attack', damage: 5, counter: 'mine', marketCost: 100, rdCost: 50, rdTime: 5000, attackDelay: 4000, icon: <Truck size={20} /> },
-  mine: { name: 'Anti Tank', type: 'defense', counters: 'tank', marketCost: 100, rdCost: 50, rdTime: 3000, icon: <ShieldAlert size={20} /> },
-  jet: { name: 'Fighter Jet', type: 'attack', damage: 6, counter: 's400', marketCost: 200, rdCost: 100, rdTime: 6000, attackDelay: 2000, icon: <Send size={20} /> },
-  s400: { name: 'Radar Destruction', type: 'defense', counters: 'jet', marketCost: 200, rdCost: 100, rdTime: 6000, icon: <Radar size={20} /> },
-  sub: { name: 'Attack Submarine', type: 'attack', damage: 7, counter: 'sonar', marketCost: 250, rdCost: 125, rdTime: 7000, attackDelay: 4000, icon: <Waves size={20} /> },
-  sonar: { name: 'Naval Mines', type: 'defense', counters: 'sub', marketCost: 250, rdCost: 125, rdTime: 5000, icon: <Zap size={20} /> },
-  virus: { name: 'Cyber Attack', type: 'attack', counters: 'nuke,missile', marketCost: 300, rdCost: 150, rdTime: 8000, icon: <Skull size={20} /> },
-  firewall: { name: 'Firewall', type: 'defense', counters: 'virus', marketCost: 300, rdCost: 150, rdTime: 6000, icon: <Lock size={20} /> },
-  nuke: { name: 'Nuke', type: 'attack', effect: 'nuke', counter: null, marketCost: 500, rdCost: 250, rdTime: 10000, attackDelay: 2000, icon: <Bomb size={20} /> }
+  missile: { name: 'Ballistic Missile', type: 'attack', damage: 8, counter: 'dome', marketCost: 150, rdCost: 75, rdTime: 4000, attackDelay: 0, icon: <ItemIcon src={missileIcon} alt="Ballistic Missile" /> },
+  dome: { name: 'Iron Dome', type: 'defense', counters: 'missile', marketCost: 150, rdCost: 75, rdTime: 4000, icon: <ItemIcon src={domeIcon} alt="Iron Dome" /> },
+  tank: { name: 'Heavy Tank Army', type: 'attack', damage: 5, counter: 'mine', marketCost: 100, rdCost: 50, rdTime: 5000, attackDelay: 4000, icon: <ItemIcon src={tankIcon} alt="Heavy Tank Army" /> },
+  mine: { name: 'Sticky Bomb', type: 'defense', counters: 'tank', marketCost: 100, rdCost: 50, rdTime: 3000, icon: <ItemIcon src={stickyBombIcon} alt="Sticky Bomb" /> },
+  jet: { name: 'Fighter Jet', type: 'attack', damage: 6, counter: 's400', marketCost: 200, rdCost: 100, rdTime: 6000, attackDelay: 2000, icon: <ItemIcon src={jetIcon} alt="Fighter Jet" /> },
+  s400: { name: 'Radar Destruction', type: 'defense', counters: 'jet', marketCost: 200, rdCost: 100, rdTime: 6000, icon: <ItemIcon src={radarIcon} alt="Radar Destruction" /> },
+  sub: { name: 'Attack Submarine', type: 'attack', damage: 7, counter: 'sonar', marketCost: 250, rdCost: 125, rdTime: 7000, attackDelay: 4000, icon: <ItemIcon src={submarineIcon} alt="Attack Submarine" /> },
+  sonar: { name: 'Naval Mines', type: 'defense', counters: 'sub', marketCost: 250, rdCost: 125, rdTime: 5000, icon: <ItemIcon src={navalMineIcon} alt="Naval Mines" /> },
+  virus: { name: 'Cyber Attack', type: 'attack', counters: 'nuke,missile', marketCost: 300, rdCost: 150, rdTime: 8000, icon: <ItemIcon src={cyberAttackIcon} alt="Cyber Attack" /> },
+  firewall: { name: 'Firewall', type: 'defense', counters: 'virus', marketCost: 300, rdCost: 150, rdTime: 6000, icon: <ItemIcon src={firewallIcon} alt="Firewall" /> },
+  nuke: { name: 'Nuke', type: 'attack', effect: 'nuke', counter: null, marketCost: 500, rdCost: 250, rdTime: 10000, attackDelay: 2000, icon: <ItemIcon src={nukeIcon} alt="Nuke" /> }
 };
 
 // Attack → Defense pairs for side-by-side layout
@@ -34,6 +49,9 @@ const WEAPON_PAIRS = [
   { attack: 'virus', defense: 'firewall' },
   { attack: 'nuke', defense: null },
 ];
+
+const ATTACK_ORDER = WEAPON_PAIRS.map(({ attack }) => attack);
+const DEFENSE_ORDER = WEAPON_PAIRS.filter(({ defense }) => Boolean(defense)).map(({ defense }) => defense);
 
 const getDamageLabel = (id) => {
   const item = EQUIPMENT[id];
@@ -338,50 +356,43 @@ export const Dashboard = () => {
       </div>
       )}
 
-      {/* INVENTORY DOCK — Paired vertical columns: Attack top, Defense bottom */}
+      {/* INVENTORY DOCK — Attack left, Defense right */}
       {!isLobby && (
         <div className="inventory-dock">
-        <div className="inv-pairs-row">
-          {WEAPON_PAIRS.map(({ attack: atkId, defense: defId }) => {
-            const atkItem = EQUIPMENT[atkId];
-            const defItem = defId ? EQUIPMENT[defId] : null;
-            const cdRemaining = cooldowns[atkId] ? Math.max(0, cooldowns[atkId] - now) : 0;
-            const isOnCooldown = cdRemaining > 0;
-            const isAtkStocked = (me.inventory[atkId] || 0) > 0;
-            const isDefStocked = defId ? (me.inventory[defId] || 0) > 0 : false;
-            const isCyber = atkId === 'virus';
-            const deflectRemaining = (isCyber && me.deflectingUntil) ? Math.max(0, me.deflectingUntil - now) : 0;
-            const isDeflecting = isCyber && deflectRemaining > 0;
-            const canActivateCyber = isCyber && isAtkStocked && !isFarmingPhase && !isDeflecting && me.hp > 0;
-            const canDrag = !isFarmingPhase && isAtkStocked && !isOnCooldown && !isCyber && me.hp > 0;
-            const dmgLabel = getDamageLabel(atkId);
-            
-            let tooltipText = isCyber ? `${atkItem.name} — Click to activate Deflection Shield` : `${atkItem.name}${canDrag ? ' — Drag onto enemy to attack' : ''}${isOnCooldown ? ` (cooldown ${(cdRemaining / 1000).toFixed(1)}s)` : ''}${isFarmingPhase ? ' (War phase only)' : ''}`;
-            if (isLobby) {
-              tooltipText = `${atkItem.name} | ${atkItem.type ? 'Damage: ' + (atkItem.damage || 'Instant') : ''} | Market: ${atkItem.marketCost}CP | R&D: ${atkItem.rdCost}CP`;
-            }
+        <div className="inv-split-row">
+          <div className="inv-group attack-group">
+            {ATTACK_ORDER.map((itemId) => {
+              const item = EQUIPMENT[itemId];
+              const isCyber = itemId === 'virus';
+              const isStocked = (me.inventory[itemId] || 0) > 0;
+              const cdRemaining = cooldowns[itemId] ? Math.max(0, cooldowns[itemId] - now) : 0;
+              const isOnCooldown = cdRemaining > 0;
+              const deflectRemaining = (isCyber && me.deflectingUntil) ? Math.max(0, me.deflectingUntil - now) : 0;
+              const isDeflecting = isCyber && deflectRemaining > 0;
+              const canActivateCyber = isCyber && isStocked && !isFarmingPhase && !isDeflecting && me.hp > 0;
+              const canDrag = !isFarmingPhase && isStocked && !isOnCooldown && !isCyber && me.hp > 0;
+              const dmgLabel = getDamageLabel(itemId);
 
-            return (
-              <div key={atkId} className="inv-pair-col">
-                {/* ATTACK (top) */}
+              const tooltipText = isCyber
+                ? `${item.name} — Click to activate Deflection Shield`
+                : `${item.name}${canDrag ? ' — Drag onto enemy to attack' : ''}${isOnCooldown ? ` (cooldown ${(cdRemaining / 1000).toFixed(1)}s)` : ''}${isFarmingPhase ? ' (War phase only)' : ''}`;
+
+              return (
                 <div
+                  key={itemId}
                   className={`inv-item attack-item ${canDrag ? 'draggable' : ''}`}
                   title={tooltipText}
                   draggable={canDrag}
-                  onDragStart={(e) => { if (canDrag) e.dataTransfer.setData('itemId', atkId); }}
+                  onDragStart={(e) => { if (canDrag) e.dataTransfer.setData('itemId', itemId); }}
                   onClick={() => { if (canActivateCyber) activateDeflect(); }}
                   style={{ position: 'relative', overflow: 'hidden', cursor: canActivateCyber ? 'pointer' : (isDeflecting ? 'not-allowed' : 'default') }}
                 >
-                  <div className={`inv-icon attack ${isCyber ? 'cyber-icon' : 'circle-icon'}${isAtkStocked ? ' stocked' : ''}`}>
-                    {atkItem.icon}
+                  <div className={`inv-icon attack ${isCyber ? 'cyber-icon' : 'square-icon'}${isStocked ? ' stocked' : ''}`}>
+                    {item.icon}
                   </div>
-                  <span className="inv-name">{atkItem.name.split(' ').pop()}</span>
-                  <div className="inv-count-row">
-                    <span className="inv-count" style={{ color: isAtkStocked ? '#ff6b6b' : 'var(--text-muted)' }}>
-                      {me.inventory[atkId] || 0}
-                    </span>
-                    {dmgLabel && <span className="inv-damage">{dmgLabel}</span>}
-                  </div>
+                  {dmgLabel && <span className="inv-badge inv-badge-damage">{dmgLabel}</span>}
+                  <span className="inv-badge inv-badge-count">{me.inventory[itemId] || 0}x</span>
+                  <span className="inv-name">{item.name.split(' ').pop()}</span>
                   {isOnCooldown && (
                     <div style={{ position: 'absolute', inset: 0, backgroundColor: 'rgba(0,0,0,0.75)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#ff4444', fontWeight: 900, fontSize: '13px', borderRadius: '10px', zIndex: 10 }}>
                       {(cdRemaining / 1000).toFixed(1)}s
@@ -396,21 +407,33 @@ export const Dashboard = () => {
                     </div>
                   )}
                 </div>
-                {/* DEFENSE (bottom) */}
-                {defItem && (
-                  <div className="inv-item defense-item" title={isLobby ? `${defItem.name} | Counters: ${defItem.counters} | Market: ${defItem.marketCost}CP | R&D: ${defItem.rdCost}CP` : defItem.name}>
-                    <div className={`inv-icon defense circle-icon${isDefStocked ? ' stocked' : ''}`}>
-                      {defItem.icon}
-                    </div>
-                    <span className="inv-name">{defItem.name.split(' ').pop()}</span>
-                    <span className="inv-count" style={{ color: isDefStocked ? '#79b8ff' : 'var(--text-muted)' }}>
-                      {me.inventory[defId] || 0}
-                    </span>
+              );
+            })}
+          </div>
+
+          <div className="inv-divider" />
+
+          <div className="inv-group defense-group">
+            {DEFENSE_ORDER.map((itemId) => {
+              const item = EQUIPMENT[itemId];
+              const isStocked = (me.inventory[itemId] || 0) > 0;
+              const tooltipText = `${item.name} | Counters: ${item.counters || '-'}`;
+              return (
+                <div
+                  key={itemId}
+                  className="inv-item defense-item"
+                  title={tooltipText}
+                  style={{ position: 'relative' }}
+                >
+                  <div className={`inv-icon defense square-icon${isStocked ? ' stocked' : ''}`}>
+                    {item.icon}
                   </div>
-                )}
-              </div>
-            );
-          })}
+                  <span className="inv-badge inv-badge-count">{me.inventory[itemId] || 0}x</span>
+                  <span className="inv-name">{item.name.split(' ').pop()}</span>
+                </div>
+              );
+            })}
+          </div>
         </div>
       </div>
       )}

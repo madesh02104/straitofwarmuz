@@ -40,7 +40,7 @@ const EQUIPMENT = {
     attackDelay: 4000,
   },
   mine: {
-    name: "Anti Tank",
+    name: "Sticky Bomb",
     type: "defense",
     counters: "tank",
     marketCost: 100,
