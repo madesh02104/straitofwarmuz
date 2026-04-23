@@ -25,6 +25,229 @@ const normalize = (n) => {
   return mapped.toLowerCase().trim();
 };
 
+const flagTextureCache = new Map();
+
+function drawStar(ctx, cx, cy, outerR, points) {
+  const innerR = outerR * 0.4;
+  ctx.beginPath();
+  for (let i = 0; i < points * 2; i++) {
+    const angle = (i * Math.PI) / points - Math.PI / 2;
+    const r = i % 2 === 0 ? outerR : innerR;
+    if (i === 0) ctx.moveTo(cx + r * Math.cos(angle), cy + r * Math.sin(angle));
+    else ctx.lineTo(cx + r * Math.cos(angle), cy + r * Math.sin(angle));
+  }
+  ctx.closePath();
+  ctx.fill();
+}
+
+function drawUnionJack(ctx, x, y, w, h) {
+  ctx.fillStyle = '#012169';
+  ctx.fillRect(x, y, w, h);
+  ctx.save();
+  ctx.beginPath();
+  ctx.rect(x, y, w, h);
+  ctx.clip();
+  ctx.strokeStyle = '#FFFFFF';
+  ctx.lineWidth = h / 4;
+  ctx.beginPath();
+  ctx.moveTo(x, y); ctx.lineTo(x + w, y + h);
+  ctx.moveTo(x + w, y); ctx.lineTo(x, y + h);
+  ctx.stroke();
+  ctx.strokeStyle = '#C8102E';
+  ctx.lineWidth = h / 9;
+  ctx.beginPath();
+  ctx.moveTo(x, y); ctx.lineTo(x + w, y + h);
+  ctx.moveTo(x + w, y); ctx.lineTo(x, y + h);
+  ctx.stroke();
+  ctx.restore();
+  ctx.fillStyle = '#FFFFFF';
+  ctx.fillRect(x, y + (h * 3) / 8, w, h / 4);
+  ctx.fillRect(x + (w * 3) / 8, y, w / 4, h);
+  ctx.fillStyle = '#C8102E';
+  ctx.fillRect(x, y + (h * 7) / 16, w, h / 8);
+  ctx.fillRect(x + (w * 7) / 16, y, w / 8, h);
+}
+
+function drawFlagOnCanvas(ctx, w, h, key) {
+  ctx.clearRect(0, 0, w, h);
+  switch (key) {
+    case 'usa': {
+      const sh = h / 13;
+      for (let i = 0; i < 13; i++) {
+        ctx.fillStyle = i % 2 === 0 ? '#B22234' : '#FFFFFF';
+        ctx.fillRect(0, i * sh, w, sh);
+      }
+      const cw = w * 0.4, ch = sh * 7;
+      ctx.fillStyle = '#3C3B6E';
+      ctx.fillRect(0, 0, cw, ch);
+      ctx.fillStyle = '#FFFFFF';
+      const rows = [6, 5, 6, 5, 6, 5, 6, 5, 6];
+      for (let r = 0; r < 9; r++) {
+        const cols = rows[r];
+        for (let c = 0; c < cols; c++) {
+          const off = r % 2 === 0 ? 0 : cw / cols / 2;
+          drawStar(ctx, off + (c + 0.5) * (cw / cols), (r + 0.5) * (ch / 9), ch / 18, 5);
+        }
+      }
+      break;
+    }
+    case 'china': {
+      ctx.fillStyle = '#DE2910';
+      ctx.fillRect(0, 0, w, h);
+      ctx.fillStyle = '#FFDE00';
+      drawStar(ctx, w * 0.18, h * 0.25, w * 0.1, 5);
+      [[w * 0.32, h * 0.1], [w * 0.4, h * 0.2], [w * 0.4, h * 0.37], [w * 0.32, h * 0.45]].forEach(
+        ([sx, sy]) => drawStar(ctx, sx, sy, w * 0.04, 5)
+      );
+      break;
+    }
+    case 'russia': {
+      ctx.fillStyle = '#FFFFFF'; ctx.fillRect(0, 0, w, h / 3);
+      ctx.fillStyle = '#0039A6'; ctx.fillRect(0, h / 3, w, h / 3);
+      ctx.fillStyle = '#D52B1E'; ctx.fillRect(0, (2 * h) / 3, w, h / 3);
+      break;
+    }
+    case 'india': {
+      ctx.fillStyle = '#FF9933'; ctx.fillRect(0, 0, w, h / 3);
+      ctx.fillStyle = '#FFFFFF'; ctx.fillRect(0, h / 3, w, h / 3);
+      ctx.fillStyle = '#138808'; ctx.fillRect(0, (2 * h) / 3, w, h / 3);
+      const [icx, icy, ir] = [w / 2, h / 2, h / 7];
+      ctx.strokeStyle = '#000080';
+      ctx.lineWidth = ir * 0.12;
+      ctx.beginPath(); ctx.arc(icx, icy, ir, 0, Math.PI * 2); ctx.stroke();
+      ctx.lineWidth = ir * 0.06;
+      for (let i = 0; i < 24; i++) {
+        const a = (i * Math.PI * 2) / 24;
+        ctx.beginPath(); ctx.moveTo(icx, icy); ctx.lineTo(icx + ir * Math.cos(a), icy + ir * Math.sin(a)); ctx.stroke();
+      }
+      break;
+    }
+    case 'uk': {
+      drawUnionJack(ctx, 0, 0, w, h);
+      break;
+    }
+    case 'germany': {
+      ctx.fillStyle = '#000000'; ctx.fillRect(0, 0, w, h / 3);
+      ctx.fillStyle = '#DD0000'; ctx.fillRect(0, h / 3, w, h / 3);
+      ctx.fillStyle = '#FFCE00'; ctx.fillRect(0, (2 * h) / 3, w, h / 3);
+      break;
+    }
+    case 'japan': {
+      ctx.fillStyle = '#FFFFFF'; ctx.fillRect(0, 0, w, h);
+      ctx.fillStyle = '#BC002D';
+      ctx.beginPath(); ctx.arc(w / 2, h / 2, h * 0.3, 0, Math.PI * 2); ctx.fill();
+      break;
+    }
+    case 'brazil': {
+      ctx.fillStyle = '#009C3B'; ctx.fillRect(0, 0, w, h);
+      ctx.fillStyle = '#FFDF00';
+      ctx.beginPath();
+      ctx.moveTo(w / 2, h * 0.06); ctx.lineTo(w * 0.95, h / 2);
+      ctx.lineTo(w / 2, h * 0.94); ctx.lineTo(w * 0.05, h / 2);
+      ctx.closePath(); ctx.fill();
+      ctx.fillStyle = '#002776';
+      ctx.beginPath(); ctx.arc(w / 2, h / 2, h * 0.28, 0, Math.PI * 2); ctx.fill();
+      ctx.save();
+      ctx.beginPath(); ctx.arc(w / 2, h / 2, h * 0.28, 0, Math.PI * 2); ctx.clip();
+      ctx.fillStyle = '#FFFFFF'; ctx.fillRect(0, h / 2 - h * 0.04, w, h * 0.08);
+      ctx.restore();
+      ctx.fillStyle = '#FFFFFF';
+      [[w * 0.37, h * 0.37], [w * 0.48, h * 0.44], [w * 0.58, h * 0.46], [w * 0.65, h * 0.41], [w * 0.5, h * 0.62]].forEach(
+        ([sx, sy]) => { ctx.beginPath(); ctx.arc(sx, sy, h * 0.016, 0, Math.PI * 2); ctx.fill(); }
+      );
+      break;
+    }
+    case 'france': {
+      ctx.fillStyle = '#002395'; ctx.fillRect(0, 0, w / 3, h);
+      ctx.fillStyle = '#FFFFFF'; ctx.fillRect(w / 3, 0, w / 3, h);
+      ctx.fillStyle = '#ED2939'; ctx.fillRect((2 * w) / 3, 0, w / 3, h);
+      break;
+    }
+    case 'australia': {
+      ctx.fillStyle = '#00008B'; ctx.fillRect(0, 0, w, h);
+      drawUnionJack(ctx, 0, 0, w / 2, h / 2);
+      ctx.fillStyle = '#FFFFFF';
+      [[w * 0.73, h * 0.22], [w * 0.86, h * 0.44], [w * 0.65, h * 0.56], [w * 0.78, h * 0.7], [w * 0.88, h * 0.18]].forEach(
+        ([sx, sy]) => drawStar(ctx, sx, sy, w * 0.024, 7)
+      );
+      drawStar(ctx, w * 0.22, h * 0.75, w * 0.038, 7);
+      break;
+    }
+    case 'north korea': {
+      ctx.fillStyle = '#024FA2';
+      ctx.fillRect(0, 0, w, h * 0.2);
+      ctx.fillRect(0, h * 0.8, w, h * 0.2);
+      ctx.fillStyle = '#FFFFFF';
+      ctx.fillRect(0, h * 0.2, w, h * 0.07);
+      ctx.fillRect(0, h * 0.73, w, h * 0.07);
+      ctx.fillStyle = '#C80000'; ctx.fillRect(0, h * 0.27, w, h * 0.46);
+      ctx.fillStyle = '#FFFFFF';
+      ctx.beginPath(); ctx.arc(w * 0.22, h * 0.5, h * 0.2, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = '#C80000';
+      drawStar(ctx, w * 0.22, h * 0.5, h * 0.14, 5);
+      break;
+    }
+    case 'pakistan': {
+      ctx.fillStyle = '#FFFFFF'; ctx.fillRect(0, 0, w * 0.25, h);
+      ctx.fillStyle = '#01411C'; ctx.fillRect(w * 0.25, 0, w * 0.75, h);
+      ctx.fillStyle = '#FFFFFF';
+      ctx.beginPath(); ctx.arc(w * 0.57, h * 0.5, h * 0.27, -1.2, 1.2); ctx.fill();
+      ctx.fillStyle = '#01411C';
+      ctx.beginPath(); ctx.arc(w * 0.64, h * 0.5, h * 0.24, -1.2, 1.2); ctx.fill();
+      ctx.fillStyle = '#FFFFFF';
+      drawStar(ctx, w * 0.75, h * 0.5, h * 0.1, 5);
+      break;
+    }
+    case 'israel': {
+      ctx.fillStyle = '#FFFFFF'; ctx.fillRect(0, 0, w, h);
+      ctx.fillStyle = '#0038B8';
+      ctx.fillRect(0, h * 0.14, w, h * 0.15);
+      ctx.fillRect(0, h * 0.71, w, h * 0.15);
+      const sq3 = Math.sqrt(3) / 2;
+      const [isx, isy, iR] = [w / 2, h / 2, h * 0.2];
+      ctx.strokeStyle = '#0038B8'; ctx.lineWidth = h * 0.04;
+      ctx.beginPath();
+      ctx.moveTo(isx, isy - iR); ctx.lineTo(isx + iR * sq3, isy + iR / 2); ctx.lineTo(isx - iR * sq3, isy + iR / 2);
+      ctx.closePath(); ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(isx, isy + iR); ctx.lineTo(isx - iR * sq3, isy - iR / 2); ctx.lineTo(isx + iR * sq3, isy - iR / 2);
+      ctx.closePath(); ctx.stroke();
+      break;
+    }
+    case 'iran': {
+      ctx.fillStyle = '#239F40'; ctx.fillRect(0, 0, w, h / 3);
+      ctx.fillStyle = '#FFFFFF'; ctx.fillRect(0, h / 3, w, h / 3);
+      ctx.fillStyle = '#DA0000'; ctx.fillRect(0, (2 * h) / 3, w, h / 3);
+      ctx.fillStyle = '#239F40';
+      ctx.beginPath(); ctx.arc(w / 2, h / 2, h * 0.1, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = '#FFFFFF';
+      ctx.beginPath(); ctx.arc(w / 2 + h * 0.045, h / 2 - h * 0.045, h * 0.08, 0, Math.PI * 2); ctx.fill();
+      ctx.strokeStyle = '#DA0000';
+      ctx.lineWidth = h * 0.025;
+      ctx.beginPath(); ctx.moveTo(w / 2, h / 3 + 2); ctx.lineTo(w / 2, (2 * h) / 3 - 2); ctx.stroke();
+      break;
+    }
+    default:
+      break;
+  }
+}
+
+function getFlagTexture(countryKey) {
+  if (flagTextureCache.has(countryKey)) return flagTextureCache.get(countryKey);
+  const canvas = document.createElement('canvas');
+  canvas.width = 512;
+  canvas.height = 256;
+  const ctx = canvas.getContext('2d');
+  drawFlagOnCanvas(ctx, 512, 256, countryKey);
+  const texture = new THREE.CanvasTexture(canvas);
+  texture.minFilter = THREE.LinearFilter;
+  texture.magFilter = THREE.LinearFilter;
+  texture.generateMipmaps = false;
+  texture.needsUpdate = true;
+  flagTextureCache.set(countryKey, texture);
+  return texture;
+}
+
 function getCountryCentroid(feature) {
   const paths = feature.geometry.type === 'Polygon'
     ? [feature.geometry.coordinates]
@@ -55,7 +278,6 @@ const CountryMesh = ({ feature, myCountry, gameState, onFocus }) => {
 
   const players = Object.values(gameState?.players || {});
 
-  let color = '#2a3a4a';
   let owner = null;
   const isMyCountry = normalizedName === normalizedMyCountry;
 
@@ -63,11 +285,12 @@ const CountryMesh = ({ feature, myCountry, gameState, onFocus }) => {
     if (normalize(p.country) === normalizedName) {
       if (p.hp > 0) {
         owner = p;
-        color = isMyCountry ? '#58a6ff' : '#f85149'; // Player's own country is blue, enemies are red
       }
       break;
     }
   }
+
+  const flagTexture = owner ? getFlagTexture(normalize(owner.country)) : null;
 
   const geometry = useMemo(() => {
     try {
@@ -89,7 +312,20 @@ const CountryMesh = ({ feature, myCountry, gameState, onFocus }) => {
         }
         shapes.push(shape);
       }
-      return new THREE.ShapeGeometry(shapes);
+      const geo = new THREE.ShapeGeometry(shapes);
+      // ShapeGeometry sets UV = raw vertex position (map coords ≈ -250..250).
+      // Remap to [0,1] based on the actual bounding box so textures render correctly.
+      geo.computeBoundingBox();
+      const { min, max } = geo.boundingBox;
+      const rangeX = (max.x - min.x) || 1;
+      const rangeY = (max.y - min.y) || 1;
+      const pos = geo.attributes.position;
+      const uv = geo.attributes.uv;
+      for (let i = 0; i < pos.count; i++) {
+        uv.setXY(i, (pos.getX(i) - min.x) / rangeX, (pos.getY(i) - min.y) / rangeY);
+      }
+      uv.needsUpdate = true;
+      return geo;
     } catch { return null; }
   }, [feature]);
 
@@ -129,9 +365,10 @@ const CountryMesh = ({ feature, myCountry, gameState, onFocus }) => {
       const targetScale = isDragOver ? 1.06 : (isMyCountry || hovered) ? 1.02 : 1.0;
       meshRef.current.scale.setScalar(THREE.MathUtils.lerp(meshRef.current.scale.x, targetScale, 0.1));
 
-      // Override color when dragged over
       if (isDragOver) {
-        meshRef.current.material.color.lerp(new THREE.Color('#ffffff'), 0.2);
+        meshRef.current.material.color.lerp(new THREE.Color('#ffff88'), 0.2);
+      } else if (owner) {
+        meshRef.current.material.color.lerp(new THREE.Color('#ffffff'), 0.1);
       }
     }
     // Sync outline with mesh
@@ -161,7 +398,13 @@ const CountryMesh = ({ feature, myCountry, gameState, onFocus }) => {
         }
       }}
     >
-      <meshBasicMaterial color={isDragOver ? '#ffffff' : color} transparent opacity={owner?.hp <= 0 ? 0.3 : 0.8} side={THREE.DoubleSide} />
+      <meshBasicMaterial
+        map={flagTexture}
+        color={isDragOver ? '#ffff88' : '#ffffff'}
+        transparent
+        opacity={owner ? (isMyCountry ? 1.0 : 0.9) : 0.6}
+        side={THREE.DoubleSide}
+      />
       {/* White outline for player's own country */}
       {isMyCountry && owner && owner.hp > 0 && geometry && (
         <lineSegments geometry={new THREE.EdgesGeometry(geometry)} position={[0, 0, 0.1]}>
