@@ -863,9 +863,11 @@ const MissileAnimation = ({ evt }) => {
   });
 
   const missileTex = loadAttackTexture(ATTACK_TEXTURE_URLS.missile);
+  const missileSize = 16;
+  const missileXScale = dx > 0 ? -missileSize : missileSize;
   return (
     <group raycast={nullRaycast}>
-      <mesh position={[evt.start.x, evt.start.y, 3]} scale={[16, 16, 1]} raycast={nullRaycast} renderOrder={50}>
+      <mesh position={[evt.start.x, evt.start.y, 3]} scale={[missileXScale, missileSize, 1]} raycast={nullRaycast} renderOrder={50}>
         <planeGeometry args={[1, 1]} />
         <meshBasicMaterial ref={missileMatRef} map={missileTex} transparent opacity={1} depthTest={false} toneMapped={false} />
       </mesh>
@@ -1099,9 +1101,11 @@ const TankAnimation = ({ evt }) => {
   });
 
   const tankTex = loadAttackTexture(ATTACK_TEXTURE_URLS.tank);
+  const tankSize = 20;
+  const tankXScale = evt.end.x - tankX > 0 ? -tankSize : tankSize;
   return (
     <group raycast={nullRaycast}>
-      <mesh position={[tankX, tankY, 3]} scale={[20, 20, 1]} raycast={nullRaycast} renderOrder={50}>
+      <mesh position={[tankX, tankY, 3]} scale={[tankXScale, tankSize, 1]} raycast={nullRaycast} renderOrder={50}>
         <planeGeometry args={[1, 1]} />
         <meshBasicMaterial map={tankTex} transparent depthTest={false} toneMapped={false} />
       </mesh>
@@ -1193,9 +1197,11 @@ const SubAnimation = ({ evt }) => {
   });
 
   const subTex = loadAttackTexture(ATTACK_TEXTURE_URLS.sub);
+  const subSize = 12;
+  const subXScale = evt.end.x - subX > 0 ? -subSize : subSize;
   return (
     <group raycast={nullRaycast}>
-      <mesh position={[subX, subY, 3]} scale={[12, 12, 1]} raycast={nullRaycast} renderOrder={50}>
+      <mesh position={[subX, subY, 3]} scale={[subXScale, subSize, 1]} raycast={nullRaycast} renderOrder={50}>
         <planeGeometry args={[1, 1]} />
         <meshBasicMaterial map={subTex} transparent depthTest={false} toneMapped={false} />
       </mesh>
@@ -1283,6 +1289,8 @@ const NukeAnimation = ({ evt }) => {
     { scaleMul: 0.30, colorStart: '#ffee88', opMul: 0.95, z: 0.72 },
   ])[0];
 
+  const nukeFlipSign = evt.end.x - evt.start.x > 0 ? -1 : 1;
+
   useFrame(() => {
     const now = performance.now();
     if (startRef.current === null) startRef.current = now;
@@ -1297,7 +1305,7 @@ const NukeAnimation = ({ evt }) => {
         const sz = 20 + (32 - 20) * t;
         nukeMeshRef.current.visible = true;
         nukeMeshRef.current.position.set(evt.end.x, fallY, 5);
-        nukeMeshRef.current.scale.set(sz, sz, 1);
+        nukeMeshRef.current.scale.set(sz * nukeFlipSign, sz, 1);
       }
       return;
     }
