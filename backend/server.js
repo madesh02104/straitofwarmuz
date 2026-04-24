@@ -9,6 +9,10 @@ import GameState from './gameState.js';
 const app = express();
 app.use(cors());
 
+app.get('/', (_req, res) => {
+  res.status(200).json({ status: 'ok', service: 'countryside-backend' });
+});
+
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
