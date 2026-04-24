@@ -35,6 +35,11 @@ export const useGameStore = create((set, get) => ({
     set({ isReady: !isReady });
   },
 
+  cancelCountdown: () => {
+    socket.emit("cancelCountdown");
+    set({ isReady: false });
+  },
+
   submitQuiz: (correct, timeTaken) => {
     socket.emit("submitQuiz", { correct, timeTaken });
     set({ activeQuiz: null });
@@ -85,7 +90,10 @@ socket.on("gameState", (state) => {
     playSound('war_begin.wav');
   }
 
-  useGameStore.setState({ gameState: state });
+  const mySocketId = socket.id;
+  const myServerPlayer = state.players && mySocketId ? state.players[mySocketId] : null;
+  const nextIsReady = myServerPlayer ? !!myServerPlayer.isReady : useGameStore.getState().isReady;
+  useGameStore.setState({ gameState: state, isReady: nextIsReady });
 });
 
 socket.on("assignedCountry", (country) => {

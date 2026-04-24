@@ -48,6 +48,18 @@ io.on('connection', (socket) => {
     }
   });
 
+  socket.on('cancelCountdown', () => {
+    if (game.lobbyState === 'starting') {
+      game.lobbyState = 'waiting';
+      game.matchStartTime = null;
+      for (const id in game.players) {
+        game.players[id].isReady = false;
+      }
+      io.emit('gameState', game.getSnapshot());
+      io.emit('notification', { message: 'Countdown cancelled by a player.', type: 'info' });
+    }
+  });
+
   socket.on('submitQuiz', (data) => {
     game.handleQuiz(socket.id, data.correct, data.timeTaken);
   });

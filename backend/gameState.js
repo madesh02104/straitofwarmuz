@@ -155,6 +155,7 @@ class GameState {
     this.lastEventTime = Date.now();
     this.quizTimers = {};
     this.streaks = {};
+    this.finalRankings = null;
   }
 
   addPlayer(socketId, name) {
@@ -260,6 +261,7 @@ class GameState {
 
     if (elapsed >= this.duration) {
       this.lobbyState = "ended";
+      this.finalRankings = this.computeRankings();
       return;
     }
 
@@ -322,7 +324,24 @@ class GameState {
     const alive = Object.values(this.players).filter((p) => p.hp > 0);
     if (alive.length <= 1 && this.lobbyState === "active") {
       this.lobbyState = "ended";
+      this.finalRankings = this.computeRankings();
     }
+  }
+
+  computeRankings() {
+    return Object.values(this.players)
+      .sort((a, b) => {
+        if (b.hp !== a.hp) return b.hp - a.hp;
+        return b.cp - a.cp;
+      })
+      .map((p, i) => ({
+        rank: i + 1,
+        name: p.name,
+        country: p.country,
+        hp: p.hp,
+        cp: Math.floor(p.cp),
+        survived: p.hp > 0,
+      }));
   }
 
   triggerRandomEvent(io) {
@@ -516,19 +535,10 @@ class GameState {
   getSnapshot() {
     let rankings = null;
     if (this.lobbyState === "ended") {
-      rankings = Object.values(this.players)
-        .sort((a, b) => {
-          if (b.hp !== a.hp) return b.hp - a.hp;
-          return b.cp - a.cp;
-        })
-        .map((p, i) => ({
-          rank: i + 1,
-          name: p.name,
-          country: p.country,
-          hp: p.hp,
-          cp: Math.floor(p.cp),
-          survived: p.hp > 0,
-        }));
+      if (!this.finalRankings) {
+        this.finalRankings = this.computeRankings();
+      }
+      rankings = this.finalRankings;
     }
 
     const elapsed = this.startTime ? Date.now() - this.startTime : 0;
@@ -570,6 +580,7 @@ class GameState {
     this.quizTimers = {};
     this.streaks = {};
     this.battleLogs = [];
+    this.finalRankings = null;
   }
 }
 

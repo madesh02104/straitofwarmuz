@@ -70,9 +70,8 @@ body {
 
 .landing-card,
 .lobby-content {
-  background: rgba(255, 255, 255, 0.03);
+  background: rgba(10, 15, 25, 0.92);
   border: 1px solid var(--panel-border);
-  backdrop-filter: blur(20px);
   padding: 40px;
   border-radius: 24px;
   box-shadow: 0 20px 80px rgba(0, 0, 0, 0.5);
@@ -384,7 +383,6 @@ body {
   left: 0;
   transform: translateY(-50%);
   background: var(--panel-bg);
-  backdrop-filter: blur(10px);
   border: 1px solid var(--accent-blue);
   border-left: none;
   border-radius: 0 8px 8px 0;
@@ -410,8 +408,7 @@ body {
   left: 0;
   bottom: 0;
   width: 550px;
-  background: rgba(10, 15, 25, 0.85); /* Deep sleek dark */
-  backdrop-filter: blur(25px);
+  background: rgba(10, 15, 25, 0.96);
   border-right: 1px solid rgba(88, 166, 255, 0.2);
   display: flex;
   flex-direction: column;
@@ -792,7 +789,6 @@ body {
   right: 20px;
   width: 320px;
   background: var(--panel-bg);
-  backdrop-filter: blur(15px);
   border: 1px solid var(--accent-blue);
   border-radius: 12px;
   padding: 15px;
@@ -874,7 +870,6 @@ body {
   justify-content: center;
   padding: 8px 14px 10px;
   z-index: 20;
-  backdrop-filter: blur(16px);
   box-shadow: 0 -6px 28px rgba(0, 0, 0, 0.5);
 }
 
@@ -1224,8 +1219,7 @@ body {
 .winner-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(5, 10, 16, 0.95);
-  backdrop-filter: blur(20px);
+  background: rgba(5, 10, 16, 0.98);
   z-index: 2000;
   display: flex;
   justify-content: center;
@@ -1445,4 +1439,775 @@ body {
   background: #79b8ff;
   transform: translateY(-2px);
   box-shadow: 0 5px 20px rgba(88, 166, 255, 0.3);
+}
+
+/* ============================================================
+   WAR-THEMED BACKGROUND FX  (used by Landing + Lobby + Countdown)
+   ============================================================ */
+
+.war-bg {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.war-bg__base {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 25% 25%, rgba(248, 81, 73, 0.10) 0%, transparent 55%),
+    radial-gradient(ellipse at 80% 75%, rgba(88, 166, 255, 0.08) 0%, transparent 60%),
+    radial-gradient(circle at center, #0d1117 0%, #050a10 75%, #02060a 100%);
+}
+
+.war-bg__grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(88, 166, 255, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(88, 166, 255, 0.06) 1px, transparent 1px);
+  background-size: 64px 64px;
+  -webkit-mask-image: radial-gradient(circle at center, black 25%, transparent 80%);
+  mask-image: radial-gradient(circle at center, black 25%, transparent 80%);
+}
+
+.war-bg__radar {
+  position: absolute;
+  width: 900px;
+  height: 900px;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  border: 1px solid rgba(63, 185, 80, 0.18);
+  opacity: 0.55;
+}
+
+.war-bg__radar::before,
+.war-bg__radar::after {
+  content: '';
+  position: absolute;
+  inset: 130px;
+  border-radius: 50%;
+  border: 1px solid rgba(63, 185, 80, 0.12);
+}
+
+.war-bg__radar::after {
+  inset: 260px;
+  border-color: rgba(63, 185, 80, 0.18);
+}
+
+.war-bg__radar-sweep { display: none; }
+
+.war-bg__scanlines {
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent 0,
+    transparent 3px,
+    rgba(255, 255, 255, 0.018) 3px,
+    rgba(255, 255, 255, 0.018) 4px
+  );
+  mix-blend-mode: overlay;
+}
+
+.war-bg__vignette {
+  position: absolute;
+  inset: 0;
+  box-shadow: inset 0 0 240px rgba(0, 0, 0, 0.95);
+  background: radial-gradient(circle at center, transparent 60%, rgba(0, 0, 0, 0.6) 100%);
+}
+
+/* Tracer streaks (small light bullets across screen) */
+.war-tracer {
+  position: absolute;
+  width: 90px;
+  height: 2px;
+  background: linear-gradient(to right, transparent, #ff8844 25%, #ffee99 50%, #ff8844 75%, transparent);
+  filter: drop-shadow(0 0 6px #ff8844) drop-shadow(0 0 14px rgba(255, 100, 50, 0.6));
+  border-radius: 2px;
+  opacity: 0;
+  will-change: transform, opacity;
+}
+
+@keyframes tracerFlight {
+  0% { transform: translate(-150px, 0) rotate(var(--angle, 0deg)); opacity: 0; }
+  6% { opacity: 0.95; }
+  92% { opacity: 0.85; }
+  100% { transform: translate(110vw, 0) rotate(var(--angle, 0deg)); opacity: 0; }
+}
+
+/* Distant explosion flash */
+.war-flash {
+  position: absolute;
+  width: 320px;
+  height: 320px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 200, 80, 0.55) 0%, rgba(255, 100, 30, 0.25) 30%, rgba(180, 40, 20, 0.1) 50%, transparent 70%);
+  filter: blur(18px);
+  opacity: 0;
+  will-change: opacity, transform;
+}
+
+@keyframes warFlashPulse {
+  0%, 92%, 100% { opacity: 0; transform: scale(0.6); }
+  6% { opacity: 0.9; transform: scale(1.05); }
+  20% { opacity: 0.4; transform: scale(1.3); }
+  35% { opacity: 0; transform: scale(1.4); }
+}
+
+/* Flying weapon icons */
+.war-flyer {
+  position: absolute;
+  width: 56px;
+  height: 56px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  filter:
+    drop-shadow(0 0 12px rgba(255, 120, 40, 0.55))
+    drop-shadow(0 0 6px rgba(255, 220, 120, 0.4));
+  opacity: 0;
+  will-change: transform, opacity;
+}
+
+@keyframes flyAcrossLTR {
+  0% { transform: translate(-12vw, var(--y, 0)) rotate(var(--rot, 0deg)) scale(var(--scale, 1)); opacity: 0; }
+  8% { opacity: 0.85; }
+  92% { opacity: 0.85; }
+  100% { transform: translate(112vw, var(--y, 0)) rotate(var(--rot, 0deg)) scale(var(--scale, 1)); opacity: 0; }
+}
+
+@keyframes flyAcrossRTL {
+  0% { transform: translate(112vw, var(--y, 0)) rotate(var(--rot, 180deg)) scale(var(--scale, 1)); opacity: 0; }
+  8% { opacity: 0.85; }
+  92% { opacity: 0.85; }
+  100% { transform: translate(-12vw, var(--y, 0)) rotate(var(--rot, 180deg)) scale(var(--scale, 1)); opacity: 0; }
+}
+
+/* Floating embers / smoke flecks */
+.war-ember {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: #ff8844;
+  box-shadow: 0 0 8px #ff8844, 0 0 16px rgba(255, 120, 40, 0.5);
+  opacity: 0;
+  will-change: transform, opacity;
+}
+
+@keyframes emberRise {
+  0% { transform: translateY(0) translateX(0); opacity: 0; }
+  10% { opacity: 0.85; }
+  90% { opacity: 0.4; }
+  100% { transform: translateY(-110vh) translateX(var(--drift, 30px)); opacity: 0; }
+}
+
+/* HUD corner brackets */
+.hud-corners {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.hud-corner {
+  position: absolute;
+  width: 56px;
+  height: 56px;
+  border: 2px solid var(--accent-blue);
+  filter: drop-shadow(0 0 6px rgba(88, 166, 255, 0.5));
+  opacity: 0.7;
+}
+
+.hud-corner.tl { top: 24px; left: 24px; border-right: none; border-bottom: none; }
+.hud-corner.tr { top: 24px; right: 24px; border-left: none; border-bottom: none; }
+.hud-corner.bl { bottom: 24px; left: 24px; border-right: none; border-top: none; }
+.hud-corner.br { bottom: 24px; right: 24px; border-left: none; border-top: none; }
+
+/* Glitch + scanline text effects */
+.war-title {
+  font-family: var(--font-display);
+  font-weight: 900;
+  letter-spacing: 6px;
+  text-transform: uppercase;
+  background: linear-gradient(180deg, #ffffff 0%, #c9d1d9 60%, #58a6ff 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  position: relative;
+}
+
+
+.war-divider {
+  position: relative;
+  width: 280px;
+  height: 16px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.war-divider::before,
+.war-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(to right, transparent, var(--accent-blue), transparent);
+}
+
+.war-divider span {
+  padding: 0 12px;
+  color: var(--accent-blue);
+  font-family: var(--font-display);
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 4px;
+}
+
+.war-status-strip {
+  position: absolute;
+  bottom: 18px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 18px;
+  font-family: var(--font-display);
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 3px;
+  color: rgba(200, 220, 255, 0.7);
+  text-transform: uppercase;
+  z-index: 5;
+}
+
+.war-status-strip__cell {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  background: rgba(0, 0, 0, 0.65);
+  border: 1px solid rgba(88, 166, 255, 0.25);
+  border-radius: 4px;
+}
+
+.war-led {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent-green);
+  box-shadow: 0 0 8px var(--accent-green);
+  animation: ledPulse 1.5s ease-in-out infinite;
+}
+
+.war-led.amber { background: #ffb547; box-shadow: 0 0 8px #ffb547; }
+.war-led.red { background: var(--accent-red); box-shadow: 0 0 10px var(--accent-red); animation-duration: 0.6s; }
+
+@keyframes ledPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+/* Bracketed framed card */
+.war-frame {
+  position: relative;
+  border: 1px solid rgba(88, 166, 255, 0.3);
+  background:
+    linear-gradient(135deg, rgba(13, 17, 23, 0.92) 0%, rgba(8, 12, 18, 0.92) 100%);
+  box-shadow:
+    0 20px 80px rgba(0, 0, 0, 0.6),
+    inset 0 0 60px rgba(88, 166, 255, 0.04);
+}
+
+.war-frame::before,
+.war-frame::after {
+  content: '';
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--accent-blue);
+  filter: drop-shadow(0 0 4px rgba(88, 166, 255, 0.5));
+}
+
+.war-frame::before {
+  top: -3px;
+  left: -3px;
+  border-right: none;
+  border-bottom: none;
+}
+
+.war-frame::after {
+  bottom: -3px;
+  right: -3px;
+  border-left: none;
+  border-top: none;
+}
+
+.war-frame__corners {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.war-frame__corners::before,
+.war-frame__corners::after {
+  content: '';
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--accent-blue);
+  filter: drop-shadow(0 0 4px rgba(88, 166, 255, 0.5));
+}
+
+.war-frame__corners::before {
+  top: -3px;
+  right: -3px;
+  border-left: none;
+  border-bottom: none;
+}
+
+.war-frame__corners::after {
+  bottom: -3px;
+  left: -3px;
+  border-right: none;
+  border-top: none;
+}
+
+/* Lobby player slot — battlefield variant */
+.war-slot {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 16px;
+  background: linear-gradient(135deg, rgba(15, 22, 32, 0.92), rgba(8, 12, 18, 0.92));
+  border: 1px solid rgba(88, 166, 255, 0.18);
+  border-radius: 10px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.war-slot::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: var(--accent-blue);
+  opacity: 0.3;
+}
+
+.war-slot.occupied::before { opacity: 0.85; }
+.war-slot.ready { border-color: rgba(63, 185, 80, 0.55); }
+.war-slot.ready::before { background: var(--accent-green); opacity: 1; }
+.war-slot.empty { opacity: 0.5; border-style: dashed; animation: pulseSlot 2.5s infinite; }
+
+.war-slot__avatar {
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  background: rgba(88, 166, 255, 0.1);
+  border: 1px solid rgba(88, 166, 255, 0.4);
+  flex-shrink: 0;
+}
+
+.war-slot.ready .war-slot__avatar {
+  background: rgba(63, 185, 80, 0.12);
+  border-color: rgba(63, 185, 80, 0.55);
+}
+
+.war-slot__info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  gap: 2px;
+}
+
+.war-slot__name {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 0.95rem;
+  letter-spacing: 1px;
+  color: var(--text-main);
+}
+
+.war-slot__country {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: rgba(200, 220, 255, 0.55);
+}
+
+.war-slot__rank {
+  font-family: var(--font-display);
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 2px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  background: rgba(88, 166, 255, 0.1);
+  border: 1px solid rgba(88, 166, 255, 0.4);
+  color: var(--accent-blue);
+  text-transform: uppercase;
+}
+
+.war-slot.ready .war-slot__rank {
+  color: var(--accent-green);
+  background: rgba(63, 185, 80, 0.12);
+  border-color: rgba(63, 185, 80, 0.55);
+}
+
+.war-slot__status-dot {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent-red);
+  box-shadow: 0 0 6px var(--accent-red);
+}
+
+.war-slot.ready .war-slot__status-dot {
+  background: var(--accent-green);
+  box-shadow: 0 0 8px var(--accent-green);
+  animation: ledPulse 1.2s ease-in-out infinite;
+}
+
+/* WEAPONS HOT toggle */
+.war-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  padding: 18px 24px;
+  background: linear-gradient(135deg, rgba(248, 81, 73, 0.08), rgba(248, 81, 73, 0.02));
+  border: 1px solid rgba(248, 81, 73, 0.4);
+  border-radius: 8px;
+  cursor: pointer;
+  font-family: var(--font-display);
+  font-weight: 900;
+  letter-spacing: 4px;
+  font-size: 0.95rem;
+  color: var(--accent-red);
+  text-transform: uppercase;
+  transition: all 0.3s;
+  position: relative;
+  overflow: hidden;
+}
+
+.war-toggle:hover {
+  background: linear-gradient(135deg, rgba(248, 81, 73, 0.18), rgba(248, 81, 73, 0.05));
+  box-shadow: 0 0 24px rgba(248, 81, 73, 0.3);
+}
+
+.war-toggle.armed {
+  background: linear-gradient(135deg, rgba(63, 185, 80, 0.12), rgba(63, 185, 80, 0.04));
+  border-color: rgba(63, 185, 80, 0.7);
+  color: var(--accent-green);
+  box-shadow: 0 0 28px rgba(63, 185, 80, 0.25);
+}
+
+.war-toggle__indicator {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: currentColor;
+  box-shadow: 0 0 12px currentColor;
+  animation: ledPulse 1.2s infinite;
+}
+
+/* ============================================================
+   COUNTDOWN TAKEOVER (full-screen war-style countdown)
+   ============================================================ */
+
+.countdown-takeover {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  background: radial-gradient(ellipse at center, #1a0808 0%, #0a0303 70%, #050102 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: all;
+  overflow: hidden;
+  animation: takeoverFadeIn 0.4s ease-out;
+}
+
+@keyframes takeoverFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.countdown-takeover__scanlines {
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent 0,
+    transparent 3px,
+    rgba(255, 30, 30, 0.05) 3px,
+    rgba(255, 30, 30, 0.05) 4px
+  );
+  pointer-events: none;
+}
+
+.countdown-takeover__edge {
+  position: absolute;
+  inset: 0;
+  box-shadow: inset 0 0 240px rgba(255, 30, 30, 0.7);
+  animation: edgeStrobe 0.8s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes edgeStrobe {
+  0%, 100% { box-shadow: inset 0 0 120px rgba(255, 30, 30, 0.45); }
+  50% { box-shadow: inset 0 0 280px rgba(255, 30, 30, 0.85); }
+}
+
+.countdown-takeover__grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255, 60, 60, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 60, 60, 0.05) 1px, transparent 1px);
+  background-size: 80px 80px;
+  -webkit-mask-image: radial-gradient(circle at center, black 30%, transparent 80%);
+  mask-image: radial-gradient(circle at center, black 30%, transparent 80%);
+  pointer-events: none;
+}
+
+.countdown-center {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 5;
+}
+
+.countdown-reticle {
+  position: relative;
+  width: 460px;
+  height: 460px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.countdown-reticle__ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 70, 70, 0.55);
+  border-top-color: transparent;
+  border-right-color: transparent;
+  animation: reticleSpin 3s linear infinite;
+}
+
+.countdown-reticle__ring--inner {
+  inset: 50px;
+  border-width: 1px;
+  border-color: rgba(255, 120, 120, 0.45);
+  border-top-color: transparent;
+  border-left-color: transparent;
+  animation: reticleSpinReverse 4s linear infinite;
+}
+
+.countdown-reticle__ring--outer {
+  inset: -40px;
+  border-width: 1px;
+  border-color: rgba(255, 60, 60, 0.25);
+  border-bottom-color: transparent;
+  animation: reticleSpin 8s linear infinite;
+}
+
+@keyframes reticleSpin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes reticleSpinReverse {
+  to { transform: rotate(-360deg); }
+}
+
+.countdown-reticle__cross::before,
+.countdown-reticle__cross::after {
+  content: '';
+  position: absolute;
+  background: rgba(255, 80, 80, 0.4);
+}
+
+.countdown-reticle__cross::before {
+  left: 50%;
+  top: 0;
+  width: 1px;
+  height: 100%;
+  transform: translateX(-50%);
+}
+
+.countdown-reticle__cross::after {
+  top: 50%;
+  left: 0;
+  height: 1px;
+  width: 100%;
+  transform: translateY(-50%);
+}
+
+.countdown-reticle__corners {
+  position: absolute;
+  inset: 80px;
+  pointer-events: none;
+}
+
+.countdown-reticle__corner {
+  position: absolute;
+  width: 28px;
+  height: 28px;
+  border: 2px solid #ff5555;
+  filter: drop-shadow(0 0 6px rgba(255, 60, 60, 0.7));
+}
+
+.countdown-reticle__corner.tl { top: 0; left: 0; border-right: none; border-bottom: none; }
+.countdown-reticle__corner.tr { top: 0; right: 0; border-left: none; border-bottom: none; }
+.countdown-reticle__corner.bl { bottom: 0; left: 0; border-right: none; border-top: none; }
+.countdown-reticle__corner.br { bottom: 0; right: 0; border-left: none; border-top: none; }
+
+.countdown-number {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 16rem;
+  line-height: 1;
+  color: #ff4444;
+  text-shadow:
+    0 0 24px rgba(255, 60, 60, 1),
+    0 0 80px rgba(255, 30, 30, 0.6),
+    0 0 160px rgba(255, 0, 0, 0.4);
+  letter-spacing: -8px;
+  position: relative;
+  z-index: 6;
+}
+
+.countdown-number--enter {
+  animation: countdownPunch 0.6s cubic-bezier(0.2, 0.9, 0.3, 1.4);
+}
+
+@keyframes countdownPunch {
+  0% { transform: scale(2.5); opacity: 0; filter: blur(24px); }
+  35% { transform: scale(0.85); opacity: 1; filter: blur(0); }
+  70% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+.countdown-shockwave {
+  position: absolute;
+  width: 240px;
+  height: 240px;
+  border: 3px solid rgba(255, 80, 80, 0.85);
+  border-radius: 50%;
+  pointer-events: none;
+  animation: countdownShock 0.95s ease-out forwards;
+}
+
+@keyframes countdownShock {
+  0% { transform: scale(0); opacity: 1; }
+  100% { transform: scale(8); opacity: 0; }
+}
+
+.countdown-status {
+  margin-top: 36px;
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 1.6rem;
+  letter-spacing: 14px;
+  color: #fff;
+  text-shadow: 0 0 18px rgba(255, 60, 60, 0.85);
+  text-transform: uppercase;
+}
+
+.countdown-substatus {
+  margin-top: 8px;
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 6px;
+  color: rgba(255, 200, 200, 0.7);
+  text-transform: uppercase;
+}
+
+.countdown-side {
+  position: absolute;
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: rgba(255, 130, 130, 0.85);
+  font-weight: 800;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.countdown-side.tl { top: 36px; left: 36px; }
+.countdown-side.tr { top: 36px; right: 36px; align-items: flex-end; }
+.countdown-side.bl { bottom: 36px; left: 36px; }
+.countdown-side.br { bottom: 36px; right: 36px; align-items: flex-end; }
+
+.countdown-side__row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 12px;
+  background: rgba(40, 4, 4, 0.55);
+  border: 1px solid rgba(255, 60, 60, 0.35);
+  border-radius: 4px;
+}
+
+.countdown-side__label {
+  opacity: 0.8;
+}
+
+.countdown-side__value {
+  color: #ffdd66;
+  font-weight: 900;
+}
+
+.countdown-progress {
+  position: absolute;
+  bottom: 32px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 6px;
+  z-index: 5;
+}
+
+.countdown-progress__bar {
+  width: 38px;
+  height: 6px;
+  background: rgba(255, 60, 60, 0.18);
+  border: 1px solid rgba(255, 60, 60, 0.4);
+  transform: skewX(-18deg);
+}
+
+.countdown-progress__bar.lit {
+  background: linear-gradient(to right, #ff4444, #ffaa55);
+  box-shadow: 0 0 12px rgba(255, 80, 80, 0.85);
+}
+
+.countdown-streaks {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
 }

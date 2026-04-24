@@ -1,0 +1,1 @@
+export const WarBackground = () => null;

@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { useGameStore, playSound } from '../../store/gameStore';
 import gsap from 'gsap';
-import { Shield, Lock, Activity, HelpCircle, Globe, Trophy, Menu, ChevronLeft } from 'lucide-react';
+import { Shield, Lock, Activity, HelpCircle, Globe, Trophy, Menu, ChevronLeft, Skull } from 'lucide-react';
 import missileIcon from '../../assets/missile.webp';
 import domeIcon from '../../assets/dome.webp';
 import tankIcon from '../../assets/tank.webp';
@@ -59,6 +59,30 @@ const getDamageLabel = (id) => {
   if (item.effect === 'nuke') return '-50%';
   if (item.damage) return `-${item.damage}`;
   return '';
+};
+
+const setScaledDragImage = (event, sourceElement) => {
+  const iconEl = sourceElement.querySelector('.inv-icon') || sourceElement;
+  const rect = iconEl.getBoundingClientRect();
+  const dragPreview = iconEl.cloneNode(true);
+  dragPreview.style.position = 'fixed';
+  dragPreview.style.top = '-9999px';
+  dragPreview.style.left = '-9999px';
+  dragPreview.style.margin = '0';
+  dragPreview.style.padding = '0';
+  dragPreview.style.border = 'none';
+  dragPreview.style.background = 'transparent';
+  dragPreview.style.boxShadow = 'none';
+  dragPreview.style.pointerEvents = 'none';
+  dragPreview.style.width = `${rect.width}px`;
+  dragPreview.style.height = `${rect.height}px`;
+  dragPreview.style.transform = 'scale(0.5)';
+  dragPreview.style.transformOrigin = 'top left';
+  document.body.appendChild(dragPreview);
+  event.dataTransfer.setDragImage(dragPreview, (rect.width * 0.5) / 2, (rect.height * 0.5) / 2);
+  requestAnimationFrame(() => {
+    if (dragPreview.parentNode) dragPreview.parentNode.removeChild(dragPreview);
+  });
 };
 
 const QuizToaster = ({ quiz, onAnswer }) => {
@@ -138,6 +162,17 @@ export const Dashboard = () => {
   const isLobby = gameState.lobbyState === 'waiting' || gameState.lobbyState === 'starting';
   const hasAnimated = useRef(false);
 
+  const [cachedRankings, setCachedRankings] = useState(null);
+  const [cachedBattleLogs, setCachedBattleLogs] = useState(null);
+  useEffect(() => {
+    if (gameState.lobbyState === 'ended' && gameState.rankings) {
+      setCachedRankings(gameState.rankings);
+      setCachedBattleLogs(gameState.battleLogs || null);
+    }
+  }, [gameState.lobbyState, gameState.rankings, gameState.battleLogs]);
+  const displayRankings = cachedRankings;
+  const displayBattleLogs = cachedBattleLogs;
+
   useEffect(() => {
     if (me && !hasAnimated.current) {
       if (document.querySelector('.top-panel')) {
@@ -169,7 +204,7 @@ export const Dashboard = () => {
   const lastCyberTick = useRef(0);
 
   useEffect(() => {
-    const int = setInterval(() => setNow(Date.now()), 100);
+    const int = setInterval(() => setNow(Date.now()), 250);
     return () => clearInterval(int);
   }, []);
 
@@ -254,13 +289,13 @@ export const Dashboard = () => {
       )}
 
       {/* END GAME RANKINGS OVERLAY */}
-      {gameState.lobbyState === 'ended' && gameState.rankings && (
+      {gameState.lobbyState === 'ended' && displayRankings && (
         <div className="winner-overlay">
           <div className="rankings-content">
             <Globe size={48} className="winner-icon" />
-            <div className="winner-label">MATCH CONCLUDED</div>
+            <div className="winner-label">MATCH OVER</div>
             <div className="rankings-list">
-              {gameState.rankings.map((entry) => (
+              {displayRankings.map((entry) => (
                 <div key={entry.rank} className={`ranking-row ${entry.survived ? 'survived' : 'eliminated'} ${entry.country === myCountry ? 'is-me' : ''}`}>
                   <div className="rank-badge">#{entry.rank}</div>
                   <div className="rank-icon">
@@ -281,10 +316,10 @@ export const Dashboard = () => {
               ))}
             </div>
 
-            {gameState.battleLogs && gameState.battleLogs.length > 0 && (
+            {displayBattleLogs && displayBattleLogs.length > 0 && (
               <div className="battle-logs-container" style={{ marginTop: '20px', padding: '15px', background: 'rgba(0,0,0,0.5)', borderRadius: '8px', maxHeight: '150px', overflowY: 'auto' }}>
                 <h3 style={{ textTransform: 'uppercase', fontSize: '14px', marginBottom: '10px', color: 'var(--accent-blue)' }}>BATTLE LOG</h3>
-                {gameState.battleLogs.map((log, i) => (
+                {displayBattleLogs.map((log, i) => (
                   <div key={i} style={{ fontSize: '12px', padding: '4px 0', borderBottom: '1px solid rgba(255,255,255,0.1)', color: log.text.includes('[ATTACK]') ? 'var(--accent-red)' : log.text.includes('[DEFENSE]') ? 'var(--text-muted)' : log.text.includes('[FIREWALL]') ? '#aaaaaa' : '#00ffcc' }}>
                     <span style={{ opacity: 0.5, marginRight: '8px' }}>{new Date(log.time).toLocaleTimeString()}</span>
                     {log.text}
@@ -293,7 +328,7 @@ export const Dashboard = () => {
               </div>
             )}
 
-            <button className="winner-btn" onClick={() => window.location.reload()}>RETURN TO HQ</button>
+            <button className="winner-btn" onClick={() => window.location.reload()}>Play Again</button>
           </div>
         </div>
       )}
@@ -383,7 +418,11 @@ export const Dashboard = () => {
                   className={`inv-item attack-item ${canDrag ? 'draggable' : ''}`}
                   title={tooltipText}
                   draggable={canDrag}
-                  onDragStart={(e) => { if (canDrag) e.dataTransfer.setData('itemId', itemId); }}
+                  onDragStart={(e) => {
+                    if (!canDrag) return;
+                    e.dataTransfer.setData('itemId', itemId);
+                    setScaledDragImage(e, e.currentTarget);
+                  }}
                   onClick={() => { if (canActivateCyber) activateDeflect(); }}
                   style={{ position: 'relative', overflow: 'hidden', cursor: canActivateCyber ? 'pointer' : (isDeflecting ? 'not-allowed' : 'default') }}
                 >
@@ -477,13 +516,13 @@ export const Dashboard = () => {
             {/* Panel 0: Market */}
             <div className="sidebar-swipe-panel" style={{ position: 'relative' }}>
               {!isFarmingPhase && (
-                <div style={{ position: 'absolute', inset: 0, zIndex: 10, background: 'rgba(5, 10, 16, 0.85)', backdropFilter: 'blur(4px)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', color: 'var(--accent-red)' }}>
+                <div style={{ position: 'absolute', inset: 0, zIndex: 10, background: 'rgba(5, 10, 16, 0.92)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', color: 'var(--accent-red)' }}>
                   <Lock size={48} style={{ marginBottom: '16px' }} />
                   <h3 style={{ fontFamily: 'var(--font-display)', letterSpacing: '2px', textAlign: 'center' }}>MARKET CLOSED</h3>
                   <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', textAlign: 'center', marginTop: '8px', padding: '0 40px', lineHeight: 1.5 }}>The World Market is unavailable during the War Window. Weapons can only be purchased during the Preparation phase.</p>
                 </div>
               )}
-              <div className="sidebar-section" style={{ filter: !isFarmingPhase ? 'blur(2px) grayscale(1)' : 'none', pointerEvents: !isFarmingPhase ? 'none' : 'auto' }}>
+              <div className="sidebar-section" style={{ opacity: !isFarmingPhase ? 0.3 : 1, pointerEvents: !isFarmingPhase ? 'none' : 'auto' }}>
                 <div className="paired-header">
                   <span className="paired-col-label attack-label">⚔ ATTACK</span>
                   <span className="paired-col-label defense-label">🛡 COUNTER</span>
