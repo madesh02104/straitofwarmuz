@@ -26,7 +26,12 @@ export const Landing = () => {
         filter: "none",
       })
       .set(".anim-tank-bullet", { opacity: 0 })
-      .set(".anim-missile-smoke", { left: "88%", bottom: "1%", opacity: 0, scale: 0.5 })
+      .set(".anim-missile-smoke", {
+        left: "88%",
+        bottom: "1%",
+        opacity: 0,
+        scale: 0.5,
+      })
       .set(".anim-jet", {
         left: "100%",
         right: "auto",
@@ -37,7 +42,7 @@ export const Landing = () => {
       .set(".anim-jet-b0, .anim-jet-b1, .anim-jet-b2, .anim-jet-b3", {
         opacity: 0,
         left: "50%",
-        top: "15%",
+        top: "11%",
       })
       .set(".anim-tank-blast", { opacity: 0, scale: 0.3 });
 
@@ -77,7 +82,12 @@ export const Landing = () => {
 
     tl.set(".anim-tank-bullet", { opacity: 0 })
       .set(".anim-missile", { opacity: 0 })
-      .set(".anim-missile-smoke", { left: "88%", bottom: "1%", opacity: 1, scale: 0.1 })
+      .set(".anim-missile-smoke", {
+        left: "88%",
+        bottom: "1%",
+        opacity: 1,
+        scale: 0.1,
+      })
       .to(".anim-missile-smoke", {
         scale: 2.5,
         opacity: 0.8,
@@ -100,7 +110,7 @@ export const Landing = () => {
 
     tl.set(".anim-jet-b0, .anim-jet-b1, .anim-jet-b2, .anim-jet-b3", {
       left: "50%",
-      top: "15%",
+      top: "11%",
       opacity: 1,
     })
       .to(
@@ -288,7 +298,7 @@ export const Landing = () => {
           style={{
             position: "absolute",
             left: "100%",
-            top: "15%",
+            top: "6%",
             width: 200,
           }}
         />
