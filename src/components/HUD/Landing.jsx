@@ -150,7 +150,7 @@ export const Landing = () => {
                 fontWeight: 700,
               }}
             >
-              6 players · One world map · Last one standing wins
+              One world map · Last one standing wins
             </p>
           </div>
 
@@ -240,7 +240,7 @@ export const Landing = () => {
                         marginTop: 2,
                       }}
                     >
-                      Public match · Up to 6 players
+                      Public match
                     </div>
                   </div>
                 </div>
@@ -273,9 +273,6 @@ export const Landing = () => {
       <div className="war-status-strip">
         <div className="war-status-strip__cell">
           <span className="war-led" /> SERVER ONLINE
-        </div>
-        <div className="war-status-strip__cell">
-          <span className="war-led amber" /> 6 PLAYERS MAX
         </div>
       </div>
     </div>

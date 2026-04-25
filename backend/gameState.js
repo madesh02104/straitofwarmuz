@@ -131,7 +131,7 @@ class GameState {
       "North Korea",
       "Pakistan",
       "Israel",
-      "Iran"
+      "Iran",
     ];
     this.availableCountries = [...this.countries];
 
@@ -312,7 +312,7 @@ class GameState {
             if (io)
               io.to(id).emit("notification", {
                 message: `R&D FAILED: ${item.itemId} lost.`,
-                type: 'error'
+                type: "error",
               });
           }
           return false;
@@ -420,11 +420,17 @@ class GameState {
       if (mode === "category") {
         const result = {};
         for (const id in EQUIPMENT) {
-          if (EQUIPMENT[id].type === options.category) result[id] = target.inventory[id];
+          if (EQUIPMENT[id].type === options.category)
+            result[id] = target.inventory[id];
         }
         return { mode, category: options.category, data: result };
       }
-      if (mode === "specific") return { mode, itemId: options.itemId, count: target.inventory[options.itemId] || 0 };
+      if (mode === "specific")
+        return {
+          mode,
+          itemId: options.itemId,
+          count: target.inventory[options.itemId] || 0,
+        };
     }
     return null;
   }
@@ -446,7 +452,8 @@ class GameState {
 
     if (attacker && actualTarget && attacker.inventory[itemId] > 0) {
       if (attacker.hp <= 0) return { success: false, reason: "dead_attacker" };
-      if (actualTarget.hp <= 0) return { success: false, reason: "dead_target" };
+      if (actualTarget.hp <= 0)
+        return { success: false, reason: "dead_target" };
 
       if (Date.now() < (attacker.attackCooldowns[itemId] || 0)) {
         return { success: false, reason: "cooldown" };
@@ -456,13 +463,28 @@ class GameState {
 
       const counterId = item.counter;
 
-      const deflectable = ['missile', 'nuke'];
-      if (Date.now() < actualTarget.deflectingUntil && deflectable.includes(itemId)) {
+      const deflectable = ["missile", "nuke"];
+      if (
+        Date.now() < actualTarget.deflectingUntil &&
+        deflectable.includes(itemId)
+      ) {
         if (attacker.inventory["firewall"] > 0) {
           attacker.inventory["firewall"]--;
-          attacker.attackCooldowns[itemId] = Date.now() + (item.attackDelay || 0);
-          this.battleLogs.push({ time: Date.now(), text: `[FIREWALL] ${attacker.country} nullified ${actualTarget.country}'s deflected ${item.name} attack!` });
-          return { success: true, damage: 0, target: attacker.socketId, deflected: true, originalTarget: actualTarget.socketId, itemId, firewallBlocked: true };
+          attacker.attackCooldowns[itemId] =
+            Date.now() + (item.attackDelay || 0);
+          this.battleLogs.push({
+            time: Date.now(),
+            text: `[FIREWALL] ${attacker.country} nullified ${actualTarget.country}'s deflected ${item.name} attack!`,
+          });
+          return {
+            success: true,
+            damage: 0,
+            target: attacker.socketId,
+            deflected: true,
+            originalTarget: actualTarget.socketId,
+            itemId,
+            firewallBlocked: true,
+          };
         }
 
         let damageDealt = 0;
@@ -481,8 +503,18 @@ class GameState {
         attacker.attackCooldowns[itemId] = Date.now() + (item.attackDelay || 0);
         // Reset deflection timer on success
         actualTarget.deflectingUntil = Date.now() + 5000;
-        this.battleLogs.push({ time: Date.now(), text: `[CYBERATTACK] ${actualTarget.country} deflected ${item.name} back to ${attacker.country} dealing ${damageDealt} HP damage!` });
-        return { success: true, damage: damageDealt, target: attacker.socketId, deflected: true, originalTarget: actualTarget.socketId, itemId };
+        this.battleLogs.push({
+          time: Date.now(),
+          text: `[CYBERATTACK] ${actualTarget.country} deflected ${item.name} back to ${attacker.country} dealing ${damageDealt} HP damage!`,
+        });
+        return {
+          success: true,
+          damage: damageDealt,
+          target: attacker.socketId,
+          deflected: true,
+          originalTarget: actualTarget.socketId,
+          itemId,
+        };
       }
 
       let isCountered = false;
@@ -493,8 +525,16 @@ class GameState {
 
       if (isCountered) {
         attacker.attackCooldowns[itemId] = Date.now() + (item.attackDelay || 0);
-        this.battleLogs.push({ time: Date.now(), text: `[DEFENSE] ${actualTarget.country} successfully countered ${attacker.country}'s ${item.name}!` });
-        return { success: false, reason: "countered", target: actualTarget.socketId, itemId };
+        this.battleLogs.push({
+          time: Date.now(),
+          text: `[DEFENSE] ${actualTarget.country} successfully countered ${attacker.country}'s ${item.name}!`,
+        });
+        return {
+          success: false,
+          reason: "countered",
+          target: actualTarget.socketId,
+          itemId,
+        };
       } else {
         let damageDealt = 0;
         if (item.effect === "freeze") {
@@ -510,8 +550,16 @@ class GameState {
         }
 
         attacker.attackCooldowns[itemId] = Date.now() + (item.attackDelay || 0);
-        this.battleLogs.push({ time: Date.now(), text: `[ATTACK] ${attacker.country} hit ${actualTarget.country} with ${item.name} dealing ${damageDealt} HP damage!` });
-        return { success: true, damage: damageDealt, target: actualTarget.socketId, itemId };
+        this.battleLogs.push({
+          time: Date.now(),
+          text: `[ATTACK] ${attacker.country} hit ${actualTarget.country} with ${item.name} dealing ${damageDealt} HP damage!`,
+        });
+        return {
+          success: true,
+          damage: damageDealt,
+          target: actualTarget.socketId,
+          itemId,
+        };
       }
     }
     return { success: false, reason: "no_ammo" };

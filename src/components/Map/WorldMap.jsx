@@ -1,14 +1,18 @@
-import React, { useMemo, useRef, useState, useEffect } from 'react';
-import { Canvas, useFrame, useThree } from '@react-three/fiber';
-import { OrthographicCamera, Html, Line } from '@react-three/drei';
-import * as THREE from 'three';
-import countriesData from '../../countries.json';
-import { useGameStore } from '../../store/gameStore';
-import missileImg from '../../assets/missile.webp';
-import jetImg from '../../assets/jet.webp';
-import tankImg from '../../assets/tank.webp';
-import submarineImg from '../../assets/submarine.webp';
-import nukeImg from '../../assets/nuke.webp';
+import React, { useMemo, useRef, useState, useEffect } from "react";
+import { Canvas, useFrame, useThree } from "@react-three/fiber";
+import { OrthographicCamera, Html, Line } from "@react-three/drei";
+import * as THREE from "three";
+import countriesData from "../../countries.json";
+import { useGameStore } from "../../store/gameStore";
+import missileImg from "../../assets/missile.webp";
+import jetImg from "../../assets/jet.webp";
+import tankImg from "../../assets/tank.webp";
+import submarineImg from "../../assets/submarine.webp";
+import nukeImg from "../../assets/nuke.webp";
+import domeImg from "../../assets/dome.webp";
+import stickybombImg from "../../assets/stickybomb.webp";
+import radarImg from "../../assets/radar.webp";
+import navalmineImg from "../../assets/navalmine.webp";
 
 const ATTACK_TEXTURE_URLS = {
   missile: missileImg,
@@ -16,6 +20,10 @@ const ATTACK_TEXTURE_URLS = {
   tank: tankImg,
   sub: submarineImg,
   nuke: nukeImg,
+  dome: domeImg,
+  stickybomb: stickybombImg,
+  radar: radarImg,
+  navalmine: navalmineImg,
 };
 
 const attackTextureCache = new Map();
@@ -36,16 +44,16 @@ const dragOverState = { targetId: null, lastDragOver: 0 };
 
 const scale = 2.5;
 function mapCoordinates(lon, lat) {
-  return [lon / 180 * 100 * scale, lat / 90 * 50 * scale];
+  return [(lon / 180) * 100 * scale, (lat / 90) * 50 * scale];
 }
 
 const mapPanState = { isDragging: false, dragDistance: 0 };
 
 const normalize = (n) => {
-  if (!n) return '';
+  if (!n) return "";
   const map = {
-    'United States of America': 'USA',
-    'United Kingdom': 'UK'
+    "United States of America": "USA",
+    "United Kingdom": "UK",
   };
   const mapped = map[n] || n;
   return mapped.toLowerCase().trim();
@@ -67,29 +75,33 @@ function drawStar(ctx, cx, cy, outerR, points) {
 }
 
 function drawUnionJack(ctx, x, y, w, h) {
-  ctx.fillStyle = '#012169';
+  ctx.fillStyle = "#012169";
   ctx.fillRect(x, y, w, h);
   ctx.save();
   ctx.beginPath();
   ctx.rect(x, y, w, h);
   ctx.clip();
-  ctx.strokeStyle = '#FFFFFF';
+  ctx.strokeStyle = "#FFFFFF";
   ctx.lineWidth = h / 4;
   ctx.beginPath();
-  ctx.moveTo(x, y); ctx.lineTo(x + w, y + h);
-  ctx.moveTo(x + w, y); ctx.lineTo(x, y + h);
+  ctx.moveTo(x, y);
+  ctx.lineTo(x + w, y + h);
+  ctx.moveTo(x + w, y);
+  ctx.lineTo(x, y + h);
   ctx.stroke();
-  ctx.strokeStyle = '#C8102E';
+  ctx.strokeStyle = "#C8102E";
   ctx.lineWidth = h / 9;
   ctx.beginPath();
-  ctx.moveTo(x, y); ctx.lineTo(x + w, y + h);
-  ctx.moveTo(x + w, y); ctx.lineTo(x, y + h);
+  ctx.moveTo(x, y);
+  ctx.lineTo(x + w, y + h);
+  ctx.moveTo(x + w, y);
+  ctx.lineTo(x, y + h);
   ctx.stroke();
   ctx.restore();
-  ctx.fillStyle = '#FFFFFF';
+  ctx.fillStyle = "#FFFFFF";
   ctx.fillRect(x, y + (h * 3) / 8, w, h / 4);
   ctx.fillRect(x + (w * 3) / 8, y, w / 4, h);
-  ctx.fillStyle = '#C8102E';
+  ctx.fillStyle = "#C8102E";
   ctx.fillRect(x, y + (h * 7) / 16, w, h / 8);
   ctx.fillRect(x + (w * 7) / 16, y, w / 8, h);
 }
@@ -97,160 +109,239 @@ function drawUnionJack(ctx, x, y, w, h) {
 function drawFlagOnCanvas(ctx, w, h, key) {
   ctx.clearRect(0, 0, w, h);
   switch (key) {
-    case 'usa': {
+    case "usa": {
       const sh = h / 13;
       for (let i = 0; i < 13; i++) {
-        ctx.fillStyle = i % 2 === 0 ? '#B22234' : '#FFFFFF';
+        ctx.fillStyle = i % 2 === 0 ? "#B22234" : "#FFFFFF";
         ctx.fillRect(0, i * sh, w, sh);
       }
-      const cw = w * 0.4, ch = sh * 7;
-      ctx.fillStyle = '#3C3B6E';
+      const cw = w * 0.4,
+        ch = sh * 7;
+      ctx.fillStyle = "#3C3B6E";
       ctx.fillRect(0, 0, cw, ch);
-      ctx.fillStyle = '#FFFFFF';
+      ctx.fillStyle = "#FFFFFF";
       const rows = [6, 5, 6, 5, 6, 5, 6, 5, 6];
       for (let r = 0; r < 9; r++) {
         const cols = rows[r];
         for (let c = 0; c < cols; c++) {
           const off = r % 2 === 0 ? 0 : cw / cols / 2;
-          drawStar(ctx, off + (c + 0.5) * (cw / cols), (r + 0.5) * (ch / 9), ch / 18, 5);
+          drawStar(
+            ctx,
+            off + (c + 0.5) * (cw / cols),
+            (r + 0.5) * (ch / 9),
+            ch / 18,
+            5,
+          );
         }
       }
       break;
     }
-    case 'china': {
-      ctx.fillStyle = '#DE2910';
+    case "china": {
+      ctx.fillStyle = "#DE2910";
       ctx.fillRect(0, 0, w, h);
-      ctx.fillStyle = '#FFDE00';
+      ctx.fillStyle = "#FFDE00";
       drawStar(ctx, w * 0.18, h * 0.25, w * 0.1, 5);
-      [[w * 0.32, h * 0.1], [w * 0.4, h * 0.2], [w * 0.4, h * 0.37], [w * 0.32, h * 0.45]].forEach(
-        ([sx, sy]) => drawStar(ctx, sx, sy, w * 0.04, 5)
-      );
+      [
+        [w * 0.32, h * 0.1],
+        [w * 0.4, h * 0.2],
+        [w * 0.4, h * 0.37],
+        [w * 0.32, h * 0.45],
+      ].forEach(([sx, sy]) => drawStar(ctx, sx, sy, w * 0.04, 5));
       break;
     }
-    case 'russia': {
-      ctx.fillStyle = '#FFFFFF'; ctx.fillRect(0, 0, w, h / 3);
-      ctx.fillStyle = '#0039A6'; ctx.fillRect(0, h / 3, w, h / 3);
-      ctx.fillStyle = '#D52B1E'; ctx.fillRect(0, (2 * h) / 3, w, h / 3);
+    case "russia": {
+      ctx.fillStyle = "#FFFFFF";
+      ctx.fillRect(0, 0, w, h / 3);
+      ctx.fillStyle = "#0039A6";
+      ctx.fillRect(0, h / 3, w, h / 3);
+      ctx.fillStyle = "#D52B1E";
+      ctx.fillRect(0, (2 * h) / 3, w, h / 3);
       break;
     }
-    case 'india': {
-      ctx.fillStyle = '#FF9933'; ctx.fillRect(0, 0, w, h / 3);
-      ctx.fillStyle = '#FFFFFF'; ctx.fillRect(0, h / 3, w, h / 3);
-      ctx.fillStyle = '#138808'; ctx.fillRect(0, (2 * h) / 3, w, h / 3);
+    case "india": {
+      ctx.fillStyle = "#FF9933";
+      ctx.fillRect(0, 0, w, h / 3);
+      ctx.fillStyle = "#FFFFFF";
+      ctx.fillRect(0, h / 3, w, h / 3);
+      ctx.fillStyle = "#138808";
+      ctx.fillRect(0, (2 * h) / 3, w, h / 3);
       const [icx, icy, ir] = [w / 2, h / 2, h / 7];
-      ctx.strokeStyle = '#000080';
+      ctx.strokeStyle = "#000080";
       ctx.lineWidth = ir * 0.12;
-      ctx.beginPath(); ctx.arc(icx, icy, ir, 0, Math.PI * 2); ctx.stroke();
+      ctx.beginPath();
+      ctx.arc(icx, icy, ir, 0, Math.PI * 2);
+      ctx.stroke();
       ctx.lineWidth = ir * 0.06;
       for (let i = 0; i < 24; i++) {
         const a = (i * Math.PI * 2) / 24;
-        ctx.beginPath(); ctx.moveTo(icx, icy); ctx.lineTo(icx + ir * Math.cos(a), icy + ir * Math.sin(a)); ctx.stroke();
+        ctx.beginPath();
+        ctx.moveTo(icx, icy);
+        ctx.lineTo(icx + ir * Math.cos(a), icy + ir * Math.sin(a));
+        ctx.stroke();
       }
       break;
     }
-    case 'uk': {
+    case "uk": {
       drawUnionJack(ctx, 0, 0, w, h);
       break;
     }
-    case 'germany': {
-      ctx.fillStyle = '#000000'; ctx.fillRect(0, 0, w, h / 3);
-      ctx.fillStyle = '#DD0000'; ctx.fillRect(0, h / 3, w, h / 3);
-      ctx.fillStyle = '#FFCE00'; ctx.fillRect(0, (2 * h) / 3, w, h / 3);
+    case "germany": {
+      ctx.fillStyle = "#000000";
+      ctx.fillRect(0, 0, w, h / 3);
+      ctx.fillStyle = "#DD0000";
+      ctx.fillRect(0, h / 3, w, h / 3);
+      ctx.fillStyle = "#FFCE00";
+      ctx.fillRect(0, (2 * h) / 3, w, h / 3);
       break;
     }
-    case 'japan': {
-      ctx.fillStyle = '#FFFFFF'; ctx.fillRect(0, 0, w, h);
-      ctx.fillStyle = '#BC002D';
-      ctx.beginPath(); ctx.arc(w / 2, h / 2, h * 0.3, 0, Math.PI * 2); ctx.fill();
-      break;
-    }
-    case 'brazil': {
-      ctx.fillStyle = '#009C3B'; ctx.fillRect(0, 0, w, h);
-      ctx.fillStyle = '#FFDF00';
+    case "japan": {
+      ctx.fillStyle = "#FFFFFF";
+      ctx.fillRect(0, 0, w, h);
+      ctx.fillStyle = "#BC002D";
       ctx.beginPath();
-      ctx.moveTo(w / 2, h * 0.06); ctx.lineTo(w * 0.95, h / 2);
-      ctx.lineTo(w / 2, h * 0.94); ctx.lineTo(w * 0.05, h / 2);
-      ctx.closePath(); ctx.fill();
-      ctx.fillStyle = '#002776';
-      ctx.beginPath(); ctx.arc(w / 2, h / 2, h * 0.28, 0, Math.PI * 2); ctx.fill();
+      ctx.arc(w / 2, h / 2, h * 0.3, 0, Math.PI * 2);
+      ctx.fill();
+      break;
+    }
+    case "brazil": {
+      ctx.fillStyle = "#009C3B";
+      ctx.fillRect(0, 0, w, h);
+      ctx.fillStyle = "#FFDF00";
+      ctx.beginPath();
+      ctx.moveTo(w / 2, h * 0.06);
+      ctx.lineTo(w * 0.95, h / 2);
+      ctx.lineTo(w / 2, h * 0.94);
+      ctx.lineTo(w * 0.05, h / 2);
+      ctx.closePath();
+      ctx.fill();
+      ctx.fillStyle = "#002776";
+      ctx.beginPath();
+      ctx.arc(w / 2, h / 2, h * 0.28, 0, Math.PI * 2);
+      ctx.fill();
       ctx.save();
-      ctx.beginPath(); ctx.arc(w / 2, h / 2, h * 0.28, 0, Math.PI * 2); ctx.clip();
-      ctx.fillStyle = '#FFFFFF'; ctx.fillRect(0, h / 2 - h * 0.04, w, h * 0.08);
+      ctx.beginPath();
+      ctx.arc(w / 2, h / 2, h * 0.28, 0, Math.PI * 2);
+      ctx.clip();
+      ctx.fillStyle = "#FFFFFF";
+      ctx.fillRect(0, h / 2 - h * 0.04, w, h * 0.08);
       ctx.restore();
-      ctx.fillStyle = '#FFFFFF';
-      [[w * 0.37, h * 0.37], [w * 0.48, h * 0.44], [w * 0.58, h * 0.46], [w * 0.65, h * 0.41], [w * 0.5, h * 0.62]].forEach(
-        ([sx, sy]) => { ctx.beginPath(); ctx.arc(sx, sy, h * 0.016, 0, Math.PI * 2); ctx.fill(); }
-      );
+      ctx.fillStyle = "#FFFFFF";
+      [
+        [w * 0.37, h * 0.37],
+        [w * 0.48, h * 0.44],
+        [w * 0.58, h * 0.46],
+        [w * 0.65, h * 0.41],
+        [w * 0.5, h * 0.62],
+      ].forEach(([sx, sy]) => {
+        ctx.beginPath();
+        ctx.arc(sx, sy, h * 0.016, 0, Math.PI * 2);
+        ctx.fill();
+      });
       break;
     }
-    case 'france': {
-      ctx.fillStyle = '#002395'; ctx.fillRect(0, 0, w / 3, h);
-      ctx.fillStyle = '#FFFFFF'; ctx.fillRect(w / 3, 0, w / 3, h);
-      ctx.fillStyle = '#ED2939'; ctx.fillRect((2 * w) / 3, 0, w / 3, h);
+    case "france": {
+      ctx.fillStyle = "#002395";
+      ctx.fillRect(0, 0, w / 3, h);
+      ctx.fillStyle = "#FFFFFF";
+      ctx.fillRect(w / 3, 0, w / 3, h);
+      ctx.fillStyle = "#ED2939";
+      ctx.fillRect((2 * w) / 3, 0, w / 3, h);
       break;
     }
-    case 'australia': {
-      ctx.fillStyle = '#00008B'; ctx.fillRect(0, 0, w, h);
+    case "australia": {
+      ctx.fillStyle = "#00008B";
+      ctx.fillRect(0, 0, w, h);
       drawUnionJack(ctx, 0, 0, w / 2, h / 2);
-      ctx.fillStyle = '#FFFFFF';
-      [[w * 0.73, h * 0.22], [w * 0.86, h * 0.44], [w * 0.65, h * 0.56], [w * 0.78, h * 0.7], [w * 0.88, h * 0.18]].forEach(
-        ([sx, sy]) => drawStar(ctx, sx, sy, w * 0.024, 7)
-      );
+      ctx.fillStyle = "#FFFFFF";
+      [
+        [w * 0.73, h * 0.22],
+        [w * 0.86, h * 0.44],
+        [w * 0.65, h * 0.56],
+        [w * 0.78, h * 0.7],
+        [w * 0.88, h * 0.18],
+      ].forEach(([sx, sy]) => drawStar(ctx, sx, sy, w * 0.024, 7));
       drawStar(ctx, w * 0.22, h * 0.75, w * 0.038, 7);
       break;
     }
-    case 'north korea': {
-      ctx.fillStyle = '#024FA2';
+    case "north korea": {
+      ctx.fillStyle = "#024FA2";
       ctx.fillRect(0, 0, w, h * 0.2);
       ctx.fillRect(0, h * 0.8, w, h * 0.2);
-      ctx.fillStyle = '#FFFFFF';
+      ctx.fillStyle = "#FFFFFF";
       ctx.fillRect(0, h * 0.2, w, h * 0.07);
       ctx.fillRect(0, h * 0.73, w, h * 0.07);
-      ctx.fillStyle = '#C80000'; ctx.fillRect(0, h * 0.27, w, h * 0.46);
-      ctx.fillStyle = '#FFFFFF';
-      ctx.beginPath(); ctx.arc(w * 0.22, h * 0.5, h * 0.2, 0, Math.PI * 2); ctx.fill();
-      ctx.fillStyle = '#C80000';
+      ctx.fillStyle = "#C80000";
+      ctx.fillRect(0, h * 0.27, w, h * 0.46);
+      ctx.fillStyle = "#FFFFFF";
+      ctx.beginPath();
+      ctx.arc(w * 0.22, h * 0.5, h * 0.2, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = "#C80000";
       drawStar(ctx, w * 0.22, h * 0.5, h * 0.14, 5);
       break;
     }
-    case 'pakistan': {
-      ctx.fillStyle = '#FFFFFF'; ctx.fillRect(0, 0, w * 0.25, h);
-      ctx.fillStyle = '#01411C'; ctx.fillRect(w * 0.25, 0, w * 0.75, h);
-      ctx.fillStyle = '#FFFFFF';
-      ctx.beginPath(); ctx.arc(w * 0.57, h * 0.5, h * 0.27, -1.2, 1.2); ctx.fill();
-      ctx.fillStyle = '#01411C';
-      ctx.beginPath(); ctx.arc(w * 0.64, h * 0.5, h * 0.24, -1.2, 1.2); ctx.fill();
-      ctx.fillStyle = '#FFFFFF';
+    case "pakistan": {
+      ctx.fillStyle = "#FFFFFF";
+      ctx.fillRect(0, 0, w * 0.25, h);
+      ctx.fillStyle = "#01411C";
+      ctx.fillRect(w * 0.25, 0, w * 0.75, h);
+      ctx.fillStyle = "#FFFFFF";
+      ctx.beginPath();
+      ctx.arc(w * 0.57, h * 0.5, h * 0.27, -1.2, 1.2);
+      ctx.fill();
+      ctx.fillStyle = "#01411C";
+      ctx.beginPath();
+      ctx.arc(w * 0.64, h * 0.5, h * 0.24, -1.2, 1.2);
+      ctx.fill();
+      ctx.fillStyle = "#FFFFFF";
       drawStar(ctx, w * 0.75, h * 0.5, h * 0.1, 5);
       break;
     }
-    case 'israel': {
-      ctx.fillStyle = '#FFFFFF'; ctx.fillRect(0, 0, w, h);
-      ctx.fillStyle = '#0038B8';
+    case "israel": {
+      ctx.fillStyle = "#FFFFFF";
+      ctx.fillRect(0, 0, w, h);
+      ctx.fillStyle = "#0038B8";
       ctx.fillRect(0, h * 0.14, w, h * 0.15);
       ctx.fillRect(0, h * 0.71, w, h * 0.15);
       const sq3 = Math.sqrt(3) / 2;
       const [isx, isy, iR] = [w / 2, h / 2, h * 0.2];
-      ctx.strokeStyle = '#0038B8'; ctx.lineWidth = h * 0.04;
+      ctx.strokeStyle = "#0038B8";
+      ctx.lineWidth = h * 0.04;
       ctx.beginPath();
-      ctx.moveTo(isx, isy - iR); ctx.lineTo(isx + iR * sq3, isy + iR / 2); ctx.lineTo(isx - iR * sq3, isy + iR / 2);
-      ctx.closePath(); ctx.stroke();
+      ctx.moveTo(isx, isy - iR);
+      ctx.lineTo(isx + iR * sq3, isy + iR / 2);
+      ctx.lineTo(isx - iR * sq3, isy + iR / 2);
+      ctx.closePath();
+      ctx.stroke();
       ctx.beginPath();
-      ctx.moveTo(isx, isy + iR); ctx.lineTo(isx - iR * sq3, isy - iR / 2); ctx.lineTo(isx + iR * sq3, isy - iR / 2);
-      ctx.closePath(); ctx.stroke();
+      ctx.moveTo(isx, isy + iR);
+      ctx.lineTo(isx - iR * sq3, isy - iR / 2);
+      ctx.lineTo(isx + iR * sq3, isy - iR / 2);
+      ctx.closePath();
+      ctx.stroke();
       break;
     }
-    case 'iran': {
-      ctx.fillStyle = '#239F40'; ctx.fillRect(0, 0, w, h / 3);
-      ctx.fillStyle = '#FFFFFF'; ctx.fillRect(0, h / 3, w, h / 3);
-      ctx.fillStyle = '#DA0000'; ctx.fillRect(0, (2 * h) / 3, w, h / 3);
-      ctx.fillStyle = '#239F40';
-      ctx.beginPath(); ctx.arc(w / 2, h / 2, h * 0.1, 0, Math.PI * 2); ctx.fill();
-      ctx.fillStyle = '#FFFFFF';
-      ctx.beginPath(); ctx.arc(w / 2 + h * 0.045, h / 2 - h * 0.045, h * 0.08, 0, Math.PI * 2); ctx.fill();
-      ctx.strokeStyle = '#DA0000';
+    case "iran": {
+      ctx.fillStyle = "#239F40";
+      ctx.fillRect(0, 0, w, h / 3);
+      ctx.fillStyle = "#FFFFFF";
+      ctx.fillRect(0, h / 3, w, h / 3);
+      ctx.fillStyle = "#DA0000";
+      ctx.fillRect(0, (2 * h) / 3, w, h / 3);
+      ctx.fillStyle = "#239F40";
+      ctx.beginPath();
+      ctx.arc(w / 2, h / 2, h * 0.1, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = "#FFFFFF";
+      ctx.beginPath();
+      ctx.arc(w / 2 + h * 0.045, h / 2 - h * 0.045, h * 0.08, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.strokeStyle = "#DA0000";
       ctx.lineWidth = h * 0.025;
-      ctx.beginPath(); ctx.moveTo(w / 2, h / 3 + 2); ctx.lineTo(w / 2, (2 * h) / 3 - 2); ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(w / 2, h / 3 + 2);
+      ctx.lineTo(w / 2, (2 * h) / 3 - 2);
+      ctx.stroke();
       break;
     }
     default:
@@ -260,10 +351,10 @@ function drawFlagOnCanvas(ctx, w, h, key) {
 
 function getFlagTexture(countryKey) {
   if (flagTextureCache.has(countryKey)) return flagTextureCache.get(countryKey);
-  const canvas = document.createElement('canvas');
+  const canvas = document.createElement("canvas");
   canvas.width = 512;
   canvas.height = 256;
-  const ctx = canvas.getContext('2d');
+  const ctx = canvas.getContext("2d");
   drawFlagOnCanvas(ctx, 512, 256, countryKey);
   const texture = new THREE.CanvasTexture(canvas);
   texture.minFilter = THREE.LinearFilter;
@@ -275,10 +366,13 @@ function getFlagTexture(countryKey) {
 }
 
 function getCountryCentroid(feature) {
-  const paths = feature.geometry.type === 'Polygon'
-    ? [feature.geometry.coordinates]
-    : feature.geometry.coordinates;
-  let sumX = 0, sumY = 0, count = 0;
+  const paths =
+    feature.geometry.type === "Polygon"
+      ? [feature.geometry.coordinates]
+      : feature.geometry.coordinates;
+  let sumX = 0,
+    sumY = 0,
+    count = 0;
   for (const polygon of paths) {
     const coords = polygon[0];
     for (let i = 0; i < coords.length; i++) {
@@ -299,10 +393,14 @@ function getFeatureBBox(feature) {
     featureBBoxCache.set(feature, bbox);
     return bbox;
   }
-  let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
-  const paths = feature.geometry.type === 'Polygon'
-    ? [feature.geometry.coordinates]
-    : feature.geometry.coordinates;
+  let minX = Infinity,
+    minY = Infinity,
+    maxX = -Infinity,
+    maxY = -Infinity;
+  const paths =
+    feature.geometry.type === "Polygon"
+      ? [feature.geometry.coordinates]
+      : feature.geometry.coordinates;
   for (const polygon of paths) {
     for (const c of polygon[0]) {
       const [x, y] = mapCoordinates(c[0], c[1]);
@@ -322,7 +420,9 @@ function pointInRing(px, py, ring) {
   for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) {
     const [xi, yi] = mapCoordinates(ring[i][0], ring[i][1]);
     const [xj, yj] = mapCoordinates(ring[j][0], ring[j][1]);
-    const intersect = ((yi > py) !== (yj > py)) && (px < ((xj - xi) * (py - yi)) / ((yj - yi) || 1e-9) + xi);
+    const intersect =
+      yi > py !== yj > py &&
+      px < ((xj - xi) * (py - yi)) / (yj - yi || 1e-9) + xi;
     if (intersect) inside = !inside;
   }
   return inside;
@@ -330,10 +430,12 @@ function pointInRing(px, py, ring) {
 
 function featureContainsPoint(feature, x, y) {
   const bbox = getFeatureBBox(feature);
-  if (x < bbox.minX || x > bbox.maxX || y < bbox.minY || y > bbox.maxY) return false;
-  const paths = feature.geometry.type === 'Polygon'
-    ? [feature.geometry.coordinates]
-    : feature.geometry.coordinates;
+  if (x < bbox.minX || x > bbox.maxX || y < bbox.minY || y > bbox.maxY)
+    return false;
+  const paths =
+    feature.geometry.type === "Polygon"
+      ? [feature.geometry.coordinates]
+      : feature.geometry.coordinates;
   for (const polygon of paths) {
     if (pointInRing(x, y, polygon[0])) return true;
   }
@@ -355,7 +457,7 @@ function findTankSpawnPoint(targetCountryName, targetCenter, attackerCenter) {
 
   // Estimate how far the target country extends from its centroid using its bbox diagonal.
   // This ensures the spawn starts beyond the target's actual border, not just beyond its centroid.
-  const targetFeature = countriesData.features.find(f => {
+  const targetFeature = countriesData.features.find((f) => {
     const n = f.properties.name || f.properties.ADMIN;
     return n && normalize(n) === excludeNorm;
   });
@@ -433,8 +535,8 @@ function findSubSpawnPoint(targetCenter, attackerCenter) {
 
 const threeContext = { camera: null, scene: null, meshes: [] };
 
-const COLOR_HIGHLIGHT = new THREE.Color('#ffff88');
-const COLOR_WHITE = new THREE.Color('#ffffff');
+const COLOR_HIGHLIGHT = new THREE.Color("#ffff88");
+const COLOR_WHITE = new THREE.Color("#ffffff");
 
 // Registry of all country meshes so one useFrame can animate them all.
 const countryMeshRegistry = new Set();
@@ -462,7 +564,10 @@ const CountryMesh = React.memo(({ feature, myCountry, onFocus }) => {
 
   const geometry = useMemo(() => {
     try {
-      const paths = feature.geometry.type === 'Polygon' ? [feature.geometry.coordinates] : feature.geometry.coordinates;
+      const paths =
+        feature.geometry.type === "Polygon"
+          ? [feature.geometry.coordinates]
+          : feature.geometry.coordinates;
       const shapes = [];
       for (const polygon of paths) {
         let shape = new THREE.Shape();
@@ -483,16 +588,22 @@ const CountryMesh = React.memo(({ feature, myCountry, onFocus }) => {
       const geo = new THREE.ShapeGeometry(shapes);
       geo.computeBoundingBox();
       const { min, max } = geo.boundingBox;
-      const rangeX = (max.x - min.x) || 1;
-      const rangeY = (max.y - min.y) || 1;
+      const rangeX = max.x - min.x || 1;
+      const rangeY = max.y - min.y || 1;
       const pos = geo.attributes.position;
       const uv = geo.attributes.uv;
       for (let i = 0; i < pos.count; i++) {
-        uv.setXY(i, (pos.getX(i) - min.x) / rangeX, (pos.getY(i) - min.y) / rangeY);
+        uv.setXY(
+          i,
+          (pos.getX(i) - min.x) / rangeX,
+          (pos.getY(i) - min.y) / rangeY,
+        );
       }
       uv.needsUpdate = true;
       return geo;
-    } catch { return null; }
+    } catch {
+      return null;
+    }
   }, [feature]);
 
   const centroid = useMemo(() => getCountryCentroid(feature), [feature]);
@@ -500,7 +611,7 @@ const CountryMesh = React.memo(({ feature, myCountry, onFocus }) => {
   useEffect(() => {
     const meshNode = meshRef.current;
     if (meshNode && owner) {
-      const existing = threeContext.meshes.find(m => m.mesh === meshNode);
+      const existing = threeContext.meshes.find((m) => m.mesh === meshNode);
       if (!existing) {
         threeContext.meshes.push({ mesh: meshNode, ownerId: owner.socketId });
       } else {
@@ -508,24 +619,32 @@ const CountryMesh = React.memo(({ feature, myCountry, onFocus }) => {
       }
     }
     return () => {
-      threeContext.meshes = threeContext.meshes.filter(m => m.mesh !== meshNode);
+      threeContext.meshes = threeContext.meshes.filter(
+        (m) => m.mesh !== meshNode,
+      );
     };
   }, [owner]);
 
   const hoveredRef = useRef(false);
-  useEffect(() => { hoveredRef.current = hovered; }, [hovered]);
+  useEffect(() => {
+    hoveredRef.current = hovered;
+  }, [hovered]);
 
   useEffect(() => {
     const mesh = meshRef.current;
     if (!mesh) return;
     const entry = {
       mesh,
-      get ownerId() { return owner?.socketId; },
+      get ownerId() {
+        return owner?.socketId;
+      },
       isMyCountry,
       hoveredRef,
     };
     countryMeshRegistry.add(entry);
-    return () => { countryMeshRegistry.delete(entry); };
+    return () => {
+      countryMeshRegistry.delete(entry);
+    };
   }, [owner, isMyCountry]);
 
   if (!geometry) return null;
@@ -535,7 +654,10 @@ const CountryMesh = React.memo(({ feature, myCountry, onFocus }) => {
       ref={meshRef}
       geometry={geometry}
       userData={{ countryName: name, ownerId: owner?.socketId }}
-      onPointerOver={(e) => { e.stopPropagation(); setHovered(true); }}
+      onPointerOver={(e) => {
+        e.stopPropagation();
+        setHovered(true);
+      }}
       onPointerOut={() => setHovered(false)}
       onClick={(e) => {
         if (mapPanState.dragDistance > 5) return;
@@ -556,16 +678,34 @@ const CountryMesh = React.memo(({ feature, myCountry, onFocus }) => {
         side={THREE.DoubleSide}
       />
       {isMyCountry && owner && geometry && (
-        <lineSegments geometry={new THREE.EdgesGeometry(geometry)} position={[0, 0, 0.1]}>
-          <lineBasicMaterial color="#ffffff" linewidth={2} transparent opacity={0.9} />
+        <lineSegments
+          geometry={new THREE.EdgesGeometry(geometry)}
+          position={[0, 0, 0.1]}
+        >
+          <lineBasicMaterial
+            color="#ffffff"
+            linewidth={2}
+            transparent
+            opacity={0.9}
+          />
         </lineSegments>
       )}
-      {lobbyState === 'active' && owner && (
-        <Html position={[centroid[0], centroid[1], 1]} center style={{ pointerEvents: 'none' }}>
-          <div className="map-tactical-overlay" style={{ pointerEvents: 'none' }}>
+      {lobbyState === "active" && owner && (
+        <Html
+          position={[centroid[0], centroid[1], 1]}
+          center
+          style={{ pointerEvents: "none" }}
+        >
+          <div
+            className="map-tactical-overlay"
+            style={{ pointerEvents: "none" }}
+          >
             <div className="map-country-label">{owner.country}</div>
             <div className="map-hp-bar">
-              <div className="map-hp-fill" style={{ width: `${owner.hp}%` }}></div>
+              <div
+                className="map-hp-fill"
+                style={{ width: `${owner.hp}%` }}
+              ></div>
             </div>
             <div className="map-hp-label">{owner.hp} HP</div>
           </div>
@@ -582,7 +722,7 @@ const CountryMesh = React.memo(({ feature, myCountry, onFocus }) => {
     </mesh>
   );
 });
-CountryMesh.displayName = 'CountryMesh';
+CountryMesh.displayName = "CountryMesh";
 
 const ContextBridge = () => {
   const { camera, scene } = useThree();
@@ -618,9 +758,13 @@ const MapScene = () => {
   }, [focusCenter]);
 
   useEffect(() => {
-    const el = document.getElementById('map-container');
+    const el = document.getElementById("map-container");
     const handleWheel = (e) => {
-      if (lobbyStateRef.current === 'waiting' || lobbyStateRef.current === 'starting') return;
+      if (
+        lobbyStateRef.current === "waiting" ||
+        lobbyStateRef.current === "starting"
+      )
+        return;
       const z0 = targetZoom.current;
       const delta = e.deltaY > 0 ? -1.5 : 1.5;
       const z1 = Math.max(2.5, Math.min(30, z0 + delta));
@@ -641,7 +785,11 @@ const MapScene = () => {
     };
 
     const handlePointerDown = (e) => {
-      if (lobbyStateRef.current === 'waiting' || lobbyStateRef.current === 'starting') return;
+      if (
+        lobbyStateRef.current === "waiting" ||
+        lobbyStateRef.current === "starting"
+      )
+        return;
       if (e.button !== 0 && e.button !== 1 && e.button !== 2) return;
       isDraggingMap.current = true;
       mapPanState.isDragging = true;
@@ -665,30 +813,39 @@ const MapScene = () => {
 
     const handlePointerUp = () => {
       isDraggingMap.current = false;
-      setTimeout(() => { mapPanState.isDragging = false; }, 50);
+      setTimeout(() => {
+        mapPanState.isDragging = false;
+      }, 50);
     };
 
     if (el) {
-      el.addEventListener('wheel', handleWheel, { passive: true });
-      el.addEventListener('pointerdown', handlePointerDown);
-      window.addEventListener('pointermove', handlePointerMove);
-      window.addEventListener('pointerup', handlePointerUp);
+      el.addEventListener("wheel", handleWheel, { passive: true });
+      el.addEventListener("pointerdown", handlePointerDown);
+      window.addEventListener("pointermove", handlePointerMove);
+      window.addEventListener("pointerup", handlePointerUp);
     }
     return () => {
       if (el) {
-        el.removeEventListener('wheel', handleWheel);
-        el.removeEventListener('pointerdown', handlePointerDown);
+        el.removeEventListener("wheel", handleWheel);
+        el.removeEventListener("pointerdown", handlePointerDown);
       }
-      window.removeEventListener('pointermove', handlePointerMove);
-      window.removeEventListener('pointerup', handlePointerUp);
+      window.removeEventListener("pointermove", handlePointerMove);
+      window.removeEventListener("pointerup", handlePointerUp);
     };
   }, []);
 
   const meshes = useMemo(() => {
     if (!countriesData || !countriesData.features) return [];
     return countriesData.features
-      .filter(f => (f.properties.name || f.properties.ADMIN) !== 'Antarctica')
-      .map((f, i) => <CountryMesh key={i} feature={f} myCountry={myCountry} onFocus={setFocusCenter} />);
+      .filter((f) => (f.properties.name || f.properties.ADMIN) !== "Antarctica")
+      .map((f, i) => (
+        <CountryMesh
+          key={i}
+          feature={f}
+          myCountry={myCountry}
+          onFocus={setFocusCenter}
+        />
+      ));
   }, [myCountry]);
 
   useFrame((state) => {
@@ -698,8 +855,14 @@ const MapScene = () => {
     const limitX = Math.max(0, 260 - viewWidth);
     const limitY = Math.max(0, 130 - viewHeight);
 
-    targetPan.current.x = Math.max(-limitX, Math.min(limitX, targetPan.current.x));
-    targetPan.current.y = Math.max(-limitY, Math.min(limitY, targetPan.current.y));
+    targetPan.current.x = Math.max(
+      -limitX,
+      Math.min(limitX, targetPan.current.x),
+    );
+    targetPan.current.y = Math.max(
+      -limitY,
+      Math.min(limitY, targetPan.current.y),
+    );
 
     const cam = state.camera;
     const dx = targetPan.current.x - cam.position.x;
@@ -717,7 +880,8 @@ const MapScene = () => {
       const mesh = entry.mesh;
       if (!mesh) return;
       const isDragOver = !!entry.ownerId && dragTargetId === entry.ownerId;
-      const isHighlighted = entry.isMyCountry || entry.hoveredRef.current || isDragOver;
+      const isHighlighted =
+        entry.isMyCountry || entry.hoveredRef.current || isDragOver;
       const targetZ = isHighlighted ? 0.5 : 0;
       const targetScale = isDragOver ? 1.06 : isHighlighted ? 1.02 : 1.0;
       const zDelta = targetZ - mesh.position.z;
@@ -729,29 +893,29 @@ const MapScene = () => {
       }
       if (isDragOver) {
         mesh.material.color.lerp(COLOR_HIGHLIGHT, 0.25);
-      } else if (mesh.material.color.r < 0.995 || mesh.material.color.g < 0.995 || mesh.material.color.b < 0.995) {
+      } else if (
+        mesh.material.color.r < 0.995 ||
+        mesh.material.color.g < 0.995 ||
+        mesh.material.color.b < 0.995
+      ) {
         mesh.material.color.lerp(COLOR_WHITE, 0.2);
       }
     });
   });
 
-  return (
-    <group onPointerMissed={() => setFocusCenter(null)}>
-      {meshes}
-    </group>
-  );
+  return <group onPointerMissed={() => setFocusCenter(null)}>{meshes}</group>;
 };
 
 const SOFT_PUFF_TEXTURE = (() => {
-  const canvas = document.createElement('canvas');
+  const canvas = document.createElement("canvas");
   canvas.width = 128;
   canvas.height = 128;
-  const ctx = canvas.getContext('2d');
+  const ctx = canvas.getContext("2d");
   const grad = ctx.createRadialGradient(64, 64, 0, 64, 64, 64);
-  grad.addColorStop(0.0, 'rgba(255,255,255,1.0)');
-  grad.addColorStop(0.35, 'rgba(255,255,255,0.55)');
-  grad.addColorStop(0.7, 'rgba(255,255,255,0.15)');
-  grad.addColorStop(1.0, 'rgba(255,255,255,0)');
+  grad.addColorStop(0.0, "rgba(255,255,255,1.0)");
+  grad.addColorStop(0.35, "rgba(255,255,255,0.55)");
+  grad.addColorStop(0.7, "rgba(255,255,255,0.15)");
+  grad.addColorStop(1.0, "rgba(255,255,255,0)");
   ctx.fillStyle = grad;
   ctx.fillRect(0, 0, 128, 128);
   const tex = new THREE.CanvasTexture(canvas);
@@ -781,7 +945,7 @@ const useAnimProgress = (duration) => {
 const tmpColor = new THREE.Color();
 
 const MissileAnimation = ({ evt }) => {
-  const duration = 1400;
+  const duration = evt.success ? (evt.deflected ? 1600 : 1400) : 1000;
   const startRef = useRef(null);
   const missileMatRef = useRef();
   const streakMeshRef = useRef();
@@ -793,24 +957,67 @@ const MissileAnimation = ({ evt }) => {
   const impactFireRef = useRef();
   const impactFire2Ref = useRef();
 
+  // Defense refs
+  const domeRef = useRef();
+  const domeMatRef = useRef();
+  const domeBulletArr = useRef([]);
+  const midAirImpactRef = useRef();
+
   const dx = evt.end.x - evt.start.x;
   const dy = evt.end.y - evt.start.y;
   const dist = Math.sqrt(dx * dx + dy * dy) || 1;
   const arcH = Math.min(10, dist * 0.07);
+
+  const domeShots = useState(() =>
+    Array.from({ length: 4 }, (_, i) => ({ start: 0.2 + i * 0.05 })),
+  )[0];
 
   useFrame(() => {
     const now = performance.now();
     if (startRef.current === null) startRef.current = now;
     const p = Math.min(1, (now - startRef.current) / duration);
 
-    const missileOp = p > 0.9 ? Math.max(0, (1 - p) / 0.1) : 1;
+    // If deflected/failed, missile gets blown up midway (approx p = 0.7 if duration is 1000)
+    const interceptP = 0.7;
+    let missileAlive = evt.success || p < interceptP;
+
+    if (evt.firewallBlocked && p > 0.6) {
+      missileAlive = false;
+    }
+
+    const missileOp = missileAlive
+      ? p > 0.9
+        ? Math.max(0, (1 - p) / 0.1)
+        : 1
+      : 0;
     if (missileMatRef.current) missileMatRef.current.opacity = missileOp;
 
-    const bulletT = p < 0.1 ? 0 : p > 0.72 ? 1 : (p - 0.1) / 0.62;
-    const showBullet = bulletT > 0 && bulletT < 1;
+    let bulletT = 0;
+    let tailT = 0;
+
+    if (evt.deflected) {
+      if (p > 0.1 && p <= 0.4) {
+        bulletT = ((p - 0.1) / 0.3) * 0.5;
+        tailT = Math.max(0, bulletT - 0.12);
+      } else if (p > 0.4 && p <= 0.72) {
+        bulletT = 0.5 - ((p - 0.4) / 0.32) * 0.5;
+        tailT = Math.min(0.5, bulletT + 0.12);
+      }
+    } else {
+      bulletT = p < 0.1 ? 0 : p > 0.72 ? 1 : (p - 0.1) / 0.62;
+      tailT = Math.max(0, bulletT - 0.12);
+    }
+
+    if (!evt.success && p >= interceptP) bulletT = interceptP;
+
+    const showBullet =
+      missileAlive &&
+      bulletT > 0 &&
+      bulletT < 1 &&
+      (evt.deflected ? bulletT > 0.01 : true);
+
     const bx = evt.start.x + dx * bulletT;
     const by = evt.start.y + dy * bulletT + Math.sin(bulletT * Math.PI) * arcH;
-    const tailT = Math.max(0, bulletT - 0.12);
     const tx = evt.start.x + dx * tailT;
     const ty = evt.start.y + dy * tailT + Math.sin(tailT * Math.PI) * arcH;
 
@@ -835,74 +1042,254 @@ const MissileAnimation = ({ evt }) => {
       }
     }
 
-    const impactP = p > 0.72 ? (p - 0.72) / 0.28 : 0;
-    if (impactGroupRef.current) {
-      impactGroupRef.current.visible = impactP > 0;
-      if (impactP > 0) {
-        const flashP = Math.min(1, impactP / 0.08);
-        const flashOp = flashP < 1 ? Math.pow(1 - flashP, 1.6) : 0;
-        const fireP = Math.min(1, impactP / 0.35);
-        const fireOp = Math.max(0, 1 - fireP);
-        const fireScale = 1.5 + fireP * 6;
-        if (impactFlashRef.current) {
-          impactFlashRef.current.material.opacity = flashOp * 0.95;
-          impactFlashRef.current.scale.setScalar(fireScale * 2.4);
+    // Normal impact on target
+    if (evt.success && !evt.firewallBlocked) {
+      const impactP = p > 0.72 ? (p - 0.72) / 0.28 : 0;
+      if (impactGroupRef.current) {
+        impactGroupRef.current.visible = impactP > 0;
+        if (impactP > 0) {
+          const flashP = Math.min(1, impactP / 0.08);
+          const flashOp = flashP < 1 ? Math.pow(1 - flashP, 1.6) : 0;
+          const fireP = Math.min(1, impactP / 0.35);
+          const fireOp = Math.max(0, 1 - fireP);
+          const fireScale = 1.5 + fireP * 6;
+          if (impactFlashRef.current) {
+            impactFlashRef.current.material.opacity = flashOp * 0.95;
+            impactFlashRef.current.scale.setScalar(fireScale * 2.4);
+          }
+          if (impactFireRef.current) {
+            impactFireRef.current.material.opacity = fireOp * 0.85;
+            impactFireRef.current.scale.setScalar(fireScale * 1.25);
+          }
+          if (impactFire2Ref.current) {
+            impactFire2Ref.current.material.opacity = fireOp * 0.95;
+            impactFire2Ref.current.scale.setScalar(fireScale * 0.55);
+          }
+          impactDataRef.current.flashOp = flashOp;
+          impactDataRef.current.fireOp = fireOp;
         }
-        if (impactFireRef.current) {
-          impactFireRef.current.material.opacity = fireOp * 0.85;
-          impactFireRef.current.scale.setScalar(fireScale * 1.25);
+      }
+    }
+
+    // Defense logic
+    if (!evt.success) {
+      if (domeRef.current && domeMatRef.current) {
+        domeRef.current.visible = true;
+        const domeAppearP = Math.min(1, p / 0.15);
+        const domeScale = 12 * Math.min(1, domeAppearP * 1.2);
+        domeRef.current.scale.set(domeScale, domeScale, 1);
+        domeMatRef.current.opacity = domeAppearP;
+      }
+      const midX = evt.start.x + dx * interceptP;
+      const midY =
+        evt.start.y + dy * interceptP + Math.sin(interceptP * Math.PI) * arcH;
+
+      for (let i = 0; i < domeShots.length; i++) {
+        const s = domeShots[i];
+        const br = domeBulletArr.current[i];
+        if (p < s.start) {
+          if (br) br.visible = false;
+          continue;
         }
-        if (impactFire2Ref.current) {
-          impactFire2Ref.current.material.opacity = fireOp * 0.95;
-          impactFire2Ref.current.scale.setScalar(fireScale * 0.55);
+        const bulletTravel = 0.2;
+        const bt = Math.min(1, (p - s.start) / bulletTravel);
+        if (bt < 1 && p < interceptP) {
+          const bxD = evt.end.x + (midX - evt.end.x) * bt;
+          const byD = evt.end.y + (midY - evt.end.y) * bt;
+          if (br) {
+            br.visible = true;
+            br.position.set(bxD, byD, 2.5);
+          }
+        } else {
+          if (br) br.visible = false;
         }
-        impactDataRef.current.flashOp = flashOp;
-        impactDataRef.current.fireOp = fireOp;
+      }
+
+      if (midAirImpactRef.current) {
+        if (p >= interceptP) {
+          midAirImpactRef.current.visible = true;
+          midAirImpactRef.current.position.set(midX, midY, 3);
+          const blowP = Math.min(1, (p - interceptP) / (1 - interceptP));
+          midAirImpactRef.current.scale.setScalar(1 + blowP * 15);
+          midAirImpactRef.current.material.opacity = Math.max(0, 1 - blowP);
+        } else {
+          midAirImpactRef.current.visible = false;
+        }
       }
     }
   });
 
   const missileTex = loadAttackTexture(ATTACK_TEXTURE_URLS.missile);
+  const domeTex = loadAttackTexture(ATTACK_TEXTURE_URLS.dome);
   const missileSize = 16;
   const missileXScale = dx > 0 ? -missileSize : missileSize;
+
   return (
     <group raycast={nullRaycast}>
-      <mesh position={[evt.start.x, evt.start.y, 3]} scale={[missileXScale, missileSize, 1]} raycast={nullRaycast} renderOrder={50}>
+      <mesh
+        position={[evt.start.x, evt.start.y, 3]}
+        scale={[missileXScale, missileSize, 1]}
+        raycast={nullRaycast}
+        renderOrder={50}
+      >
         <planeGeometry args={[1, 1]} />
-        <meshBasicMaterial ref={missileMatRef} map={missileTex} transparent opacity={1} depthTest={false} toneMapped={false} />
+        <meshBasicMaterial
+          ref={missileMatRef}
+          map={missileTex}
+          transparent
+          opacity={1}
+          depthTest={false}
+          toneMapped={false}
+        />
       </mesh>
       <mesh ref={streakMeshRef} visible={false} raycast={nullRaycast}>
         <planeGeometry args={[1, 1]} />
-        <meshBasicMaterial map={SOFT_PUFF_TEXTURE} color="#ffdd66" transparent opacity={0.9} blending={THREE.AdditiveBlending} depthTest={false} toneMapped={false} />
+        <meshBasicMaterial
+          map={SOFT_PUFF_TEXTURE}
+          color="#ffdd66"
+          transparent
+          opacity={0.9}
+          blending={THREE.AdditiveBlending}
+          depthTest={false}
+          toneMapped={false}
+        />
       </mesh>
       <mesh ref={streakGlowRef} visible={false} raycast={nullRaycast}>
         <planeGeometry args={[1, 1]} />
-        <meshBasicMaterial map={SOFT_PUFF_TEXTURE} color="#ffdd66" transparent opacity={0.22} blending={THREE.AdditiveBlending} depthTest={false} toneMapped={false} />
+        <meshBasicMaterial
+          map={SOFT_PUFF_TEXTURE}
+          color="#ffdd66"
+          transparent
+          opacity={0.22}
+          blending={THREE.AdditiveBlending}
+          depthTest={false}
+          toneMapped={false}
+        />
       </mesh>
-      <mesh ref={streakHeadRef} visible={false} scale={[1.1, 1.1, 1]} raycast={nullRaycast}>
+      <mesh
+        ref={streakHeadRef}
+        visible={false}
+        scale={[1.1, 1.1, 1]}
+        raycast={nullRaycast}
+      >
         <circleGeometry args={[0.4, 10]} />
-        <meshBasicMaterial color="#ffffff" transparent opacity={0.9} blending={THREE.AdditiveBlending} depthTest={false} toneMapped={false} />
+        <meshBasicMaterial
+          color="#ffffff"
+          transparent
+          opacity={0.9}
+          blending={THREE.AdditiveBlending}
+          depthTest={false}
+          toneMapped={false}
+        />
       </mesh>
-      <group ref={impactGroupRef} position={[evt.end.x, evt.end.y, 2]} visible={false} raycast={nullRaycast}>
+      <group
+        ref={impactGroupRef}
+        position={
+          evt.deflected
+            ? [evt.start.x, evt.start.y, 2]
+            : [evt.end.x, evt.end.y, 2]
+        }
+        visible={false}
+        raycast={nullRaycast}
+      >
         <mesh ref={impactFlashRef} position={[0, 0, 0.5]} raycast={nullRaycast}>
           <planeGeometry args={[1, 1]} />
-          <meshBasicMaterial map={SOFT_PUFF_TEXTURE} color="#ffffff" transparent opacity={0} blending={THREE.AdditiveBlending} depthTest={false} toneMapped={false} />
+          <meshBasicMaterial
+            map={SOFT_PUFF_TEXTURE}
+            color="#ffffff"
+            transparent
+            opacity={0}
+            blending={THREE.AdditiveBlending}
+            depthTest={false}
+            toneMapped={false}
+          />
         </mesh>
         <mesh ref={impactFireRef} position={[0, 0, 0.42]} raycast={nullRaycast}>
           <planeGeometry args={[1, 1]} />
-          <meshBasicMaterial map={SOFT_PUFF_TEXTURE} color="#ff5522" transparent opacity={0} blending={THREE.AdditiveBlending} depthTest={false} toneMapped={false} />
+          <meshBasicMaterial
+            map={SOFT_PUFF_TEXTURE}
+            color="#ff5522"
+            transparent
+            opacity={0}
+            blending={THREE.AdditiveBlending}
+            depthTest={false}
+            toneMapped={false}
+          />
         </mesh>
-        <mesh ref={impactFire2Ref} position={[0, 0, 0.44]} raycast={nullRaycast}>
+        <mesh
+          ref={impactFire2Ref}
+          position={[0, 0, 0.44]}
+          raycast={nullRaycast}
+        >
           <planeGeometry args={[1, 1]} />
-          <meshBasicMaterial map={SOFT_PUFF_TEXTURE} color="#ffee66" transparent opacity={0} blending={THREE.AdditiveBlending} depthTest={false} toneMapped={false} />
+          <meshBasicMaterial
+            map={SOFT_PUFF_TEXTURE}
+            color="#ffee66"
+            transparent
+            opacity={0}
+            blending={THREE.AdditiveBlending}
+            depthTest={false}
+            toneMapped={false}
+          />
         </mesh>
       </group>
+      {!evt.success && (
+        <group raycast={nullRaycast}>
+          <mesh
+            ref={domeRef}
+            position={[evt.end.x, evt.end.y, 3]}
+            visible={false}
+            raycast={nullRaycast}
+          >
+            <planeGeometry args={[1, 1]} />
+            <meshBasicMaterial
+              ref={domeMatRef}
+              map={domeTex}
+              transparent
+              depthTest={false}
+              toneMapped={false}
+            />
+          </mesh>
+          {domeShots.map((_, i) => (
+            <mesh
+              key={`ds${i}`}
+              ref={(el) => {
+                domeBulletArr.current[i] = el;
+              }}
+              visible={false}
+              raycast={nullRaycast}
+            >
+              <circleGeometry args={[0.5, 8]} />
+              <meshBasicMaterial
+                color="#aaddff"
+                transparent
+                opacity={0.8}
+                blending={THREE.AdditiveBlending}
+                depthTest={false}
+                toneMapped={false}
+              />
+            </mesh>
+          ))}
+          <mesh ref={midAirImpactRef} visible={false} raycast={nullRaycast}>
+            <planeGeometry args={[1, 1]} />
+            <meshBasicMaterial
+              map={SOFT_PUFF_TEXTURE}
+              color="#ffffff"
+              transparent
+              opacity={0}
+              blending={THREE.AdditiveBlending}
+              depthTest={false}
+              toneMapped={false}
+            />
+          </mesh>
+        </group>
+      )}
     </group>
   );
 };
 
 const JetAnimation = ({ evt }) => {
-  const duration = 1800;
+  const duration = evt.success ? 1800 : 1200;
   const startRef = useRef(null);
   const jetMeshRef = useRef();
   const jetMatRef = useRef();
@@ -910,6 +1297,13 @@ const JetAnimation = ({ evt }) => {
   const bombGlowArr = useRef([]);
   const impactArr = useRef([]);
   const impactMatArr = useRef([]);
+
+  // Defense refs
+  const radarRef = useRef();
+  const radarMatRef = useRef();
+  const radarBulletArr = useRef([]);
+  const jetFireRef = useRef();
+  const jetSmokeRef = useRef();
 
   const dx = evt.end.x - evt.start.x;
   const dy = evt.end.y - evt.start.y;
@@ -923,121 +1317,342 @@ const JetAnimation = ({ evt }) => {
   const perpX = -Math.sin(angle);
   const perpY = Math.cos(angle);
 
-  const bombs = useMemo(() => Array.from({ length: 3 }, (_, i) => {
-    const releaseProgress = 0.32 + i * 0.05;
-    let releaseT;
-    if (releaseProgress < 0.45) releaseT = (releaseProgress / 0.45) * (tAtTarget * 0.65);
-    else if (releaseProgress < 0.7) releaseT = tAtTarget * 0.65 + ((releaseProgress - 0.45) / 0.25) * (tAtTarget * 0.18);
-    else releaseT = tAtTarget * 0.83 + ((releaseProgress - 0.7) / 0.3) * (1 - tAtTarget * 0.83);
-    const lateral = (i - 1) * 4;
-    return {
-      releaseProgress,
-      travelDuration: 0.16,
-      originX: evt.start.x + (extX - evt.start.x) * releaseT,
-      originY: evt.start.y + (extY - evt.start.y) * releaseT,
-      targetX: evt.end.x + perpX * lateral,
-      targetY: evt.end.y + perpY * lateral,
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }), []);
+  const bombs = useMemo(
+    () =>
+      Array.from({ length: 3 }, (_, i) => {
+        const releaseProgress = 0.32 + i * 0.05;
+        let releaseT;
+        if (releaseProgress < 0.45)
+          releaseT = (releaseProgress / 0.45) * (tAtTarget * 0.65);
+        else if (releaseProgress < 0.7)
+          releaseT =
+            tAtTarget * 0.65 +
+            ((releaseProgress - 0.45) / 0.25) * (tAtTarget * 0.18);
+        else
+          releaseT =
+            tAtTarget * 0.83 +
+            ((releaseProgress - 0.7) / 0.3) * (1 - tAtTarget * 0.83);
+        const lateral = (i - 1) * 4;
+        return {
+          releaseProgress,
+          travelDuration: 0.16,
+          originX: evt.start.x + (extX - evt.start.x) * releaseT,
+          originY: evt.start.y + (extY - evt.start.y) * releaseT,
+          targetX: evt.end.x + perpX * lateral,
+          targetY: evt.end.y + perpY * lateral,
+        };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+      }),
+    [],
+  );
+
+  const radarShots = useState(() =>
+    Array.from({ length: 6 }, (_, i) => ({ start: 0.1 + i * 0.06 })),
+  )[0];
 
   useFrame(() => {
     const now = performance.now();
     if (startRef.current === null) startRef.current = now;
     const p = Math.min(1, (now - startRef.current) / duration);
 
+    const interceptP = 0.6; // when jet gets destroyed if !success
+    const jetAlive = evt.success || p < interceptP;
+
     let jetT;
-    if (p < 0.45) jetT = (p / 0.45) * (tAtTarget * 0.65);
-    else if (p < 0.7) jetT = tAtTarget * 0.65 + ((p - 0.45) / 0.25) * (tAtTarget * 0.18);
-    else jetT = tAtTarget * 0.83 + ((p - 0.7) / 0.3) * (1 - tAtTarget * 0.83);
+    const effectiveP = jetAlive ? p : interceptP;
+    if (effectiveP < 0.45) jetT = (effectiveP / 0.45) * (tAtTarget * 0.65);
+    else if (effectiveP < 0.7)
+      jetT =
+        tAtTarget * 0.65 + ((effectiveP - 0.45) / 0.25) * (tAtTarget * 0.18);
+    else
+      jetT =
+        tAtTarget * 0.83 + ((effectiveP - 0.7) / 0.3) * (1 - tAtTarget * 0.83);
+
+    const jx = evt.start.x + (extX - evt.start.x) * jetT;
+    const jy = evt.start.y + (extY - evt.start.y) * jetT;
 
     if (jetMeshRef.current) {
-      const jx = evt.start.x + (extX - evt.start.x) * jetT;
-      const jy = evt.start.y + (extY - evt.start.y) * jetT;
       jetMeshRef.current.position.set(jx, jy, 3);
-      jetMeshRef.current.visible = p < 1.0;
-      if (jetMatRef.current) jetMatRef.current.opacity = p < 1.0 ? 1 : 0;
+      if (!evt.success && p >= interceptP) {
+        jetMeshRef.current.position.y -= (p - interceptP) * 30; // falling down visually
+      }
+      jetMeshRef.current.visible = jetAlive || (!evt.success && p < 1.0);
+      if (jetMatRef.current) {
+        jetMatRef.current.opacity = jetAlive
+          ? 1
+          : Math.max(0, 1 - (p - interceptP) / 0.4);
+      }
     }
 
-    for (let i = 0; i < bombs.length; i++) {
-      const b = bombs[i];
-      const bref = bombArr.current[i];
-      const gref = bombGlowArr.current[i];
-      const iref = impactArr.current[i];
-      const imat = impactMatArr.current[i];
-      if (p < b.releaseProgress) {
-        if (bref) bref.visible = false;
-        if (gref) gref.visible = false;
-        if (iref) iref.visible = false;
-        continue;
-      }
-      const bt = Math.min(1, (p - b.releaseProgress) / b.travelDuration);
-      if (bt < 1) {
-        const bx = b.originX + (b.targetX - b.originX) * bt;
-        const by = b.originY + (b.targetY - b.originY) * bt;
-        if (bref) { bref.visible = true; bref.position.set(bx, by, 2); }
-        if (gref) { gref.visible = true; gref.position.set(bx, by, 2); }
-        if (iref) iref.visible = false;
-      } else {
-        if (bref) bref.visible = false;
-        if (gref) gref.visible = false;
-        const impactP = Math.min(1, (p - b.releaseProgress - b.travelDuration) / 0.45);
-        if (iref && imat && impactP > 0 && impactP < 1) {
-          iref.visible = true;
-          const fireP = Math.min(1, impactP / 0.35);
-          const fireOp = Math.max(0, 1 - fireP);
-          const fireScale = 1.5 + fireP * 6;
-          iref.scale.setScalar(fireScale * 1.25);
-          imat.opacity = fireOp * 0.9;
-        } else if (iref) {
-          iref.visible = false;
+    if (evt.success) {
+      for (let i = 0; i < bombs.length; i++) {
+        const b = bombs[i];
+        const bref = bombArr.current[i];
+        const gref = bombGlowArr.current[i];
+        const iref = impactArr.current[i];
+        const imat = impactMatArr.current[i];
+        if (p < b.releaseProgress) {
+          if (bref) bref.visible = false;
+          if (gref) gref.visible = false;
+          if (iref) iref.visible = false;
+          continue;
         }
+        const bt = Math.min(1, (p - b.releaseProgress) / b.travelDuration);
+        if (bt < 1) {
+          const bx = b.originX + (b.targetX - b.originX) * bt;
+          const by = b.originY + (b.targetY - b.originY) * bt;
+          if (bref) {
+            bref.visible = true;
+            bref.position.set(bx, by, 2);
+          }
+          if (gref) {
+            gref.visible = true;
+            gref.position.set(bx, by, 2);
+          }
+          if (iref) iref.visible = false;
+        } else {
+          if (bref) bref.visible = false;
+          if (gref) gref.visible = false;
+          const impactP = Math.min(
+            1,
+            (p - b.releaseProgress - b.travelDuration) / 0.45,
+          );
+          if (iref && imat && impactP > 0 && impactP < 1) {
+            iref.visible = true;
+            const fireP = Math.min(1, impactP / 0.35);
+            const fireOp = Math.max(0, 1 - fireP);
+            const fireScale = 1.5 + fireP * 6;
+            iref.scale.setScalar(fireScale * 1.25);
+            imat.opacity = fireOp * 0.9;
+          } else if (iref) {
+            iref.visible = false;
+          }
+        }
+      }
+    } else {
+      // Failed jet (radar counter)
+      if (radarRef.current && radarMatRef.current) {
+        radarRef.current.visible = true;
+        const radarAppearP = Math.min(1, p / 0.15);
+        const radarScale = 12 * Math.min(1, radarAppearP * 1.2);
+        radarRef.current.scale.set(radarScale, radarScale, 1);
+        radarMatRef.current.opacity = radarAppearP;
+      }
+
+      const midHitP = interceptP;
+      const midHitT = (midHitP / 0.45) * (tAtTarget * 0.65);
+      const hitX = evt.start.x + (extX - evt.start.x) * midHitT;
+      const hitY = evt.start.y + (extY - evt.start.y) * midHitT;
+
+      for (let i = 0; i < radarShots.length; i++) {
+        const s = radarShots[i];
+        const br = radarBulletArr.current[i];
+        if (p < s.start) {
+          if (br) br.visible = false;
+          continue;
+        }
+        const bulletTravel = 0.25;
+        const bt = Math.min(1, (p - s.start) / bulletTravel);
+        if (bt < 1 && p < interceptP) {
+          const bxD = evt.end.x + (hitX - evt.end.x) * bt;
+          const byD = evt.end.y + (hitY - evt.end.y) * bt;
+          if (br) {
+            br.visible = true;
+            br.position.set(bxD, byD, 2.5);
+          }
+        } else {
+          if (br) br.visible = false;
+        }
+      }
+
+      if (p >= interceptP) {
+        const explP = Math.min(1, (p - interceptP) / 0.4);
+        if (jetFireRef.current) {
+          jetFireRef.current.visible = true;
+          // follow falling jet
+          jetFireRef.current.position.set(jx, jy - (p - interceptP) * 30, 3.1);
+          jetFireRef.current.scale.setScalar(
+            8 + Math.sin(explP * Math.PI) * 10,
+          );
+          jetFireRef.current.material.opacity = Math.max(0, 1 - explP);
+        }
+        if (jetSmokeRef.current) {
+          jetSmokeRef.current.visible = true;
+          jetSmokeRef.current.position.set(jx, jy - (p - interceptP) * 15, 3.2);
+          jetSmokeRef.current.scale.setScalar(10 + explP * 25);
+          jetSmokeRef.current.material.opacity =
+            Math.max(0, 1 - explP * 1.5) * 0.8;
+        }
+      } else {
+        if (jetFireRef.current) jetFireRef.current.visible = false;
+        if (jetSmokeRef.current) jetSmokeRef.current.visible = false;
       }
     }
   });
 
   const jetTex = loadAttackTexture(ATTACK_TEXTURE_URLS.jet);
+  const radarTex = loadAttackTexture(ATTACK_TEXTURE_URLS.radar);
   const size = 24;
   const xScale = dx > 0 ? -size : size;
   return (
     <group raycast={nullRaycast}>
-      <mesh ref={jetMeshRef} scale={[xScale, size, 1]} raycast={nullRaycast} renderOrder={50}>
+      <mesh
+        ref={jetMeshRef}
+        scale={[xScale, size, 1]}
+        raycast={nullRaycast}
+        renderOrder={50}
+      >
         <planeGeometry args={[1, 1]} />
-        <meshBasicMaterial ref={jetMatRef} map={jetTex} transparent opacity={1} depthTest={false} toneMapped={false} />
+        <meshBasicMaterial
+          ref={jetMatRef}
+          map={jetTex}
+          transparent
+          opacity={1}
+          depthTest={false}
+          toneMapped={false}
+        />
       </mesh>
       {bombs.map((_, i) => (
         <React.Fragment key={i}>
-          <mesh ref={(el) => { bombArr.current[i] = el; }} visible={false} raycast={nullRaycast}>
+          <mesh
+            ref={(el) => {
+              bombArr.current[i] = el;
+            }}
+            visible={false}
+            raycast={nullRaycast}
+          >
             <circleGeometry args={[1.4, 14]} />
-            <meshBasicMaterial color="#ffcc44" transparent opacity={1} depthTest={false} toneMapped={false} />
-          </mesh>
-          <mesh ref={(el) => { bombGlowArr.current[i] = el; }} visible={false} raycast={nullRaycast}>
-            <circleGeometry args={[3.1, 16]} />
-            <meshBasicMaterial color="#ffcc44" transparent opacity={0.35} depthTest={false} toneMapped={false} />
+            <meshBasicMaterial
+              color="#ffcc44"
+              transparent
+              opacity={1}
+              depthTest={false}
+              toneMapped={false}
+            />
           </mesh>
           <mesh
-            ref={(el) => { impactArr.current[i] = el; }}
+            ref={(el) => {
+              bombGlowArr.current[i] = el;
+            }}
+            visible={false}
+            raycast={nullRaycast}
+          >
+            <circleGeometry args={[3.1, 16]} />
+            <meshBasicMaterial
+              color="#ffcc44"
+              transparent
+              opacity={0.35}
+              depthTest={false}
+              toneMapped={false}
+            />
+          </mesh>
+          <mesh
+            ref={(el) => {
+              impactArr.current[i] = el;
+            }}
             position={[bombs[i].targetX, bombs[i].targetY, 2]}
             visible={false}
             raycast={nullRaycast}
           >
             <planeGeometry args={[1, 1]} />
-            <meshBasicMaterial ref={(el) => { impactMatArr.current[i] = el; }} map={SOFT_PUFF_TEXTURE} color="#ff7722" transparent opacity={0} blending={THREE.AdditiveBlending} depthTest={false} toneMapped={false} />
+            <meshBasicMaterial
+              ref={(el) => {
+                impactMatArr.current[i] = el;
+              }}
+              map={SOFT_PUFF_TEXTURE}
+              color="#ff7722"
+              transparent
+              opacity={0}
+              blending={THREE.AdditiveBlending}
+              depthTest={false}
+              toneMapped={false}
+            />
           </mesh>
         </React.Fragment>
       ))}
+      {!evt.success && (
+        <group raycast={nullRaycast}>
+          <mesh
+            ref={radarRef}
+            position={[evt.end.x, evt.end.y, 3]}
+            visible={false}
+            raycast={nullRaycast}
+          >
+            <planeGeometry args={[1, 1]} />
+            <meshBasicMaterial
+              ref={radarMatRef}
+              map={radarTex}
+              transparent
+              depthTest={false}
+              toneMapped={false}
+            />
+          </mesh>
+          {radarShots.map((_, i) => (
+            <mesh
+              key={`rs${i}`}
+              ref={(el) => {
+                radarBulletArr.current[i] = el;
+              }}
+              visible={false}
+              raycast={nullRaycast}
+            >
+              <circleGeometry args={[0.6, 8]} />
+              <meshBasicMaterial
+                color="#ffcc44"
+                transparent
+                opacity={0.85}
+                blending={THREE.AdditiveBlending}
+                depthTest={false}
+                toneMapped={false}
+              />
+            </mesh>
+          ))}
+          <mesh ref={jetFireRef} visible={false} raycast={nullRaycast}>
+            <planeGeometry args={[1, 1]} />
+            <meshBasicMaterial
+              map={SOFT_PUFF_TEXTURE}
+              color="#ff6600"
+              transparent
+              opacity={0}
+              blending={THREE.AdditiveBlending}
+              depthTest={false}
+              toneMapped={false}
+            />
+          </mesh>
+          <mesh ref={jetSmokeRef} visible={false} raycast={nullRaycast}>
+            <planeGeometry args={[1, 1]} />
+            <meshBasicMaterial
+              map={SOFT_PUFF_TEXTURE}
+              color="#aaaaaa"
+              transparent
+              opacity={0}
+              blending={THREE.AdditiveBlending}
+              depthTest={false}
+              toneMapped={false}
+            />
+          </mesh>
+        </group>
+      )}
     </group>
   );
 };
 
 const TankAnimation = ({ evt }) => {
-  const duration = 1600;
+  const duration = evt.success ? 1600 : 2000;
   const startRef = useRef(null);
   const SHOT_COUNT = 5;
   const bulletArr = useRef([]);
   const glowArr = useRef([]);
   const impactArr = useRef([]);
   const impactMatArr = useRef([]);
+
+  const tankMeshRef = useRef();
+  const tankMatRef = useRef();
+
+  // Defense refs
+  const stickyBombRef = useRef();
+  const stickyBombMatRef = useRef();
+  const tankExplosionRef = useRef();
 
   const tankPos = evt.tankSpawn || [
     evt.start.x + (evt.end.x - evt.start.x) * 0.86,
@@ -1055,7 +1670,7 @@ const TankAnimation = ({ evt }) => {
         tx: evt.end.x + ox,
         ty: evt.end.y + oy,
       };
-    })
+    }),
   )[0];
 
   useFrame(() => {
@@ -1063,84 +1678,221 @@ const TankAnimation = ({ evt }) => {
     if (startRef.current === null) startRef.current = now;
     const p = Math.min(1, (now - startRef.current) / duration);
 
-    for (let i = 0; i < shots.length; i++) {
-      const s = shots[i];
-      const br = bulletArr.current[i];
-      const gr = glowArr.current[i];
-      const ir = impactArr.current[i];
-      const im = impactMatArr.current[i];
-      if (p < s.start) {
-        if (br) br.visible = false;
-        if (gr) gr.visible = false;
-        if (ir) ir.visible = false;
-        continue;
+    if (evt.success) {
+      for (let i = 0; i < shots.length; i++) {
+        const s = shots[i];
+        const br = bulletArr.current[i];
+        const gr = glowArr.current[i];
+        const ir = impactArr.current[i];
+        const im = impactMatArr.current[i];
+        if (p < s.start) {
+          if (br) br.visible = false;
+          if (gr) gr.visible = false;
+          if (ir) ir.visible = false;
+          continue;
+        }
+        const bt = Math.min(1, (p - s.start) / 0.22);
+        if (bt < 1) {
+          const bx = tankX + (s.tx - tankX) * bt;
+          const by = tankY + (s.ty - tankY) * bt;
+          if (br) {
+            br.visible = true;
+            br.position.set(bx, by, 2);
+          }
+          if (gr) {
+            gr.visible = true;
+            gr.position.set(bx, by, 2);
+          }
+          if (ir) ir.visible = false;
+        } else {
+          if (br) br.visible = false;
+          if (gr) gr.visible = false;
+          const impactP = Math.min(1, (p - s.start - 0.22) / 0.35);
+          if (ir && im && impactP > 0 && impactP < 1) {
+            ir.visible = true;
+            const fireP = Math.min(1, impactP / 0.35);
+            const fireOp = Math.max(0, 1 - fireP);
+            const fireScale = 1.5 + fireP * 6;
+            ir.scale.setScalar(fireScale * 1.25);
+            im.opacity = fireOp * 0.9;
+          } else if (ir) {
+            ir.visible = false;
+          }
+        }
       }
-      const bt = Math.min(1, (p - s.start) / 0.22);
-      if (bt < 1) {
-        const bx = tankX + (s.tx - tankX) * bt;
-        const by = tankY + (s.ty - tankY) * bt;
-        if (br) { br.visible = true; br.position.set(bx, by, 2); }
-        if (gr) { gr.visible = true; gr.position.set(bx, by, 2); }
-        if (ir) ir.visible = false;
-      } else {
-        if (br) br.visible = false;
-        if (gr) gr.visible = false;
-        const impactP = Math.min(1, (p - s.start - 0.22) / 0.35);
-        if (ir && im && impactP > 0 && impactP < 1) {
-          ir.visible = true;
-          const fireP = Math.min(1, impactP / 0.35);
-          const fireOp = Math.max(0, 1 - fireP);
-          const fireScale = 1.5 + fireP * 6;
-          ir.scale.setScalar(fireScale * 1.25);
-          im.opacity = fireOp * 0.9;
-        } else if (ir) {
-          ir.visible = false;
+    } else {
+      // Sticky Bomb counter
+      const travelEnd = 0.4;
+      if (stickyBombRef.current) {
+        if (p < travelEnd) {
+          stickyBombRef.current.visible = true;
+          const t = p / travelEnd;
+          const arc = Math.sin(t * Math.PI) * 15; // Arc height
+          const bx = evt.end.x + (tankX - evt.end.x) * t;
+          const by = evt.end.y + (tankY - evt.end.y) * t + arc;
+          stickyBombRef.current.position.set(bx, by, 4);
+          stickyBombRef.current.rotation.z = t * Math.PI * 4; // spin
+          stickyBombRef.current.scale.set(9, 9, 1);
+        } else {
+          stickyBombRef.current.visible = false;
+        }
+      }
+
+      if (tankMeshRef.current) {
+        if (p >= travelEnd) {
+          const destroyP = Math.min(1, (p - travelEnd) / 0.6);
+          // Topple over
+          tankMeshRef.current.rotation.z = destroyP * Math.PI;
+          tankMeshRef.current.position.y = tankY - destroyP * 20; // go away downwards
+          if (tankMatRef.current) {
+            tankMatRef.current.opacity = Math.max(0, 1 - destroyP);
+          }
+        }
+      }
+
+      if (tankExplosionRef.current) {
+        if (p >= travelEnd && p < travelEnd + 0.3) {
+          tankExplosionRef.current.visible = true;
+          tankExplosionRef.current.position.set(tankX, tankY, 3.5);
+          const explP = (p - travelEnd) / 0.3;
+          tankExplosionRef.current.scale.setScalar(5 + explP * 12);
+          tankExplosionRef.current.material.opacity = Math.max(0, 1 - explP);
+        } else {
+          tankExplosionRef.current.visible = false;
         }
       }
     }
   });
 
   const tankTex = loadAttackTexture(ATTACK_TEXTURE_URLS.tank);
+  const stickyBombTex = loadAttackTexture(ATTACK_TEXTURE_URLS.stickybomb);
   const tankSize = 20;
   const tankXScale = evt.end.x - tankX > 0 ? -tankSize : tankSize;
+
   return (
     <group raycast={nullRaycast}>
-      <mesh position={[tankX, tankY, 3]} scale={[tankXScale, tankSize, 1]} raycast={nullRaycast} renderOrder={50}>
+      <mesh
+        ref={tankMeshRef}
+        position={[tankX, tankY, 3]}
+        scale={[tankXScale, tankSize, 1]}
+        raycast={nullRaycast}
+        renderOrder={50}
+      >
         <planeGeometry args={[1, 1]} />
-        <meshBasicMaterial map={tankTex} transparent depthTest={false} toneMapped={false} />
+        <meshBasicMaterial
+          ref={tankMatRef}
+          map={tankTex}
+          transparent
+          depthTest={false}
+          toneMapped={false}
+        />
       </mesh>
       {shots.map((s, i) => (
         <React.Fragment key={i}>
-          <mesh ref={(el) => { bulletArr.current[i] = el; }} visible={false} raycast={nullRaycast}>
+          <mesh
+            ref={(el) => {
+              bulletArr.current[i] = el;
+            }}
+            visible={false}
+            raycast={nullRaycast}
+          >
             <circleGeometry args={[1.6, 14]} />
-            <meshBasicMaterial color="#ffdd44" transparent depthTest={false} toneMapped={false} />
-          </mesh>
-          <mesh ref={(el) => { glowArr.current[i] = el; }} visible={false} raycast={nullRaycast}>
-            <circleGeometry args={[3.5, 16]} />
-            <meshBasicMaterial color="#ffdd44" transparent opacity={0.35} depthTest={false} toneMapped={false} />
+            <meshBasicMaterial
+              color="#ffdd44"
+              transparent
+              depthTest={false}
+              toneMapped={false}
+            />
           </mesh>
           <mesh
-            ref={(el) => { impactArr.current[i] = el; }}
+            ref={(el) => {
+              glowArr.current[i] = el;
+            }}
+            visible={false}
+            raycast={nullRaycast}
+          >
+            <circleGeometry args={[3.5, 16]} />
+            <meshBasicMaterial
+              color="#ffdd44"
+              transparent
+              opacity={0.35}
+              depthTest={false}
+              toneMapped={false}
+            />
+          </mesh>
+          <mesh
+            ref={(el) => {
+              impactArr.current[i] = el;
+            }}
             position={[s.tx, s.ty, 2]}
             visible={false}
             raycast={nullRaycast}
           >
             <planeGeometry args={[1, 1]} />
-            <meshBasicMaterial ref={(el) => { impactMatArr.current[i] = el; }} map={SOFT_PUFF_TEXTURE} color="#ff8822" transparent opacity={0} blending={THREE.AdditiveBlending} depthTest={false} toneMapped={false} />
+            <meshBasicMaterial
+              ref={(el) => {
+                impactMatArr.current[i] = el;
+              }}
+              map={SOFT_PUFF_TEXTURE}
+              color="#ff8822"
+              transparent
+              opacity={0}
+              blending={THREE.AdditiveBlending}
+              depthTest={false}
+              toneMapped={false}
+            />
           </mesh>
         </React.Fragment>
       ))}
+      {!evt.success && (
+        <group raycast={nullRaycast}>
+          <mesh
+            ref={stickyBombRef}
+            visible={false}
+            raycast={nullRaycast}
+            renderOrder={55}
+          >
+            <planeGeometry args={[1, 1]} />
+            <meshBasicMaterial
+              map={stickyBombTex}
+              transparent
+              depthTest={false}
+              toneMapped={false}
+            />
+          </mesh>
+          <mesh ref={tankExplosionRef} visible={false} raycast={nullRaycast}>
+            <planeGeometry args={[1, 1]} />
+            <meshBasicMaterial
+              map={SOFT_PUFF_TEXTURE}
+              color="#ff6600"
+              transparent
+              opacity={0}
+              blending={THREE.AdditiveBlending}
+              depthTest={false}
+              toneMapped={false}
+            />
+          </mesh>
+        </group>
+      )}
     </group>
   );
 };
 
 const SubAnimation = ({ evt }) => {
-  const duration = 1600;
+  const duration = evt.success ? 1600 : 2000;
   const startRef = useRef(null);
   const SHOT_COUNT = 4;
   const bulletArr = useRef([]);
   const impactArr = useRef([]);
   const impactMatArr = useRef([]);
+
+  const subMeshRef = useRef();
+  const subMatRef = useRef();
+
+  // Defense refs
+  const mineRef = useRef();
+  const mineMatRef = useRef();
+  const subExplosionRef = useRef();
 
   const subPos = evt.subSpawn;
   const subX = subPos ? subPos[0] : evt.end.x;
@@ -1155,7 +1907,7 @@ const SubAnimation = ({ evt }) => {
         tx: evt.end.x + ox,
         ty: evt.end.y + oy,
       };
-    })
+    }),
   )[0];
 
   useFrame(() => {
@@ -1163,69 +1915,176 @@ const SubAnimation = ({ evt }) => {
     if (startRef.current === null) startRef.current = now;
     const p = Math.min(1, (now - startRef.current) / duration);
 
-    for (let i = 0; i < shots.length; i++) {
-      const s = shots[i];
-      const br = bulletArr.current[i];
-      const ir = impactArr.current[i];
-      const im = impactMatArr.current[i];
-      if (p < s.start) {
-        if (br) br.visible = false;
-        if (ir) ir.visible = false;
-        continue;
+    if (evt.success) {
+      for (let i = 0; i < shots.length; i++) {
+        const s = shots[i];
+        const br = bulletArr.current[i];
+        const ir = impactArr.current[i];
+        const im = impactMatArr.current[i];
+        if (p < s.start) {
+          if (br) br.visible = false;
+          if (ir) ir.visible = false;
+          continue;
+        }
+        const bt = Math.min(1, (p - s.start) / 0.32);
+        if (bt < 1) {
+          const bx = subX + (s.tx - subX) * bt;
+          const by =
+            subY + (s.ty - subY) * bt + Math.sin(bt * Math.PI * 6) * 0.8;
+          if (br) {
+            br.visible = true;
+            br.position.set(bx, by, 2);
+          }
+          if (ir) ir.visible = false;
+        } else {
+          if (br) br.visible = false;
+          const impactP = Math.min(1, (p - s.start - 0.32) / 0.4);
+          if (ir && im && impactP > 0 && impactP < 1) {
+            ir.visible = true;
+            const fireP = Math.min(1, impactP / 0.35);
+            const fireOp = Math.max(0, 1 - fireP);
+            const fireScale = 1.5 + fireP * 5;
+            ir.scale.setScalar(fireScale * 1.25);
+            im.opacity = fireOp * 0.85;
+          } else if (ir) {
+            ir.visible = false;
+          }
+        }
       }
-      const bt = Math.min(1, (p - s.start) / 0.32);
-      if (bt < 1) {
-        const bx = subX + (s.tx - subX) * bt;
-        const by = subY + (s.ty - subY) * bt + Math.sin(bt * Math.PI * 6) * 0.8;
-        if (br) { br.visible = true; br.position.set(bx, by, 2); }
-        if (ir) ir.visible = false;
-      } else {
-        if (br) br.visible = false;
-        const impactP = Math.min(1, (p - s.start - 0.32) / 0.4);
-        if (ir && im && impactP > 0 && impactP < 1) {
-          ir.visible = true;
-          const fireP = Math.min(1, impactP / 0.35);
-          const fireOp = Math.max(0, 1 - fireP);
-          const fireScale = 1.5 + fireP * 5;
-          ir.scale.setScalar(fireScale * 1.25);
-          im.opacity = fireOp * 0.85;
-        } else if (ir) {
-          ir.visible = false;
+    } else {
+      // Naval mine counter
+      const mineAppearEnd = 0.3;
+      const explodeStart = 0.45;
+
+      if (mineRef.current && mineMatRef.current) {
+        if (p < explodeStart) {
+          mineRef.current.visible = true;
+          const mineP = Math.min(1, p / mineAppearEnd);
+          const sc = mineP * 12; // pop up
+          mineRef.current.scale.set(sc, sc, 1);
+          mineRef.current.position.set(subX + 10, subY + 5, 3.5);
+          mineMatRef.current.opacity = mineP;
+        } else {
+          mineRef.current.visible = false;
+        }
+      }
+
+      if (subMeshRef.current && subMatRef.current) {
+        if (p >= explodeStart) {
+          const destroyP = Math.min(1, (p - explodeStart) / 0.5);
+          subMeshRef.current.position.y -= destroyP * 0.5; // sink down slowly
+          subMatRef.current.opacity = Math.max(0, 1 - destroyP);
+        }
+      }
+
+      if (subExplosionRef.current) {
+        if (p >= explodeStart && p < explodeStart + 0.4) {
+          subExplosionRef.current.visible = true;
+          subExplosionRef.current.position.set(subX + 5, subY + 2, 4);
+          const explP = (p - explodeStart) / 0.4;
+          subExplosionRef.current.scale.setScalar(6 + explP * 14);
+          subExplosionRef.current.material.opacity = Math.max(0, 1 - explP);
+        } else {
+          subExplosionRef.current.visible = false;
         }
       }
     }
   });
 
   const subTex = loadAttackTexture(ATTACK_TEXTURE_URLS.sub);
-  const subSize = 12;
+  const navalmineTex = loadAttackTexture(ATTACK_TEXTURE_URLS.navalmine);
+  const subSize = 15;
   const subXScale = evt.end.x - subX > 0 ? -subSize : subSize;
   return (
     <group raycast={nullRaycast}>
-      <mesh position={[subX, subY, 3]} scale={[subXScale, subSize, 1]} raycast={nullRaycast} renderOrder={50}>
+      <mesh
+        ref={subMeshRef}
+        position={[subX, subY, 3]}
+        scale={[subXScale, subSize, 1]}
+        raycast={nullRaycast}
+        renderOrder={50}
+      >
         <planeGeometry args={[1, 1]} />
-        <meshBasicMaterial map={subTex} transparent depthTest={false} toneMapped={false} />
-      </mesh>
-      <mesh position={[subX, subY, 1]} raycast={nullRaycast}>
-        <ringGeometry args={[4, 5.6, 32]} />
-        <meshBasicMaterial color="#66ccff" transparent opacity={0.35} side={THREE.DoubleSide} depthTest={false} toneMapped={false} />
+        <meshBasicMaterial
+          ref={subMatRef}
+          map={subTex}
+          transparent
+          depthTest={false}
+          toneMapped={false}
+        />
       </mesh>
       {shots.map((s, i) => (
         <React.Fragment key={i}>
-          <mesh ref={(el) => { bulletArr.current[i] = el; }} visible={false} raycast={nullRaycast}>
+          <mesh
+            ref={(el) => {
+              bulletArr.current[i] = el;
+            }}
+            visible={false}
+            raycast={nullRaycast}
+          >
             <circleGeometry args={[0.7, 12]} />
-            <meshBasicMaterial color="#aaddff" transparent depthTest={false} toneMapped={false} />
+            <meshBasicMaterial
+              color="#aaddff"
+              transparent
+              depthTest={false}
+              toneMapped={false}
+            />
           </mesh>
           <mesh
-            ref={(el) => { impactArr.current[i] = el; }}
+            ref={(el) => {
+              impactArr.current[i] = el;
+            }}
             position={[s.tx, s.ty, 2]}
             visible={false}
             raycast={nullRaycast}
           >
             <planeGeometry args={[1, 1]} />
-            <meshBasicMaterial ref={(el) => { impactMatArr.current[i] = el; }} map={SOFT_PUFF_TEXTURE} color="#99ccff" transparent opacity={0} blending={THREE.AdditiveBlending} depthTest={false} toneMapped={false} />
+            <meshBasicMaterial
+              ref={(el) => {
+                impactMatArr.current[i] = el;
+              }}
+              map={SOFT_PUFF_TEXTURE}
+              color="#99ccff"
+              transparent
+              opacity={0}
+              blending={THREE.AdditiveBlending}
+              depthTest={false}
+              toneMapped={false}
+            />
           </mesh>
         </React.Fragment>
       ))}
+      {!evt.success && (
+        <group raycast={nullRaycast}>
+          <mesh
+            ref={mineRef}
+            visible={false}
+            raycast={nullRaycast}
+            renderOrder={55}
+          >
+            <planeGeometry args={[1, 1]} />
+            <meshBasicMaterial
+              ref={mineMatRef}
+              map={navalmineTex}
+              transparent
+              depthTest={false}
+              toneMapped={false}
+            />
+          </mesh>
+          <mesh ref={subExplosionRef} visible={false} raycast={nullRaycast}>
+            <planeGeometry args={[1, 1]} />
+            <meshBasicMaterial
+              map={SOFT_PUFF_TEXTURE}
+              color="#ff3300"
+              transparent
+              opacity={0}
+              blending={THREE.AdditiveBlending}
+              depthTest={false}
+              toneMapped={false}
+            />
+          </mesh>
+        </group>
+      )}
     </group>
   );
 };
@@ -1239,6 +2098,9 @@ const FLASH_LAYER_COUNT = 2;
 const NukeAnimation = ({ evt }) => {
   const duration = 3000;
   const startRef = useRef(null);
+
+  const targetX = evt.deflected ? evt.start.x : evt.end.x;
+  const targetY = evt.deflected ? evt.start.y : evt.end.y;
 
   const nukeMeshRef = useRef();
   const nukeMatRef = useRef();
@@ -1263,7 +2125,7 @@ const NukeAnimation = ({ evt }) => {
       size: 20 + Math.random() * 18,
       shade: 24 + Math.random() * 52,
       z: 0.55 + i * 0.007,
-    }))
+    })),
   )[0];
   const innerPuffs = useState(() =>
     Array.from({ length: INNER_PUFF_COUNT }, (_, i) => ({
@@ -1275,21 +2137,46 @@ const NukeAnimation = ({ evt }) => {
       z: 0.85 + i * 0.01,
       idxCos: Math.cos(i),
       idxSin: Math.sin(i * 1.7),
-    }))
+    })),
   )[0];
   const centralPuffs = useState(() => [
-    { ox: 0, oy: 0, baseScale: 55, addScale: 40, color: '#1a1614', z: 1.0, maxOp: 0.92 },
-    { ox: 5, oy: 2.5, baseScale: 36, addScale: 24, color: '#3a3028', z: 1.01, maxOp: 0.78 },
-    { ox: -4, oy: -3, baseScale: 38, addScale: 26, color: '#2c2820', z: 1.02, maxOp: 0.82 },
+    {
+      ox: 0,
+      oy: 0,
+      baseScale: 55,
+      addScale: 40,
+      color: "#1a1614",
+      z: 1.0,
+      maxOp: 0.92,
+    },
+    {
+      ox: 5,
+      oy: 2.5,
+      baseScale: 36,
+      addScale: 24,
+      color: "#3a3028",
+      z: 1.01,
+      maxOp: 0.78,
+    },
+    {
+      ox: -4,
+      oy: -3,
+      baseScale: 38,
+      addScale: 26,
+      color: "#2c2820",
+      z: 1.02,
+      maxOp: 0.82,
+    },
   ])[0];
   const fireLayers = useState(() => [
-    { scaleMul: 1.5, colorStart: '#cc1500', opMul: 0.72, z: 0.60 },
-    { scaleMul: 1.15, colorStart: '#ff3300', opMul: 0.85, z: 0.63 },
-    { scaleMul: 0.82, colorStart: '#ff6600', opMul: 0.92, z: 0.66 },
-    { scaleMul: 0.30, colorStart: '#ffee88', opMul: 0.95, z: 0.72 },
+    { scaleMul: 1.5, colorStart: "#cc1500", opMul: 0.72, z: 0.6 },
+    { scaleMul: 1.15, colorStart: "#ff3300", opMul: 0.85, z: 0.63 },
+    { scaleMul: 0.82, colorStart: "#ff6600", opMul: 0.92, z: 0.66 },
+    { scaleMul: 0.3, colorStart: "#ffee88", opMul: 0.95, z: 0.72 },
   ])[0];
 
-  const nukeFlipSign = evt.end.x - evt.start.x > 0 ? -1 : 1;
+  const nukeFlipSign =
+    targetX - (evt.deflected ? evt.end.x : evt.start.x) > 0 ? -1 : 1;
 
   useFrame(() => {
     const now = performance.now();
@@ -1297,14 +2184,20 @@ const NukeAnimation = ({ evt }) => {
     const p = Math.min(1, (now - startRef.current) / duration);
     const fallEnd = 0.32;
 
+    if (evt.firewallBlocked && p > fallEnd * 0.5) {
+      if (nukeMeshRef.current) nukeMeshRef.current.visible = false;
+      if (explosionGroupRef.current) explosionGroupRef.current.visible = false;
+      return;
+    }
+
     if (p < fallEnd) {
       if (explosionGroupRef.current) explosionGroupRef.current.visible = false;
       if (nukeMeshRef.current) {
         const t = p / fallEnd;
-        const fallY = evt.end.y + (1 - t) * 60;
+        const fallY = targetY + (1 - t) * 60;
         const sz = 20 + (32 - 20) * t;
         nukeMeshRef.current.visible = true;
-        nukeMeshRef.current.position.set(evt.end.x, fallY, 5);
+        nukeMeshRef.current.position.set(targetX, fallY, 5);
         nukeMeshRef.current.scale.set(sz * nukeFlipSign, sz, 1);
       }
       return;
@@ -1360,8 +2253,14 @@ const NukeAnimation = ({ evt }) => {
       const m = debrisArr.current[i];
       const mat = debrisMatArr.current[i];
       if (!m || !mat) continue;
-      const pt = Math.max(0, (t - d.delay - 0.02) / Math.max(0.001, 0.92 - d.delay));
-      if (pt <= 0 || pt >= 1) { m.visible = false; continue; }
+      const pt = Math.max(
+        0,
+        (t - d.delay - 0.02) / Math.max(0.001, 0.92 - d.delay),
+      );
+      if (pt <= 0 || pt >= 1) {
+        m.visible = false;
+        continue;
+      }
       m.visible = true;
       const eased = 1 - Math.pow(1 - pt, 1.5);
       const dist = eased * d.distance;
@@ -1371,7 +2270,11 @@ const NukeAnimation = ({ evt }) => {
       m.position.set(px, py, d.z);
       m.scale.set(s, s, 1);
       const shade = Math.max(0, Math.min(255, Math.floor(d.shade + pt * 32)));
-      tmpColor.setRGB(shade / 255, Math.max(0, shade - 6) / 255, Math.max(0, shade - 12) / 255);
+      tmpColor.setRGB(
+        shade / 255,
+        Math.max(0, shade - 6) / 255,
+        Math.max(0, shade - 12) / 255,
+      );
       mat.color.copy(tmpColor);
       mat.opacity = Math.max(0, 1 - pt * 0.9) * 0.9;
     }
@@ -1382,14 +2285,21 @@ const NukeAnimation = ({ evt }) => {
       const mat = innerMatArr.current[i];
       if (!m || !mat) continue;
       const pt = Math.max(0, (t - d.delay) / Math.max(0.001, 1 - d.delay));
-      if (pt <= 0) { m.visible = false; continue; }
+      if (pt <= 0) {
+        m.visible = false;
+        continue;
+      }
       m.visible = true;
       const s = d.size * (0.6 + pt * 1.4);
       const drift = pt * 3.0;
       m.position.set(d.ox + d.idxCos * drift, d.oy + d.idxSin * drift, d.z);
       m.scale.set(s, s, 1);
       const shade = Math.max(0, Math.min(255, Math.floor(d.shade + pt * 24)));
-      tmpColor.setRGB(shade / 255, Math.max(0, shade - 6) / 255, Math.max(0, shade - 12) / 255);
+      tmpColor.setRGB(
+        shade / 255,
+        Math.max(0, shade - 6) / 255,
+        Math.max(0, shade - 12) / 255,
+      );
       mat.color.copy(tmpColor);
       mat.opacity = Math.max(0, 1 - pt * 0.72) * 0.9;
     }
@@ -1400,7 +2310,10 @@ const NukeAnimation = ({ evt }) => {
       const m = centralArr.current[i];
       const mat = centralMatArr.current[i];
       if (!m || !mat) continue;
-      if (centralP <= 0) { m.visible = false; continue; }
+      if (centralP <= 0) {
+        m.visible = false;
+        continue;
+      }
       m.visible = true;
       const s = d.baseScale + centralP * d.addScale;
       m.scale.set(s, s, 1);
@@ -1411,18 +2324,43 @@ const NukeAnimation = ({ evt }) => {
   const nukeTex = loadAttackTexture(ATTACK_TEXTURE_URLS.nuke);
   return (
     <group raycast={nullRaycast}>
-      <mesh ref={nukeMeshRef} visible={false} raycast={nullRaycast} renderOrder={50}>
+      <mesh
+        ref={nukeMeshRef}
+        visible={false}
+        raycast={nullRaycast}
+        renderOrder={50}
+      >
         <planeGeometry args={[1, 1]} />
-        <meshBasicMaterial ref={nukeMatRef} map={nukeTex} transparent depthTest={false} toneMapped={false} />
+        <meshBasicMaterial
+          ref={nukeMatRef}
+          map={nukeTex}
+          transparent
+          depthTest={false}
+          toneMapped={false}
+        />
       </mesh>
-      <group ref={explosionGroupRef} position={[evt.end.x, evt.end.y, 2]} visible={false} raycast={nullRaycast}>
+      <group
+        ref={explosionGroupRef}
+        position={[targetX, targetY, 2]}
+        visible={false}
+        raycast={nullRaycast}
+      >
         {[0, 1].map((i) => (
-          <mesh key={`f${i}`} ref={(el) => { flashArr.current[i] = el; }} position={[0, 0, i === 0 ? 1.6 : 1.5]} raycast={nullRaycast}>
+          <mesh
+            key={`f${i}`}
+            ref={(el) => {
+              flashArr.current[i] = el;
+            }}
+            position={[0, 0, i === 0 ? 1.6 : 1.5]}
+            raycast={nullRaycast}
+          >
             <planeGeometry args={[1, 1]} />
             <meshBasicMaterial
-              ref={(el) => { flashMatArr.current[i] = el; }}
+              ref={(el) => {
+                flashMatArr.current[i] = el;
+              }}
               map={SOFT_PUFF_TEXTURE}
-              color={i === 0 ? '#ffffff' : '#ffffcc'}
+              color={i === 0 ? "#ffffff" : "#ffffcc"}
               transparent
               opacity={0}
               blending={THREE.AdditiveBlending}
@@ -1432,10 +2370,19 @@ const NukeAnimation = ({ evt }) => {
           </mesh>
         ))}
         {fireLayers.map((L, i) => (
-          <mesh key={`fire${i}`} ref={(el) => { fireArr.current[i] = el; }} position={[0, 0, L.z]} raycast={nullRaycast}>
+          <mesh
+            key={`fire${i}`}
+            ref={(el) => {
+              fireArr.current[i] = el;
+            }}
+            position={[0, 0, L.z]}
+            raycast={nullRaycast}
+          >
             <planeGeometry args={[1, 1]} />
             <meshBasicMaterial
-              ref={(el) => { fireMatArr.current[i] = el; }}
+              ref={(el) => {
+                fireMatArr.current[i] = el;
+              }}
               map={SOFT_PUFF_TEXTURE}
               color={L.colorStart}
               transparent
@@ -1447,21 +2394,70 @@ const NukeAnimation = ({ evt }) => {
           </mesh>
         ))}
         {debris.map((_, i) => (
-          <mesh key={`d${i}`} ref={(el) => { debrisArr.current[i] = el; }} raycast={nullRaycast}>
+          <mesh
+            key={`d${i}`}
+            ref={(el) => {
+              debrisArr.current[i] = el;
+            }}
+            raycast={nullRaycast}
+          >
             <planeGeometry args={[1, 1]} />
-            <meshBasicMaterial ref={(el) => { debrisMatArr.current[i] = el; }} map={SOFT_PUFF_TEXTURE} color="#888888" transparent opacity={0} depthTest={false} toneMapped={false} />
+            <meshBasicMaterial
+              ref={(el) => {
+                debrisMatArr.current[i] = el;
+              }}
+              map={SOFT_PUFF_TEXTURE}
+              color="#888888"
+              transparent
+              opacity={0}
+              depthTest={false}
+              toneMapped={false}
+            />
           </mesh>
         ))}
         {innerPuffs.map((_, i) => (
-          <mesh key={`ip${i}`} ref={(el) => { innerArr.current[i] = el; }} raycast={nullRaycast}>
+          <mesh
+            key={`ip${i}`}
+            ref={(el) => {
+              innerArr.current[i] = el;
+            }}
+            raycast={nullRaycast}
+          >
             <planeGeometry args={[1, 1]} />
-            <meshBasicMaterial ref={(el) => { innerMatArr.current[i] = el; }} map={SOFT_PUFF_TEXTURE} color="#555555" transparent opacity={0} depthTest={false} toneMapped={false} />
+            <meshBasicMaterial
+              ref={(el) => {
+                innerMatArr.current[i] = el;
+              }}
+              map={SOFT_PUFF_TEXTURE}
+              color="#555555"
+              transparent
+              opacity={0}
+              depthTest={false}
+              toneMapped={false}
+            />
           </mesh>
         ))}
         {centralPuffs.map((d, i) => (
-          <mesh key={`c${i}`} ref={(el) => { centralArr.current[i] = el; }} position={[d.ox, d.oy, d.z]} raycast={nullRaycast}>
+          <mesh
+            key={`c${i}`}
+            ref={(el) => {
+              centralArr.current[i] = el;
+            }}
+            position={[d.ox, d.oy, d.z]}
+            raycast={nullRaycast}
+          >
             <planeGeometry args={[1, 1]} />
-            <meshBasicMaterial ref={(el) => { centralMatArr.current[i] = el; }} map={SOFT_PUFF_TEXTURE} color={d.color} transparent opacity={0} depthTest={false} toneMapped={false} />
+            <meshBasicMaterial
+              ref={(el) => {
+                centralMatArr.current[i] = el;
+              }}
+              map={SOFT_PUFF_TEXTURE}
+              color={d.color}
+              transparent
+              opacity={0}
+              depthTest={false}
+              toneMapped={false}
+            />
           </mesh>
         ))}
       </group>
@@ -1481,29 +2477,54 @@ const DeflectedTrajectory = ({ evt }) => {
     const length = Math.sqrt(dx * dx + dy * dy) || 1;
     let perpX = -dy / length;
     let perpY = dx / length;
-    if (perpY < 0) { perpX = -perpX; perpY = -perpY; }
-    const midPoint = new THREE.Vector3(midX + perpX * length * 0.25, midY + perpY * length * 0.25, 10);
+    if (perpY < 0) {
+      perpX = -perpX;
+      perpY = -perpY;
+    }
+    const midPoint = new THREE.Vector3(
+      midX + perpX * length * 0.25,
+      midY + perpY * length * 0.25,
+      10,
+    );
     return new THREE.QuadraticBezierCurve3(start, midPoint, end);
   }, [evt]);
 
   const points = useMemo(() => {
-    const pts = curve.getPoints(24).slice(0, Math.max(2, Math.floor(progress * 24)));
-    return pts.map(p => [p.x, p.y, p.z]);
+    const pts = curve
+      .getPoints(24)
+      .slice(0, Math.max(2, Math.floor(progress * 24)));
+    return pts.map((p) => [p.x, p.y, p.z]);
   }, [curve, progress]);
 
   if (points.length < 2) return null;
-  return <Line points={points} color="#00ffcc" lineWidth={2} transparent opacity={0.85} raycast={nullRaycast} />;
+  return (
+    <Line
+      points={points}
+      color="#00ffcc"
+      lineWidth={2}
+      transparent
+      opacity={0.85}
+      raycast={nullRaycast}
+    />
+  );
 };
 
 const AttackEffect = ({ evt }) => {
-  if (evt.deflected) return <DeflectedTrajectory evt={evt} />;
+  if (evt.deflected && evt.itemId !== "missile" && evt.itemId !== "nuke")
+    return <DeflectedTrajectory evt={evt} />;
   switch (evt.itemId) {
-    case 'missile': return <MissileAnimation evt={evt} />;
-    case 'jet': return <JetAnimation evt={evt} />;
-    case 'tank': return <TankAnimation evt={evt} />;
-    case 'sub': return <SubAnimation evt={evt} />;
-    case 'nuke': return <NukeAnimation evt={evt} />;
-    default: return <DeflectedTrajectory evt={evt} />;
+    case "missile":
+      return <MissileAnimation evt={evt} />;
+    case "jet":
+      return <JetAnimation evt={evt} />;
+    case "tank":
+      return <TankAnimation evt={evt} />;
+    case "sub":
+      return <SubAnimation evt={evt} />;
+    case "nuke":
+      return <NukeAnimation evt={evt} />;
+    default:
+      return <DeflectedTrajectory evt={evt} />;
   }
 };
 
@@ -1514,27 +2535,35 @@ const Trajectories = () => {
     const onAttackEvent = (e) => {
       const data = e.detail;
       const { players } = useGameStore.getState().gameState;
-      const startPlayerId = data.deflected ? data.originalTarget : data.attacker;
-      const endPlayerId = data.target;
+      const startPlayerId = data.attacker;
+      const endPlayerId = data.deflected ? data.originalTarget : data.target;
 
       const attackerPlayer = players[startPlayerId];
       const targetPlayer = players[endPlayerId];
       if (!attackerPlayer || !targetPlayer) return;
 
-      const attackerCountry = countriesData.features.find(f => normalize(f.properties.name || f.properties.ADMIN) === normalize(attackerPlayer.country));
-      const targetCountry = countriesData.features.find(f => normalize(f.properties.name || f.properties.ADMIN) === normalize(targetPlayer.country));
+      const attackerCountry = countriesData.features.find(
+        (f) =>
+          normalize(f.properties.name || f.properties.ADMIN) ===
+          normalize(attackerPlayer.country),
+      );
+      const targetCountry = countriesData.features.find(
+        (f) =>
+          normalize(f.properties.name || f.properties.ADMIN) ===
+          normalize(targetPlayer.country),
+      );
       if (!attackerCountry || !targetCountry) return;
 
       const start = getCountryCentroid(attackerCountry);
       const end = getCountryCentroid(targetCountry);
 
       let tankSpawn = null;
-      if (data.itemId === 'tank' && !data.deflected) {
+      if (data.itemId === "tank" && !data.deflected) {
         tankSpawn = findTankSpawnPoint(targetPlayer.country, end, start);
       }
 
       let subSpawn = null;
-      if (data.itemId === 'sub' && !data.deflected) {
+      if (data.itemId === "sub" && !data.deflected) {
         subSpawn = findSubSpawnPoint(end, start);
       }
 
@@ -1544,26 +2573,36 @@ const Trajectories = () => {
         start: new THREE.Vector3(start[0], start[1], 0),
         end: new THREE.Vector3(end[0], end[1], 0),
         deflected: !!data.deflected,
+        firewallBlocked: !!data.firewallBlocked,
         success: data.success,
         tankSpawn,
         subSpawn,
       };
       const ttl = evt.deflected
-        ? 1200
-        : evt.itemId === 'nuke' ? 3300
-        : evt.itemId === 'sub' ? 2000
-        : evt.itemId === 'tank' ? 1800
-        : 1600;
-      setEvents(prev => [...prev, evt]);
-      setTimeout(() => setEvents(prev => prev.filter(x => x.id !== evt.id)), ttl);
+        ? evt.itemId === "nuke"
+          ? 3300
+          : evt.itemId === "missile"
+            ? 2000
+            : 1800
+        : evt.itemId === "nuke"
+          ? 3300
+          : evt.itemId === "sub"
+            ? 2200
+            : evt.itemId === "tank"
+              ? 2200
+              : 2200;
+      setEvents((prev) => [...prev, evt]);
+      setTimeout(
+        () => setEvents((prev) => prev.filter((x) => x.id !== evt.id)),
+        ttl,
+      );
     };
-    window.addEventListener('attackEvent', onAttackEvent);
-    return () => window.removeEventListener('attackEvent', onAttackEvent);
+    window.addEventListener("attackEvent", onAttackEvent);
+    return () => window.removeEventListener("attackEvent", onAttackEvent);
   }, []);
 
-  return events.map(evt => <AttackEffect key={evt.id} evt={evt} />);
+  return events.map((evt) => <AttackEffect key={evt.id} evt={evt} />);
 };
-
 
 const AttackPopups = () => {
   const [popups, setPopups] = useState([]);
@@ -1571,11 +2610,16 @@ const AttackPopups = () => {
   useEffect(() => {
     const onAttackEvent = (e) => {
       const data = e.detail;
-      const owner = Object.values(useGameStore.getState().gameState.players).find(p => p.socketId === data.target);
+      const owner = Object.values(
+        useGameStore.getState().gameState.players,
+      ).find((p) => p.socketId === data.target);
       if (!owner) return;
 
-      const targetCountry = countriesData.features.find(f => {
-        return normalize(f.properties.name || f.properties.ADMIN) === normalize(owner.country);
+      const targetCountry = countriesData.features.find((f) => {
+        return (
+          normalize(f.properties.name || f.properties.ADMIN) ===
+          normalize(owner.country)
+        );
       });
 
       if (targetCountry) {
@@ -1583,25 +2627,49 @@ const AttackPopups = () => {
         const popup = {
           id: Date.now() + Math.random(),
           pos: centroid,
-          text: data.firewallBlocked ? 'FIREWALL BLOCKED' : (data.deflected ? 'CYBERATTACK' : (data.success ? `-${data.damage} HP` : 'COUNTERED')),
-          color: data.firewallBlocked ? '#aaaaaa' : (data.deflected ? '#00ffcc' : (data.success ? '#ff4444' : '#58a6ff'))
+          text: data.firewallBlocked
+            ? "FIREWALL BLOCKED"
+            : data.deflected
+              ? "CYBERATTACK"
+              : data.success
+                ? `-${data.damage} HP`
+                : "COUNTERED",
+          color: data.firewallBlocked
+            ? "#aaaaaa"
+            : data.deflected
+              ? "#00ffcc"
+              : data.success
+                ? "#ff4444"
+                : "#58a6ff",
         };
-        if (data.itemId === 'nuke' && data.success) {
+        if (data.itemId === "nuke" && data.success && !data.firewallBlocked) {
           popup.text = `NUKE DETONATED -${data.damage} HP`;
-          popup.color = '#ff0000';
+          popup.color = "#ff0000";
           popup.scale = 2;
         }
-        setPopups(prev => [...prev, popup]);
-        setTimeout(() => setPopups(prev => prev.filter(p => p.id !== popup.id)), 2000);
+        setPopups((prev) => [...prev, popup]);
+        setTimeout(
+          () => setPopups((prev) => prev.filter((p) => p.id !== popup.id)),
+          2000,
+        );
       }
     };
-    window.addEventListener('attackEvent', onAttackEvent);
-    return () => window.removeEventListener('attackEvent', onAttackEvent);
+    window.addEventListener("attackEvent", onAttackEvent);
+    return () => window.removeEventListener("attackEvent", onAttackEvent);
   }, []);
 
-  return popups.map(p => (
+  return popups.map((p) => (
     <Html key={p.id} position={[p.pos[0], p.pos[1], 5]} center>
-      <div className="damage-popup" style={{ color: p.color, transform: p.scale ? `scale(${p.scale})` : 'scale(1)', fontWeight: 'bold' }}>{p.text}</div>
+      <div
+        className="damage-popup"
+        style={{
+          color: p.color,
+          transform: p.scale ? `scale(${p.scale})` : "scale(1)",
+          fontWeight: "bold",
+        }}
+      >
+        {p.text}
+      </div>
     </Html>
   ));
 };
@@ -1610,11 +2678,11 @@ export const WorldMap = () => {
   const canvasRef = useRef();
   const attack = useGameStore((s) => s.attack);
   const lobbyState = useGameStore((s) => s.gameState?.lobbyState);
-  const isLobby = lobbyState === 'waiting' || lobbyState === 'starting';
+  const isLobby = lobbyState === "waiting" || lobbyState === "starting";
 
   const handleDrop = (e) => {
     e.preventDefault();
-    const itemId = e.dataTransfer.getData('itemId');
+    const itemId = e.dataTransfer.getData("itemId");
     if (!itemId) return;
 
     const { camera, scene } = threeContext;
@@ -1629,7 +2697,9 @@ export const WorldMap = () => {
     raycaster.setFromCamera(mouse, camera);
 
     const allMeshes = [];
-    scene.traverse((obj) => { if (obj.isMesh && obj.userData.ownerId) allMeshes.push(obj); });
+    scene.traverse((obj) => {
+      if (obj.isMesh && obj.userData.ownerId) allMeshes.push(obj);
+    });
 
     const intersects = raycaster.intersectObjects(allMeshes, false);
     const mySocketId = useGameStore.getState().socket.id;
@@ -1646,14 +2716,16 @@ export const WorldMap = () => {
       let closestTarget = null;
       let minDistance = Infinity;
 
-      allMeshes.forEach(mesh => {
+      allMeshes.forEach((mesh) => {
         const ownerId = mesh.userData.ownerId;
         if (ownerId && ownerId !== mySocketId) {
           const box = new THREE.Box3().setFromObject(mesh);
           const center = new THREE.Vector3();
           box.getCenter(center);
 
-          const dist = new THREE.Vector2(center.x, center.y).distanceTo(new THREE.Vector2(worldDropPoint.x, worldDropPoint.y));
+          const dist = new THREE.Vector2(center.x, center.y).distanceTo(
+            new THREE.Vector2(worldDropPoint.x, worldDropPoint.y),
+          );
           if (dist < minDistance) {
             minDistance = dist;
             closestTarget = ownerId;
@@ -1678,39 +2750,67 @@ export const WorldMap = () => {
         if (now - dragOverState.lastDragOver < 40) return;
         dragOverState.lastDragOver = now;
         const { camera, scene } = threeContext;
-        if (!camera || !scene || !canvasRef.current) { dragOverState.targetId = null; return; }
+        if (!camera || !scene || !canvasRef.current) {
+          dragOverState.targetId = null;
+          return;
+        }
         const rect = canvasRef.current.getBoundingClientRect();
         const x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
         const y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
         const raycaster = new THREE.Raycaster();
         raycaster.setFromCamera(new THREE.Vector2(x, y), camera);
         const allMeshes = [];
-        scene.traverse((obj) => { if (obj.isMesh && obj.userData.ownerId) allMeshes.push(obj); });
+        scene.traverse((obj) => {
+          if (obj.isMesh && obj.userData.ownerId) allMeshes.push(obj);
+        });
         const intersects = raycaster.intersectObjects(allMeshes, false);
         const mySocketId = useGameStore.getState().socket.id;
         if (intersects.length > 0) {
           const targetId = intersects[0].object.userData.ownerId;
-          dragOverState.targetId = (targetId && targetId !== mySocketId) ? targetId : null;
+          dragOverState.targetId =
+            targetId && targetId !== mySocketId ? targetId : null;
         } else {
           dragOverState.targetId = null;
         }
       }}
-      onDragLeave={() => { dragOverState.targetId = null; }}
-      onDrop={(e) => { dragOverState.targetId = null; handleDrop(e); }}
+      onDragLeave={() => {
+        dragOverState.targetId = null;
+      }}
+      onDrop={(e) => {
+        dragOverState.targetId = null;
+        handleDrop(e);
+      }}
       style={{
-        width: '100vw', height: '100vh', background: '#050a10',
-        position: 'absolute', top: 0, left: 0, zIndex: 0,
-        pointerEvents: isLobby ? 'none' : 'auto',
+        width: "100vw",
+        height: "100vh",
+        background: "#050a10",
+        position: "absolute",
+        top: 0,
+        left: 0,
+        zIndex: 0,
+        pointerEvents: isLobby ? "none" : "auto",
         opacity: isLobby ? 0.25 : 1,
-        transition: 'opacity 0.6s ease'
+        transition: "opacity 0.6s ease",
       }}
     >
       <Canvas
         dpr={[1, 1.5]}
-        gl={{ antialias: false, powerPreference: 'high-performance', alpha: false, stencil: false, depth: true }}
+        gl={{
+          antialias: false,
+          powerPreference: "high-performance",
+          alpha: false,
+          stencil: false,
+          depth: true,
+        }}
         flat
       >
-        <OrthographicCamera makeDefault position={[0, 0, 100]} zoom={3} near={1} far={1000} />
+        <OrthographicCamera
+          makeDefault
+          position={[0, 0, 100]}
+          zoom={3}
+          near={1}
+          far={1000}
+        />
         <ambientLight intensity={1.5} />
         <ContextBridge />
         <MapScene />
