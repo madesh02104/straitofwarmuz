@@ -1,11 +1,166 @@
-import React, { useState } from "react";
+import React, { useState, useLayoutEffect } from "react";
 import { useGameStore } from "../../store/gameStore";
 import { Shield, Globe, Users, ChevronRight, Maximize } from "lucide-react";
 import gsap from "gsap";
 
+import missileImg from "../../assets/missile.webp";
+import tankImg from "../../assets/tank.webp";
+import jetImg from "../../assets/jet.webp";
+
 export const Landing = () => {
   const [name, setName] = useState("");
   const joinMatch = useGameStore((state) => state.joinMatch);
+
+  useLayoutEffect(() => {
+    gsap.set(".anim-jet", { left: "100%", x: 220, right: "auto" });
+    const tl = gsap.timeline({ repeat: -1 });
+
+    // Step 1: Initial state reset
+    tl.set(".anim-missile", { opacity: 1, rotation: 0, scale: 1, left: "90%" })
+      .set(".anim-tank", {
+        left: "-15%",
+        scaleX: -1,
+        scaleY: 1,
+        opacity: 1,
+        y: 0,
+        filter: "none",
+      })
+      .set(".anim-tank-bullet", { opacity: 0 })
+      .set(".anim-missile-smoke", { left: "88%", bottom: "1%", opacity: 0, scale: 0.5 })
+      .set(".anim-jet", {
+        left: "100%",
+        right: "auto",
+        x: 220,
+        opacity: 1,
+        scaleX: 1,
+      })
+      .set(".anim-jet-b0, .anim-jet-b1, .anim-jet-b2, .anim-jet-b3", {
+        opacity: 0,
+        left: "50%",
+        top: "15%",
+      })
+      .set(".anim-tank-blast", { opacity: 0, scale: 0.3 });
+
+    tl.to(".anim-tank", {
+      left: "20%",
+      duration: (16 * 35) / 45,
+      ease: "power1.inOut",
+    })
+      .to(
+        ".anim-missile",
+        { left: "75%", duration: (16 * 10) / 45, ease: "power1.inOut" },
+        ">",
+      )
+      .to(
+        ".anim-tank",
+        { left: "30%", duration: (16 * 10) / 45, ease: "power1.inOut" },
+        "<",
+      )
+      .to(".anim-tank", { left: "32%", duration: 1.5, ease: "power1.inOut" });
+
+    tl.set(".anim-tank-bullet", { left: "38%", bottom: "24px", opacity: 1 })
+      .to(
+        ".anim-tank-bullet",
+        { left: "88%", duration: 0.8, ease: "none" },
+        "tankFire",
+      )
+      .to(
+        ".anim-tank-bullet",
+        {
+          keyframes: [
+            { bottom: "24%", duration: 0.4, ease: "power1.out" },
+            { bottom: "1%", duration: 0.4, ease: "power1.in" },
+          ],
+        },
+        "tankFire",
+      );
+
+    tl.set(".anim-tank-bullet", { opacity: 0 })
+      .set(".anim-missile", { opacity: 0 })
+      .set(".anim-missile-smoke", { left: "88%", bottom: "1%", opacity: 1, scale: 0.1 })
+      .to(".anim-missile-smoke", {
+        scale: 2.5,
+        opacity: 0.8,
+        duration: 0.4,
+        ease: "power2.out",
+      })
+      .to(".anim-missile-smoke", {
+        scale: 3.5,
+        opacity: 0,
+        duration: 1.5,
+        ease: "power1.in",
+      });
+
+    // Step 3: Jet flies from right to left
+    tl.to(
+      ".anim-jet",
+      { left: "50%", x: 0, duration: 1.5, ease: "none" },
+      "jetFly",
+    );
+
+    tl.set(".anim-jet-b0, .anim-jet-b1, .anim-jet-b2, .anim-jet-b3", {
+      left: "50%",
+      top: "15%",
+      opacity: 1,
+    })
+      .to(
+        ".anim-jet-b0",
+        { left: "39%", top: "90%", duration: 0.3, ease: "none" },
+        "jetFire",
+      )
+      .to(
+        ".anim-jet-b1",
+        { left: "40.5%", top: "91%", duration: 0.3, ease: "none" },
+        "jetFire+=0.05",
+      )
+      .to(
+        ".anim-jet-b2",
+        { left: "42%", top: "89%", duration: 0.3, ease: "none" },
+        "jetFire+=0.1",
+      )
+      .to(
+        ".anim-jet-b3",
+        { left: "40.2%", top: "90.5%", duration: 0.3, ease: "none" },
+        "jetFire+=0.15",
+      )
+      .to(
+        ".anim-jet",
+        { left: "-15%", x: 0, duration: 1.5, ease: "none" },
+        "jetFire",
+      )
+      .addLabel("tankStruck", "jetFire+=0.45")
+      .set(
+        ".anim-jet-b0, .anim-jet-b1, .anim-jet-b2, .anim-jet-b3",
+        { opacity: 0 },
+        "tankStruck",
+      )
+      .set(
+        ".anim-tank-blast",
+        { left: "40%", bottom: "2%", opacity: 1, scale: 0.4 },
+        "tankStruck",
+      )
+      .to(
+        ".anim-tank",
+        {
+          opacity: 0,
+          filter: "blur(8px)",
+          scaleX: -0.9,
+          scaleY: 0.9,
+          duration: 0.9,
+        },
+        "tankStruck",
+      )
+      .to(
+        ".anim-tank-blast",
+        { scale: 3.2, opacity: 0, duration: 2 },
+        "tankStruck",
+      );
+
+    // Add small delay before repeating
+    tl.to({}, { duration: 1 });
+
+    return () => tl.kill();
+  }, []);
 
   const handleJoin = () => {
     if (!name.trim()) {
@@ -18,8 +173,192 @@ export const Landing = () => {
   return (
     <div
       className="landing-overlay"
-      style={{ display: "flex", flexDirection: "column", alignItems: "center" }}
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        minHeight: "100vh",
+        position: "relative",
+        overflow: "hidden",
+      }}
     >
+      {/* Background War Animations */}
+      <div
+        className="bg-animations"
+        style={{
+          position: "absolute",
+          inset: 0,
+          zIndex: 6,
+          pointerEvents: "none",
+        }}
+      >
+        <img
+          src={missileImg}
+          className="anim-missile"
+          alt=""
+          style={{
+            position: "absolute",
+            left: "85%",
+            bottom: "1%",
+            width: 500,
+          }}
+        />
+        <img
+          src={tankImg}
+          className="anim-tank"
+          alt=""
+          style={{
+            position: "absolute",
+            left: "-15%",
+            bottom: "1%",
+            width: 270,
+          }}
+        />
+        <div
+          className="anim-tank-bullet"
+          style={{
+            position: "absolute",
+            width: 40,
+            height: 10,
+            left: 0,
+            bottom: "0%",
+            opacity: 0,
+            pointerEvents: "none",
+          }}
+        >
+          {/* Main streak body matching streakMeshRef colors FFDD66 */}
+          <div
+            style={{
+              position: "absolute",
+              inset: 0,
+              background:
+                "linear-gradient(to right, transparent, #ffdd66 80%, #ffffff 100%)",
+              borderRadius: "10px",
+            }}
+          />
+          {/* Main glow matching streakGlowRef */}
+          <div
+            style={{
+              position: "absolute",
+              inset: "-4px",
+              background: "#ffdd66",
+              opacity: 0.5,
+              filter: "blur(6px)",
+              borderRadius: "10px",
+            }}
+          />
+          {/* Bright head matching streakHeadRef */}
+          <div
+            style={{
+              position: "absolute",
+              width: 14,
+              height: 14,
+              background: "#ffffff",
+              borderRadius: "50%",
+              right: -4,
+              top: -2,
+              boxShadow: "0 0 10px #ffffff, 0 0 20px #ffdd66",
+            }}
+          />
+        </div>
+        <div
+          className="anim-missile-smoke"
+          style={{
+            position: "absolute",
+            left: "88%",
+            bottom: "1%",
+            width: 375,
+            height: 375,
+            borderRadius: "50%",
+            /* Nuke style fire/smoke layers based on NukeAnimation */
+            background:
+              "radial-gradient(circle, #ffffff 0%, #ffee88 15%, #ff6600 30%, #cc1500 50%, rgba(44,40,32,0.9) 70%, rgba(26,22,20,0) 100%)",
+            filter: "blur(12px)",
+            opacity: 0,
+            transform: "translate(-50%, 40%)",
+            pointerEvents: "none",
+          }}
+        />
+
+        <img
+          src={jetImg}
+          className="anim-jet"
+          alt=""
+          style={{
+            position: "absolute",
+            left: "100%",
+            top: "15%",
+            width: 200,
+          }}
+        />
+        {["b0", "b1", "b2", "b3"].map((id) => (
+          <div
+            key={id}
+            className={`anim-jet-${id}`}
+            style={{
+              position: "absolute",
+              width: 8,
+              height: 32,
+              left: 0,
+              top: 0,
+              opacity: 0,
+              pointerEvents: "none",
+            }}
+          >
+            <div
+              style={{
+                position: "absolute",
+                inset: 0,
+                background:
+                  "linear-gradient(to bottom, transparent, #ffeedd 80%, #ffffff 100%)",
+                borderRadius: "8px",
+              }}
+            />
+            <div
+              style={{
+                position: "absolute",
+                inset: "-3px",
+                background: "#ffeedd",
+                opacity: 0.5,
+                filter: "blur(5px)",
+                borderRadius: "8px",
+              }}
+            />
+            <div
+              style={{
+                position: "absolute",
+                width: 12,
+                height: 12,
+                background: "#ffffff",
+                borderRadius: "50%",
+                left: -2,
+                bottom: -3,
+                boxShadow: "0 0 8px #ffffff, 0 0 16px #ffeedd",
+              }}
+            />
+          </div>
+        ))}
+        <div
+          className="anim-tank-blast"
+          style={{
+            position: "absolute",
+            left: "40%",
+            bottom: "2%",
+            width: 360,
+            height: 360,
+            borderRadius: "50%",
+            background:
+              "radial-gradient(circle, #ffffff 0%, #ff5522 28%, rgba(60,40,20,0.75) 55%, rgba(0,0,0,0) 85%)",
+            filter: "blur(14px)",
+            opacity: 0,
+            transform: "translate(-50%, 45%)",
+            transformOrigin: "50% 60%",
+            pointerEvents: "none",
+          }}
+        />
+      </div>
+
       <div
         className="landing-content"
         style={{
@@ -30,7 +369,7 @@ export const Landing = () => {
           justifyContent: "center",
           maxWidth: "1100px",
           width: "100%",
-          zIndex: 2,
+          zIndex: 1,
         }}
       >
         <div
