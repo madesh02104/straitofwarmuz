@@ -318,9 +318,9 @@ export const Dashboard = () => {
 
             {displayBattleLogs && displayBattleLogs.length > 0 && (
               <div className="battle-logs-container" style={{ marginTop: '20px', padding: '15px', background: 'rgba(0,0,0,0.5)', borderRadius: '8px', maxHeight: '150px', overflowY: 'auto' }}>
-                <h3 style={{ textTransform: 'uppercase', fontSize: '14px', marginBottom: '10px', color: 'var(--accent-blue)' }}>BATTLE LOG</h3>
+                <h3 style={{ textTransform: 'uppercase', fontSize: '8px', marginBottom: '10px', color: 'var(--accent-blue)', letterSpacing: '2px' }}>BATTLE LOG</h3>
                 {displayBattleLogs.map((log, i) => (
-                  <div key={i} style={{ fontSize: '12px', padding: '4px 0', borderBottom: '1px solid rgba(255,255,255,0.1)', color: log.text.includes('[ATTACK]') ? 'var(--accent-red)' : log.text.includes('[DEFENSE]') ? 'var(--text-muted)' : log.text.includes('[FIREWALL]') ? '#aaaaaa' : '#00ffcc' }}>
+                  <div key={i} style={{ fontSize: '6px', lineHeight: '1.6', padding: '6px 0', borderBottom: '1px solid rgba(255,255,255,0.1)', color: log.text.includes('[ATTACK]') ? 'var(--accent-red)' : log.text.includes('[DEFENSE]') ? 'var(--text-muted)' : log.text.includes('[FIREWALL]') ? '#aaaaaa' : '#00ffcc' }}>
                     <span style={{ opacity: 0.5, marginRight: '8px' }}>{new Date(log.time).toLocaleTimeString()}</span>
                     {log.text}
                   </div>
@@ -383,7 +383,7 @@ export const Dashboard = () => {
             <span className="time" style={{ fontWeight: isLast5Sec ? 900 : 'normal' }}>{formatTime(phaseTimeRemaining)}</span>
           </div>
           {isFarmingPhase && isLast5Sec && (
-            <span style={{ color: 'var(--accent-red)', fontSize: '9px', fontWeight: 800, textAlign: 'center', marginTop: '4px', maxWidth: '100px', lineHeight: 1.1, textShadow: '0 0 10px #f85149' }}>
+            <span style={{ color: 'var(--accent-red)', fontSize: '6px', fontWeight: 800, textAlign: 'center', marginTop: '4px', maxWidth: '100px', lineHeight: 1.6, textShadow: '0 0 10px #f85149' }}>
               5 SEC LEFT TO BUY!
             </span>
           )}
@@ -433,13 +433,13 @@ export const Dashboard = () => {
                   <span className="inv-badge inv-badge-count">{me.inventory[itemId] || 0}x</span>
                   <span className="inv-name">{item.name.split(' ').pop()}</span>
                   {isOnCooldown && (
-                    <div style={{ position: 'absolute', inset: 0, backgroundColor: 'rgba(0,0,0,0.75)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#ff4444', fontWeight: 900, fontSize: '13px', borderRadius: '10px', zIndex: 10 }}>
+                    <div style={{ position: 'absolute', inset: 0, backgroundColor: 'rgba(0,0,0,0.75)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#ff4444', fontWeight: 900, fontSize: '8px', borderRadius: '10px', zIndex: 10 }}>
                       {(cdRemaining / 1000).toFixed(1)}s
                     </div>
                   )}
                   {isDeflecting && (
                     <div style={{ position: 'absolute', inset: 0, backgroundColor: 'rgba(0, 255, 204, 0.2)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', zIndex: 10, borderRadius: '10px' }}>
-                      <span style={{ color: '#00ffcc', fontWeight: 900, fontSize: '13px', textShadow: '0 0 5px black' }}>{(deflectRemaining / 1000).toFixed(1)}s</span>
+                      <span style={{ color: '#00ffcc', fontWeight: 900, fontSize: '8px', textShadow: '0 0 5px black' }}>{(deflectRemaining / 1000).toFixed(1)}s</span>
                       <div style={{ position: 'absolute', bottom: 0, left: 0, height: '4px', background: 'rgba(0,0,0,0.5)', width: '100%', borderBottomLeftRadius: '10px', borderBottomRightRadius: '10px', overflow: 'hidden' }}>
                         <div style={{ height: '100%', width: `${(deflectRemaining / 5000) * 100}%`, background: '#00ffcc', transition: 'width 0.1s linear' }} />
                       </div>
