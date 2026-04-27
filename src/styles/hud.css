@@ -1365,11 +1365,13 @@ body {
   flex: 1;
   display: flex;
   flex-direction: column;
+  gap: 8px;
 }
 
 .rank-name {
   font-weight: 700;
   font-size: 0.57rem;
+  line-height: 1;
 }
 
 .rank-country {
@@ -1377,6 +1379,7 @@ body {
   color: var(--text-muted);
   text-transform: uppercase;
   letter-spacing: 0.50px;
+  line-height: 1;
 }
 
 .rank-stats {
