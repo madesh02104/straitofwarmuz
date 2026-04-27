@@ -109,8 +109,8 @@ export const Lobby = () => {
             style={{
               fontFamily: "var(--font-display)",
               fontWeight: 900,
-              fontSize: "1.8rem",
-              letterSpacing: 8,
+              fontSize: "1.08rem",
+              letterSpacing: 4,
               margin: "4px 0",
               textTransform: "uppercase",
               color: "var(--text-main)",
@@ -159,9 +159,9 @@ export const Lobby = () => {
                           <span
                             style={{
                               marginLeft: 6,
-                              fontSize: "0.65rem",
+                              fontSize: "0.39rem",
                               color: "var(--accent-yellow)",
-                              letterSpacing: 2,
+                              letterSpacing: 1,
                             }}
                           >
                             (YOU)
@@ -187,9 +187,9 @@ export const Lobby = () => {
                       flex: 1,
                       textAlign: "center",
                       fontFamily: "var(--font-display)",
-                      fontSize: "0.72rem",
+                      fontSize: "0.43rem",
                       color: "var(--text-muted)",
-                      letterSpacing: 3,
+                      letterSpacing: 1,
                       fontWeight: 800,
                     }}
                   >
@@ -217,11 +217,11 @@ export const Lobby = () => {
           </label>
           <p
             style={{
-              fontSize: "0.72rem",
+              fontSize: "0.43rem",
               color: "var(--text-muted)",
               marginTop: 12,
               textAlign: "center",
-              letterSpacing: 2,
+              letterSpacing: 1,
               fontFamily: "var(--font-display)",
               fontWeight: 700,
             }}
@@ -243,9 +243,9 @@ export const Lobby = () => {
                 color: "var(--accent-blue)",
                 marginBottom: 10,
                 textAlign: "center",
-                letterSpacing: 4,
+                letterSpacing: 2,
                 fontFamily: "var(--font-display)",
-                fontSize: "0.8rem",
+                fontSize: "0.48rem",
                 fontWeight: 900,
               }}
             >
@@ -287,12 +287,12 @@ export const Lobby = () => {
                     border: `1px solid ${item.border}`,
                   }}
                 >
-                  <strong style={{ color: item.color, letterSpacing: 1 }}>
+                  <strong style={{ color: item.color, letterSpacing: 0 }}>
                     {item.label}
                   </strong>
                   <br />
                   <span
-                    style={{ color: "var(--text-muted)", fontSize: "0.72rem" }}
+                    style={{ color: "var(--text-muted)", fontSize: "0.43rem" }}
                   >
                     {item.desc}
                   </span>

@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
 :root {
   --bg-dark: #050a10;
   --panel-bg: rgba(13, 20, 30, 0.85);
@@ -17,9 +19,16 @@ body {
   padding: 0;
   background: var(--bg-dark);
   color: var(--text-main);
-  font-family: 'Inter', -apple-system, sans-serif;
   overflow: hidden;
   user-select: none;
+}
+
+* {
+  font-family: 'Press Start 2P', monospace !important;
+  border-radius: 0 !important;
+  -webkit-font-smoothing: none !important;
+  font-smooth: never !important;
+  text-transform: uppercase;
 }
 
 /* --- MAP OVERLAYS --- */
@@ -48,11 +57,11 @@ body {
 }
 
 .map-hp-label {
-  font-size: 10px;
+  font-size: 6.00px;
   font-weight: 800;
   color: white;
   text-shadow: 0 0 5px black;
-  letter-spacing: 1px;
+  letter-spacing: 0.50px;
 }
 
 .map-hover-tooltip {
@@ -72,14 +81,14 @@ body {
 .tooltip-name {
   color: var(--accent-blue);
   font-weight: 800;
-  font-size: 12px;
+  font-size: 7.20px;
   text-transform: uppercase;
 }
 
 .tooltip-rank {
-  font-size: 8px;
+  font-size: 4.80px;
   color: var(--text-muted);
-  letter-spacing: 2px;
+  letter-spacing: 1.00px;
 }
 
 @keyframes tooltip-slide {
@@ -113,14 +122,14 @@ body {
 }
 
 .winner-label {
-  letter-spacing: 8px;
+  letter-spacing: 4.00px;
   font-weight: 200;
   color: var(--text-muted);
   margin-bottom: 20px;
 }
 
 .winner-name {
-  font-size: 4rem;
+  font-size: 2.40rem;
   margin: 0;
   background: linear-gradient(to bottom, #fff, var(--accent-blue));
   -webkit-background-clip: text;
@@ -131,16 +140,16 @@ body {
 }
 
 .winner-country {
-  font-size: 1.5rem;
+  font-size: 0.90rem;
   color: var(--accent-blue);
   font-weight: 800;
-  letter-spacing: 2px;
+  letter-spacing: 1.00px;
   margin-bottom: 30px;
 }
 
 .winner-stats {
   color: var(--text-muted);
-  font-size: 0.9rem;
+  font-size: 0.54rem;
   line-height: 1.6;
   margin-bottom: 40px;
 }
@@ -151,7 +160,7 @@ body {
   color: var(--accent-blue);
   padding: 12px 30px;
   font-weight: 800;
-  letter-spacing: 2px;
+  letter-spacing: 1.00px;
   cursor: pointer;
   transition: all 0.3s;
 }
@@ -216,14 +225,14 @@ body {
 }
 
 .stat-label {
-  font-size: 9px;
+  font-size: 5.40px;
   color: var(--text-muted);
-  letter-spacing: 1px;
+  letter-spacing: 0.50px;
   text-transform: uppercase;
 }
 
 .stat-value {
-  font-size: 1.2rem;
+  font-size: 0.72rem;
   font-weight: 800;
 }
 
@@ -232,7 +241,7 @@ body {
   align-items: center;
   gap: 10px;
   font-family: 'JetBrains Mono', monospace;
-  font-size: 1.5rem;
+  font-size: 0.90rem;
   color: var(--text-bright);
 }
 
@@ -332,8 +341,8 @@ body {
   padding: 0 20px;
   height: 100%;
   font-weight: 700;
-  font-size: 11px;
-  letter-spacing: 1px;
+  font-size: 6.60px;
+  letter-spacing: 0.50px;
   text-transform: uppercase;
   cursor: pointer;
   transition: all 0.2s;
@@ -364,10 +373,52 @@ body {
 .landing-overlay {
   position: fixed;
   inset: 0;
-  background: radial-gradient(circle at center, #1a2a3a 0%, #050a10 100%);
+  background: #040411;
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 1000;
+}
+
+/* --- RETRO 8-BIT STYLES --- */
+
+img, canvas, .anim-missile, .anim-tank, .globe-icon {
+  image-rendering: pixelated !important;
+}
+
+@keyframes retro-hover {
+  0% { transform: translateY(0px); }
+  25% { transform: translateY(-4px); }
+  50% { transform: translateY(-6px); }
+  75% { transform: translateY(-4px); }
+  100% { transform: translateY(0px); }
+}
+
+.floating-element, .globe-icon {
+  animation: retro-hover 2s steps(4, end) infinite;
+}
+
+.panel-container, .war-frame {
+  background-color: #000000 !important;
+  border: 4px solid #00FFFF !important;
+  box-shadow: 8px 8px 0px 0px rgba(0, 0, 0, 0.75) !important;
+  border-radius: 0 !important;
+}
+
+.war-frame__corners {
+  display: none !important;
+}
+
+.mode-btn.public {
+  background-color: #D21404 !important;
+  border: none !important;
+  border-bottom: 4px solid #8B0000 !important;
+  border-radius: 0 !important;
+  transition: none !important;
+}
+
+.mode-btn.public:active {
+  border-bottom: 0px !important;
+  transform: translateY(4px) !important;
 }
 

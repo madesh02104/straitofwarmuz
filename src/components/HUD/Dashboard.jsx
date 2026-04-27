@@ -357,7 +357,7 @@ export const Dashboard = () => {
           <div className="hp-bar-container">
             <div className="hp-fill" style={{ width: `${me.hp}%` }} />
           </div>
-          <div className="hp-text" style={{ fontSize: '0.8rem', marginTop: '4px' }}>{me.hp} HP</div>
+          <div className="hp-text" style={{ fontSize: "0.48rem", marginTop: '4px' }}>{me.hp} HP</div>
         </div>
 
         <div className="stats-center">
@@ -519,7 +519,7 @@ export const Dashboard = () => {
                 <div style={{ position: 'absolute', inset: 0, zIndex: 10, background: 'rgba(5, 10, 16, 0.92)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', color: 'var(--accent-red)' }}>
                   <Lock size={48} style={{ marginBottom: '16px' }} />
                   <h3 style={{ fontFamily: 'var(--font-display)', letterSpacing: '2px', textAlign: 'center' }}>MARKET CLOSED</h3>
-                  <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', textAlign: 'center', marginTop: '8px', padding: '0 40px', lineHeight: 1.5 }}>The World Market is unavailable during the War Window. Weapons can only be purchased during the Preparation phase.</p>
+                  <p style={{ fontSize: "0.51rem", color: 'var(--text-muted)', textAlign: 'center', marginTop: '8px', padding: '0 40px', lineHeight: 1.5 }}>The World Market is unavailable during the War Window. Weapons can only be purchased during the Preparation phase.</p>
                 </div>
               )}
               <div className="sidebar-section" style={{ opacity: !isFarmingPhase ? 0.3 : 1, pointerEvents: !isFarmingPhase ? 'none' : 'auto' }}>
@@ -548,7 +548,7 @@ export const Dashboard = () => {
                         </div>
                         <div style={{ marginTop: 'auto', display: 'flex', alignItems: 'center', gap: '6px' }}>
                           <span className="item-cost" style={{ marginTop: 0 }}>{atkItem.marketCost} CP</span>
-                          <span style={{ color: 'rgba(255,255,255,0.2)', fontSize: '0.75rem' }}>|</span>
+                          <span style={{ color: 'rgba(255,255,255,0.2)', fontSize: "0.45rem" }}>|</span>
                           <span className="item-stock">
                             {atkId === 'nuke'
                               ? `Stock: ${(gameState.marketStock[atkId] || 0) === 0 ? '-/0' : `${me.nukeMarketBuilt ? 0 : 1}/${gameState.marketStock[atkId] || 0}`}`
@@ -580,7 +580,7 @@ export const Dashboard = () => {
                           </div>
                           <div style={{ marginTop: 'auto', display: 'flex', alignItems: 'center', gap: '6px' }}>
                             <span className="item-cost" style={{ marginTop: 0 }}>{defItem.marketCost} CP</span>
-                            <span style={{ color: 'rgba(255,255,255,0.2)', fontSize: '0.75rem' }}>|</span>
+                            <span style={{ color: 'rgba(255,255,255,0.2)', fontSize: "0.45rem" }}>|</span>
                             <span className="item-stock">Stock: {gameState.marketStock[defId] || 0}</span>
                           </div>
                           <button
@@ -594,7 +594,7 @@ export const Dashboard = () => {
                           {isLobby && (
                             <div className="custom-tooltip">
                               <strong style={{color: 'var(--accent-blue)'}}>Cyberattack (Deflection)</strong><br/>
-                              <span style={{color: 'var(--text-muted)', fontSize: '0.7rem'}}>Deflects remote weapons like <span style={{color: 'var(--accent-red)'}}>Missiles</span> and <span style={{color: 'var(--accent-red)'}}>Nukes</span> back to the attacker, dealing full damage.</span>
+                              <span style={{color: 'var(--text-muted)', fontSize: "0.42rem"}}>Deflects remote weapons like <span style={{color: 'var(--accent-red)'}}>Missiles</span> and <span style={{color: 'var(--accent-red)'}}>Nukes</span> back to the attacker, dealing full damage.</span>
                             </div>
                           )}
                           <HelpCircle size={48} style={{ opacity: 0.15, strokeWidth: 1 }} />
@@ -678,7 +678,7 @@ export const Dashboard = () => {
                           {isLobby && (
                             <div className="custom-tooltip">
                               <strong style={{color: 'var(--accent-blue)'}}>Cyberattack (Deflection)</strong><br/>
-                              <span style={{color: 'var(--text-muted)', fontSize: '0.7rem'}}>Deflects remote weapons like <span style={{color: 'var(--accent-red)'}}>Missiles</span> and <span style={{color: 'var(--accent-red)'}}>Nukes</span> back to the attacker, dealing full damage.</span>
+                              <span style={{color: 'var(--text-muted)', fontSize: "0.42rem"}}>Deflects remote weapons like <span style={{color: 'var(--accent-red)'}}>Missiles</span> and <span style={{color: 'var(--accent-red)'}}>Nukes</span> back to the attacker, dealing full damage.</span>
                             </div>
                           )}
                           <HelpCircle size={48} style={{ opacity: 0.15, strokeWidth: 1 }} />
@@ -753,10 +753,10 @@ export const Dashboard = () => {
                 {/* INTEL REPORTS LOG */}
                 {intelLogs && intelLogs.length > 0 && (
                   <div className="intel-reports" style={{ marginTop: '20px', borderTop: '1px solid var(--panel-border)', paddingTop: '15px' }}>
-                    <h4 style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: '10px', letterSpacing: '1px' }}>RECENT REPORTS</h4>
+                    <h4 style={{ fontSize: "0.48rem", color: 'var(--text-muted)', marginBottom: '10px', letterSpacing: '1px' }}>RECENT REPORTS</h4>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', maxHeight: '250px', overflowY: 'auto', paddingRight: '5px' }}>
                       {intelLogs.map((log, idx) => (
-                        <div key={idx} style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid var(--panel-border)', padding: '10px', borderRadius: '6px', fontSize: '0.75rem' }}>
+                        <div key={idx} style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid var(--panel-border)', padding: '10px', borderRadius: '6px', fontSize: "0.45rem" }}>
                           <div style={{ display: 'flex', justifyContent: 'space-between', color: 'var(--accent-blue)', fontWeight: 800, marginBottom: '4px' }}>
                             <span>{log.countryName.toUpperCase()}</span>
                             <span style={{ opacity: 0.5 }}>{new Date(log.time).toLocaleTimeString()}</span>

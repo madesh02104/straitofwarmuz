@@ -52,7 +52,7 @@ body {
 
 .landing-header h1 {
   font-family: var(--font-display);
-  font-size: 3.5rem;
+  font-size: 2.10rem;
   font-weight: 900;
   letter-spacing: -2px;
   margin: 20px 0 10px;
@@ -64,7 +64,7 @@ body {
 
 .landing-header p {
   color: var(--text-muted);
-  font-size: 1.1rem;
+  font-size: 0.66rem;
   margin-bottom: 40px;
 }
 
@@ -84,11 +84,11 @@ body {
 
 .input-group label {
   display: block;
-  font-size: 0.7rem;
+  font-size: 0.42rem;
   font-weight: 800;
   color: var(--accent-blue);
   margin-bottom: 10px;
-  letter-spacing: 2px;
+  letter-spacing: 1.00px;
 }
 
 .name-input {
@@ -98,7 +98,7 @@ body {
   padding: 15px 20px;
   border-radius: 12px;
   color: white;
-  font-size: 1.2rem;
+  font-size: 0.72rem;
   outline: none;
   transition: border-color 0.3s;
 }
@@ -145,11 +145,11 @@ body {
 
 .mode-title {
   font-weight: 700;
-  font-size: 1.1rem;
+  font-size: 0.66rem;
 }
 
 .mode-desc {
-  font-size: 0.8rem;
+  font-size: 0.48rem;
   color: var(--text-muted);
 }
 
@@ -169,7 +169,7 @@ body {
 
 .lobby-header h2 {
   font-family: var(--font-display);
-  letter-spacing: 2px;
+  letter-spacing: 1.00px;
   margin: 10px 0;
 }
 
@@ -178,7 +178,7 @@ body {
   align-items: center;
   justify-content: center;
   gap: 15px;
-  font-size: 0.8rem;
+  font-size: 0.48rem;
   color: var(--text-muted);
   font-weight: 700;
 }
@@ -251,11 +251,11 @@ body {
 
 .p-name {
   font-weight: 700;
-  font-size: 0.9rem;
+  font-size: 0.54rem;
 }
 
 .p-country {
-  font-size: 0.7rem;
+  font-size: 0.42rem;
   color: var(--text-muted);
   text-transform: uppercase;
 }
@@ -267,8 +267,8 @@ body {
   gap: 15px;
   cursor: pointer;
   font-weight: 800;
-  letter-spacing: 2px;
-  font-size: 0.9rem;
+  letter-spacing: 1.00px;
+  font-size: 0.54rem;
   color: var(--accent-blue);
   padding: 20px;
   border-radius: 12px;
@@ -282,7 +282,7 @@ body {
 }
 
 .ready-hint {
-  font-size: 0.75rem;
+  font-size: 0.45rem;
   color: var(--text-muted);
   margin-top: 15px;
 }
@@ -312,8 +312,8 @@ body {
 
 .country-info h2 {
   font-family: var(--font-display);
-  font-size: 1.8rem;
-  letter-spacing: 2px;
+  font-size: 1.08rem;
+  letter-spacing: 1.00px;
   text-transform: uppercase;
   color: var(--accent-blue);
 }
@@ -335,7 +335,7 @@ body {
 }
 
 .hp-text {
-  font-size: 0.7rem;
+  font-size: 0.42rem;
   font-weight: 800;
   color: var(--text-muted);
   margin-top: 4px;
@@ -354,15 +354,15 @@ body {
 }
 
 .stat-label {
-  font-size: 0.6rem;
+  font-size: 0.36rem;
   color: var(--text-muted);
   text-transform: uppercase;
-  letter-spacing: 1px;
+  letter-spacing: 0.50px;
 }
 
 .stat-value {
   font-family: var(--font-display);
-  font-size: 1.2rem;
+  font-size: 0.72rem;
   font-weight: 700;
 }
 
@@ -371,7 +371,7 @@ body {
   align-items: center;
   gap: 10px;
   font-family: var(--font-display);
-  font-size: 1.5rem;
+  font-size: 0.90rem;
   color: var(--text-main);
 }
 
@@ -433,8 +433,8 @@ body {
 .sidebar-title {
   color: var(--text-main);
   font-family: var(--font-display);
-  font-size: 1.2rem;
-  letter-spacing: 2px;
+  font-size: 0.72rem;
+  letter-spacing: 1.00px;
   margin: 0;
   text-transform: uppercase;
 }
@@ -467,10 +467,10 @@ body {
   border-radius: 6px;
   color: var(--text-muted);
   font-family: var(--font-display);
-  font-size: 0.75rem;
+  font-size: 0.45rem;
   font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 1px;
+  letter-spacing: 0.50px;
   cursor: pointer;
   transition: all 0.2s;
 }
@@ -566,9 +566,9 @@ body {
 }
 
 .paired-col-label {
-  font-size: 0.65rem;
+  font-size: 0.39rem;
   font-weight: 800;
-  letter-spacing: 2px;
+  letter-spacing: 1.00px;
   flex: 1;
   text-align: center;
 }
@@ -612,7 +612,7 @@ body {
   visibility: hidden;
   z-index: 100;
   color: white;
-  font-size: 0.75rem;
+  font-size: 0.45rem;
   box-shadow: 0 5px 20px rgba(0, 150, 255, 0.2);
   text-align: left;
   transition: all 0.2s ease;
@@ -660,19 +660,19 @@ body {
 }
 
 .item-name {
-  font-size: 0.75rem;
+  font-size: 0.45rem;
   font-weight: 700;
   line-height: 1.2;
 }
 
 .item-cost {
-  font-size: 0.75rem;
+  font-size: 0.45rem;
   color: var(--accent-yellow);
   margin-top: auto;
 }
 
 .item-stock {
-  font-size: 0.65rem;
+  font-size: 0.39rem;
   color: var(--text-muted);
 }
 
@@ -685,7 +685,7 @@ body {
   color: white;
   font-weight: 700;
   cursor: pointer;
-  font-size: 0.7rem;
+  font-size: 0.42rem;
   margin-top: 2px;
 }
 .attack-card .btn-buy, .attack-card .btn-rd {
@@ -709,7 +709,7 @@ body {
 
 .rd-progress {
   padding: 6px;
-  font-size: 0.65rem;
+  font-size: 0.39rem;
   font-weight: 900;
   text-align: center;
   background: rgba(63, 185, 80, 0.2);
@@ -751,7 +751,7 @@ body {
 
 .intel-option-title {
   font-weight: 700;
-  font-size: 0.9rem;
+  font-size: 0.54rem;
   color: var(--text-main);
 }
 
@@ -760,7 +760,7 @@ body {
 }
 
 .intel-option-desc {
-  font-size: 0.7rem;
+  font-size: 0.42rem;
   color: var(--text-muted);
 }
 
@@ -768,7 +768,7 @@ body {
   font-family: var(--font-display);
   font-weight: 800;
   color: var(--accent-yellow);
-  font-size: 0.9rem;
+  font-size: 0.54rem;
 }
 
 .intel-specific-row {
@@ -814,7 +814,7 @@ body {
   gap: 8px;
   margin-bottom: 10px;
   font-family: var(--font-display);
-  font-size: 0.7rem;
+  font-size: 0.42rem;
   font-weight: 700;
   color: var(--accent-blue);
 }
@@ -828,7 +828,7 @@ body {
 }
 
 .quiz-question-mini {
-  font-size: 0.85rem;
+  font-size: 0.51rem;
   margin-bottom: 12px;
   line-height: 1.4;
 }
@@ -845,7 +845,7 @@ body {
   border: 1px solid var(--panel-border);
   border-radius: 6px;
   color: white;
-  font-size: 0.8rem;
+  font-size: 0.48rem;
   text-align: left;
   cursor: pointer;
   transition: all 0.2s;
@@ -963,9 +963,9 @@ body {
   position: absolute;
   top: 0;
   font-family: var(--font-display);
-  font-size: 0.68rem;
+  font-size: 0.41rem;
   font-weight: 900;
-  letter-spacing: 0.4px;
+  letter-spacing: 0.20px;
   padding: 2px 6px;
   border-radius: 999px;
   z-index: 4;
@@ -1049,24 +1049,24 @@ body {
 }
 
 .inv-name {
-  font-size: 0.68rem;
+  font-size: 0.41rem;
   font-weight: 700;
   color: #c9d1d9;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.25px;
   white-space: nowrap;
   text-align: center;
 }
 
 .inv-count {
   font-family: var(--font-display);
-  font-size: 1rem;
+  font-size: 0.60rem;
   font-weight: 900;
 }
 
 .inv-damage {
   font-family: var(--font-display);
-  font-size: 0.65rem;
+  font-size: 0.39rem;
   color: var(--accent-yellow);
   font-weight: 800;
   background: rgba(210, 153, 34, 0.15);
@@ -1112,11 +1112,11 @@ body {
 
 .map-country-label {
   font-family: var(--font-display);
-  font-size: 0.6rem;
+  font-size: 0.36rem;
   font-weight: 800;
   color: white;
   text-transform: uppercase;
-  letter-spacing: 1px;
+  letter-spacing: 0.50px;
   text-shadow: 0 1px 4px rgba(0, 0, 0, 0.9);
 }
 
@@ -1141,7 +1141,7 @@ body {
   color: white;
   padding: 1px 5px;
   border-radius: 3px;
-  font-size: 0.55rem;
+  font-size: 0.33rem;
   font-weight: 800;
   border: 1px solid rgba(255, 255, 255, 0.15);
   pointer-events: none;
@@ -1162,19 +1162,19 @@ body {
 
 .tooltip-name {
   font-weight: 700;
-  font-size: 0.8rem;
+  font-size: 0.48rem;
   color: white;
 }
 
 .tooltip-rank {
-  font-size: 0.6rem;
+  font-size: 0.36rem;
   color: var(--accent-blue);
-  letter-spacing: 1px;
+  letter-spacing: 0.50px;
 }
 
 .damage-popup {
   font-family: var(--font-display);
-  font-size: 1.2rem;
+  font-size: 0.72rem;
   font-weight: 900;
   pointer-events: none;
   white-space: nowrap;
@@ -1211,8 +1211,8 @@ body {
   align-items: center;
   color: var(--accent-blue);
   font-family: var(--font-display);
-  font-size: 1.5rem;
-  letter-spacing: 4px;
+  font-size: 0.90rem;
+  letter-spacing: 2.00px;
 }
 
 /* END GAME RANKINGS */
@@ -1254,9 +1254,9 @@ body {
 
 .winner-label {
   font-family: var(--font-display);
-  font-size: 1.6rem;
+  font-size: 0.96rem;
   font-weight: 900;
-  letter-spacing: 6px;
+  letter-spacing: 3.00px;
   color: var(--text-main);
   text-transform: uppercase;
 }
@@ -1337,7 +1337,7 @@ body {
 
 .rank-badge {
   font-family: var(--font-display);
-  font-size: 1.1rem;
+  font-size: 0.66rem;
   font-weight: 900;
   color: var(--accent-yellow);
   min-width: 36px;
@@ -1369,14 +1369,14 @@ body {
 
 .rank-name {
   font-weight: 700;
-  font-size: 0.95rem;
+  font-size: 0.57rem;
 }
 
 .rank-country {
-  font-size: 0.7rem;
+  font-size: 0.42rem;
   color: var(--text-muted);
   text-transform: uppercase;
-  letter-spacing: 1px;
+  letter-spacing: 0.50px;
 }
 
 .rank-stats {
@@ -1388,7 +1388,7 @@ body {
 .rank-hp {
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: 0.9rem;
+  font-size: 0.54rem;
   color: var(--accent-red);
 }
 
@@ -1397,15 +1397,15 @@ body {
 }
 
 .rank-cp {
-  font-size: 0.75rem;
+  font-size: 0.45rem;
   color: var(--accent-yellow);
 }
 
 .rank-status {
   font-family: var(--font-display);
-  font-size: 0.65rem;
+  font-size: 0.39rem;
   font-weight: 800;
-  letter-spacing: 2px;
+  letter-spacing: 1.00px;
   padding: 4px 10px;
   border-radius: 4px;
 }
@@ -1429,8 +1429,8 @@ body {
   color: white;
   font-family: var(--font-display);
   font-weight: 800;
-  font-size: 0.9rem;
-  letter-spacing: 2px;
+  font-size: 0.54rem;
+  letter-spacing: 1.00px;
   cursor: pointer;
   transition: all 0.3s;
 }
@@ -1632,7 +1632,7 @@ body {
 .war-title {
   font-family: var(--font-display);
   font-weight: 900;
-  letter-spacing: 6px;
+  letter-spacing: 3.00px;
   text-transform: uppercase;
   background: linear-gradient(180deg, #ffffff 0%, #c9d1d9 60%, #58a6ff 100%);
   -webkit-background-clip: text;
@@ -1664,9 +1664,9 @@ body {
   padding: 0 12px;
   color: var(--accent-blue);
   font-family: var(--font-display);
-  font-size: 0.7rem;
+  font-size: 0.42rem;
   font-weight: 800;
-  letter-spacing: 4px;
+  letter-spacing: 2.00px;
 }
 
 .war-status-strip {
@@ -1677,9 +1677,9 @@ body {
   display: flex;
   gap: 18px;
   font-family: var(--font-display);
-  font-size: 0.7rem;
+  font-size: 0.42rem;
   font-weight: 800;
-  letter-spacing: 3px;
+  letter-spacing: 1.50px;
   color: rgba(200, 220, 255, 0.7);
   text-transform: uppercase;
   z-index: 5;
@@ -1835,24 +1835,24 @@ body {
 .war-slot__name {
   font-family: var(--font-display);
   font-weight: 800;
-  font-size: 0.95rem;
-  letter-spacing: 1px;
+  font-size: 0.57rem;
+  letter-spacing: 0.50px;
   color: var(--text-main);
 }
 
 .war-slot__country {
-  font-size: 0.7rem;
+  font-size: 0.42rem;
   font-weight: 700;
-  letter-spacing: 2px;
+  letter-spacing: 1.00px;
   text-transform: uppercase;
   color: rgba(200, 220, 255, 0.55);
 }
 
 .war-slot__rank {
   font-family: var(--font-display);
-  font-size: 0.65rem;
+  font-size: 0.39rem;
   font-weight: 800;
-  letter-spacing: 2px;
+  letter-spacing: 1.00px;
   padding: 4px 8px;
   border-radius: 4px;
   background: rgba(88, 166, 255, 0.1);
@@ -1897,8 +1897,8 @@ body {
   cursor: pointer;
   font-family: var(--font-display);
   font-weight: 900;
-  letter-spacing: 4px;
-  font-size: 0.95rem;
+  letter-spacing: 2.00px;
+  font-size: 0.57rem;
   color: var(--accent-red);
   text-transform: uppercase;
   transition: all 0.3s;
@@ -2085,7 +2085,7 @@ body {
 .countdown-number {
   font-family: var(--font-display);
   font-weight: 900;
-  font-size: 16rem;
+  font-size: 9.60rem;
   line-height: 1;
   color: #ff4444;
   text-shadow:
@@ -2127,8 +2127,8 @@ body {
   margin-top: 36px;
   font-family: var(--font-display);
   font-weight: 900;
-  font-size: 1.6rem;
-  letter-spacing: 14px;
+  font-size: 0.96rem;
+  letter-spacing: 7.00px;
   color: #fff;
   text-shadow: 0 0 18px rgba(255, 60, 60, 0.85);
   text-transform: uppercase;
@@ -2137,9 +2137,9 @@ body {
 .countdown-substatus {
   margin-top: 8px;
   font-family: var(--font-display);
-  font-size: 0.85rem;
+  font-size: 0.51rem;
   font-weight: 700;
-  letter-spacing: 6px;
+  letter-spacing: 3.00px;
   color: rgba(255, 200, 200, 0.7);
   text-transform: uppercase;
 }
@@ -2147,8 +2147,8 @@ body {
 .countdown-side {
   position: absolute;
   font-family: var(--font-display);
-  font-size: 0.85rem;
-  letter-spacing: 3px;
+  font-size: 0.51rem;
+  letter-spacing: 1.50px;
   text-transform: uppercase;
   color: rgba(255, 130, 130, 0.85);
   font-weight: 800;

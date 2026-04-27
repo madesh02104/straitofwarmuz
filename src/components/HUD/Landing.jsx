@@ -7,6 +7,17 @@ import missileImg from "../../assets/missile.webp";
 import tankImg from "../../assets/tank.webp";
 import jetImg from "../../assets/jet.webp";
 
+const blockyExplosion = `polygon(
+  40% 10%, 40% 0%, 60% 0%, 60% 10%,
+  70% 10%, 70% 20%, 90% 20%, 90% 30%, 80% 30%,
+  80% 40%, 100% 40%, 100% 60%, 80% 60%,
+  80% 70%, 90% 70%, 90% 80%, 70% 80%,
+  70% 90%, 60% 90%, 60% 100%, 40% 100%, 40% 90%,
+  30% 90%, 30% 80%, 10% 80%, 10% 70%, 20% 70%,
+  20% 60%, 0% 60%, 0% 40%, 20% 40%,
+  20% 30%, 10% 30%, 10% 20%, 30% 20%, 30% 10%
+)`;
+
 export const Landing = () => {
   const [name, setName] = useState("");
   const joinMatch = useGameStore((state) => state.joinMatch);
@@ -191,6 +202,7 @@ export const Landing = () => {
         minHeight: "100vh",
         position: "relative",
         overflow: "hidden",
+        backgroundColor: "#040411",
       }}
     >
       {/* Background War Animations */}
@@ -226,7 +238,7 @@ export const Landing = () => {
           }}
         />
         <div
-          className="anim-tank-bullet"
+          className="anim-tank-bullet floating-element"
           style={{
             position: "absolute",
             width: 40,
@@ -237,38 +249,13 @@ export const Landing = () => {
             pointerEvents: "none",
           }}
         >
-          {/* Main streak body matching streakMeshRef colors FFDD66 */}
+          {/* Solid color blocky bullet */}
           <div
             style={{
               position: "absolute",
               inset: 0,
-              background:
-                "linear-gradient(to right, transparent, #ffdd66 80%, #ffffff 100%)",
-              borderRadius: "10px",
-            }}
-          />
-          {/* Main glow matching streakGlowRef */}
-          <div
-            style={{
-              position: "absolute",
-              inset: "-4px",
-              background: "#ffdd66",
-              opacity: 0.5,
-              filter: "blur(6px)",
-              borderRadius: "10px",
-            }}
-          />
-          {/* Bright head matching streakHeadRef */}
-          <div
-            style={{
-              position: "absolute",
-              width: 14,
-              height: 14,
-              background: "#ffffff",
-              borderRadius: "50%",
-              right: -4,
-              top: -2,
-              boxShadow: "0 0 10px #ffffff, 0 0 20px #ffdd66",
+              background: "#FFFF00",
+              border: "2px solid #FF0000",
             }}
           />
         </div>
@@ -278,18 +265,22 @@ export const Landing = () => {
             position: "absolute",
             left: "88%",
             bottom: "1%",
-            width: 375,
-            height: 375,
-            borderRadius: "50%",
-            /* Nuke style fire/smoke layers based on NukeAnimation */
-            background:
-              "radial-gradient(circle, #ffffff 0%, #ffee88 15%, #ff6600 30%, #cc1500 50%, rgba(44,40,32,0.9) 70%, rgba(26,22,20,0) 100%)",
-            filter: "blur(12px)",
+            width: 100,
+            height: 100,
             opacity: 0,
-            transform: "translate(-50%, 40%)",
+            transform: "translate(-50%, -10%)",
+            transformOrigin: "50% 50%",
             pointerEvents: "none",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
           }}
-        />
+        >
+          <div style={{ position: "absolute", inset: 0, background: "#8B0000", clipPath: blockyExplosion }} />
+          <div style={{ position: "absolute", inset: "20%", background: "#FF0000", clipPath: blockyExplosion }} />
+          <div style={{ position: "absolute", inset: "40%", background: "#FF9900", clipPath: blockyExplosion }} />
+          <div style={{ position: "absolute", inset: "60%", background: "#555555", clipPath: blockyExplosion }} />
+        </div>
 
         <img
           src={jetImg}
@@ -320,31 +311,8 @@ export const Landing = () => {
               style={{
                 position: "absolute",
                 inset: 0,
-                background:
-                  "linear-gradient(to bottom, transparent, #ffeedd 80%, #ffffff 100%)",
-                borderRadius: "8px",
-              }}
-            />
-            <div
-              style={{
-                position: "absolute",
-                inset: "-3px",
-                background: "#ffeedd",
-                opacity: 0.5,
-                filter: "blur(5px)",
-                borderRadius: "8px",
-              }}
-            />
-            <div
-              style={{
-                position: "absolute",
-                width: 12,
-                height: 12,
-                background: "#ffffff",
-                borderRadius: "50%",
-                left: -2,
-                bottom: -3,
-                boxShadow: "0 0 8px #ffffff, 0 0 16px #ffeedd",
+                background: "#00FFFF",
+                border: "2px solid #FFFFFF",
               }}
             />
           </div>
@@ -355,18 +323,22 @@ export const Landing = () => {
             position: "absolute",
             left: "40%",
             bottom: "2%",
-            width: 360,
-            height: 360,
-            borderRadius: "50%",
-            background:
-              "radial-gradient(circle, #ffffff 0%, #ff5522 28%, rgba(60,40,20,0.75) 55%, rgba(0,0,0,0) 85%)",
-            filter: "blur(14px)",
+            width: 120,
+            height: 120,
             opacity: 0,
-            transform: "translate(-50%, 45%)",
-            transformOrigin: "50% 60%",
+            transform: "translate(-50%, -10%)",
+            transformOrigin: "50% 50%",
             pointerEvents: "none",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
           }}
-        />
+        >
+          <div style={{ position: "absolute", inset: 0, background: "#D21404", clipPath: blockyExplosion }} />
+          <div style={{ position: "absolute", inset: "15%", background: "#FF9900", clipPath: blockyExplosion }} />
+          <div style={{ position: "absolute", inset: "30%", background: "#FFFF00", clipPath: blockyExplosion }} />
+          <div style={{ position: "absolute", inset: "45%", background: "#FFFFFF", clipPath: blockyExplosion }} />
+        </div>
       </div>
 
       <div
@@ -383,11 +355,11 @@ export const Landing = () => {
         }}
       >
         <div
-          className="instructions-box war-frame"
+          className="instructions-box war-frame floating-element"
           style={{
-            padding: "2rem",
+            padding: "1.5rem",
             borderRadius: 10,
-            maxWidth: 350,
+            maxWidth: 380,
             marginTop: "6rem",
           }}
         >
@@ -399,7 +371,7 @@ export const Landing = () => {
               display: "flex",
               alignItems: "center",
               gap: 10,
-              fontSize: "0.95rem",
+              fontSize: "0.8rem",
               fontFamily: "var(--font-display)",
               textTransform: "uppercase",
               letterSpacing: 4,
@@ -413,36 +385,36 @@ export const Landing = () => {
               padding: 0,
               margin: 0,
               color: "var(--text-main)",
-              fontSize: "0.88rem",
+              fontSize: "0.6rem",
               display: "flex",
               flexDirection: "column",
-              gap: 12,
-              lineHeight: 1.55,
+              gap: 20,
+              lineHeight: 1.8,
             }}
           >
             <li>
-              <strong style={{ color: "var(--accent-blue)" }}>1. Join</strong>{" "}
+              <strong style={{ color: "#00FFFF" }}>1. Join</strong>{" "}
               Enter your name and join the game. You'll be assigned a country on
               the world map.
             </li>
             <li>
-              <strong style={{ color: "#e3b341" }}>2. Prepare (2 min)</strong>{" "}
+              <strong style={{ color: "#FFFF00" }}>2. Prepare (2 min)</strong>{" "}
               Buy weapons and defenses from the market. Start R&D to unlock
               cheaper gear.
             </li>
             <li>
-              <strong style={{ color: "var(--accent-red)" }}>
+              <strong style={{ color: "#FF0000" }}>
                 3. Attack (1 min)
               </strong>{" "}
               Drag weapons from your inventory onto enemy countries to attack
               them.
             </li>
             <li>
-              <strong style={{ color: "#ffb86c" }}>4. Answer Quizzes</strong>{" "}
+              <strong style={{ color: "#FF9900" }}>4. Answer Quizzes</strong>{" "}
               Answer strategy questions mid-game to earn bonus currency.
             </li>
             <li>
-              <strong style={{ color: "#bd93f9" }}>5. Survive</strong> Last
+              <strong style={{ color: "#CC00FF" }}>5. Survive</strong> Last
               country standing wins. Matching defenses automatically counter
               attacks.
             </li>
@@ -463,37 +435,35 @@ export const Landing = () => {
           >
             <Globe
               size={44}
+              className="globe-icon floating-element"
               style={{
-                color: "var(--accent-blue)",
-                filter: "drop-shadow(0 0 10px rgba(88,166,255,0.5))",
+                color: "#00FFFF",
+                filter: "drop-shadow(4px 4px 0px #000)",
               }}
             />
             <h1
               style={{
                 fontFamily: "var(--font-display)",
                 fontWeight: 900,
-                fontSize: "3.4rem",
+                fontSize: "2.4rem",
                 letterSpacing: 6,
                 textTransform: "uppercase",
-                margin: "8px 0 6px",
-                background:
-                  "linear-gradient(180deg, #ffffff 0%, #c9d1d9 60%, #58a6ff 100%)",
-                WebkitBackgroundClip: "text",
-                backgroundClip: "text",
-                WebkitTextFillColor: "transparent",
+                margin: "8px 0 16px",
+                color: "white",
+                textShadow: "4px 4px 0px #000",
               }}
             >
               COUNTRYSIDE
             </h1>
             <div className="war-divider">
-              <span>GLOBAL STRATEGY GAME</span>
+              <span style={{ fontSize: "0.6rem", letterSpacing: 2 }}>GLOBAL STRATEGY GAME</span>
             </div>
             <p
               style={{
                 color: "var(--text-muted)",
                 letterSpacing: 3,
-                marginTop: 12,
-                fontSize: "0.8rem",
+                marginTop: 16,
+                fontSize: "0.55rem",
                 textTransform: "uppercase",
                 fontFamily: "var(--font-display)",
                 fontWeight: 700,
@@ -504,7 +474,7 @@ export const Landing = () => {
           </div>
 
           <div
-            className="landing-card war-frame"
+            className="landing-card war-frame floating-element"
             style={{ padding: "1.8rem", borderRadius: 10 }}
           >
             <div className="war-frame__corners" />
@@ -513,7 +483,7 @@ export const Landing = () => {
               <label
                 style={{
                   display: "block",
-                  fontSize: "0.7rem",
+                  fontSize: "0.55rem",
                   color: "var(--accent-blue)",
                   marginBottom: 8,
                   letterSpacing: 3,
@@ -535,15 +505,15 @@ export const Landing = () => {
                 maxLength={15}
                 style={{
                   width: "100%",
-                  padding: "12px 16px",
-                  background: "rgba(0,0,0,0.5)",
-                  border: "1px solid rgba(88,166,255,0.35)",
-                  borderRadius: 6,
+                  padding: "16px 16px",
+                  background: "#000",
+                  border: "4px solid #00FFFF",
                   color: "white",
-                  fontSize: "1rem",
+                  fontSize: "0.8rem",
                   outline: "none",
                   boxSizing: "border-box",
                   letterSpacing: 1,
+                  caretColor: "#00FFFF",
                 }}
               />
             </div>
@@ -558,24 +528,19 @@ export const Landing = () => {
                   alignItems: "center",
                   justifyContent: "space-between",
                   padding: 16,
-                  background:
-                    "linear-gradient(135deg, rgba(248,81,73,0.15), rgba(248,81,73,0.05))",
-                  border: "1px solid rgba(248,81,73,0.45)",
-                  borderRadius: 6,
                   color: "white",
                   cursor: "pointer",
-                  transition: "all 0.3s",
                   fontFamily: "var(--font-display)",
                   letterSpacing: 2,
                 }}
               >
                 <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                  <Users size={22} color="var(--accent-red)" />
+                  <Users size={22} color="#FFFFFF" />
                   <div style={{ textAlign: "left" }}>
                     <div
                       style={{
                         fontWeight: 900,
-                        fontSize: "1rem",
+                        fontSize: "0.8rem",
                         letterSpacing: 3,
                       }}
                     >
@@ -583,10 +548,10 @@ export const Landing = () => {
                     </div>
                     <div
                       style={{
-                        fontSize: "0.7rem",
+                        fontSize: "0.5rem",
                         color: "var(--text-muted)",
                         letterSpacing: 2,
-                        marginTop: 2,
+                        marginTop: 6,
                       }}
                     >
                       Public match
@@ -603,9 +568,9 @@ export const Landing = () => {
                 alignItems: "center",
                 justifyContent: "center",
                 gap: 8,
-                marginTop: "1.2rem",
+                marginTop: "1.6rem",
                 color: "var(--text-muted)",
-                fontSize: "0.75rem",
+                fontSize: "0.55rem",
                 letterSpacing: 1,
               }}
             >
