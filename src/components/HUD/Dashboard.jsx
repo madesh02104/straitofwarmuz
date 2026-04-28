@@ -61,28 +61,56 @@ const getDamageLabel = (id) => {
   return '';
 };
 
+const transparentDragImage = (() => {
+  const img = new Image();
+  img.src =
+    "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==";
+  return img;
+})();
+
+let dragPreviewEl = null;
+let dragMoveHandler = null;
+
+const clearDragPreview = () => {
+  if (dragPreviewEl && dragPreviewEl.parentNode) {
+    dragPreviewEl.parentNode.removeChild(dragPreviewEl);
+  }
+  dragPreviewEl = null;
+  if (dragMoveHandler) {
+    window.removeEventListener("dragover", dragMoveHandler);
+  }
+  dragMoveHandler = null;
+};
+
 const setScaledDragImage = (event, sourceElement) => {
+  clearDragPreview();
   const iconEl = sourceElement.querySelector('.inv-icon') || sourceElement;
   const rect = iconEl.getBoundingClientRect();
   const dragPreview = iconEl.cloneNode(true);
   dragPreview.style.position = 'fixed';
-  dragPreview.style.top = '-9999px';
-  dragPreview.style.left = '-9999px';
+  dragPreview.style.top = `${event.clientY - rect.height}px`;
+  dragPreview.style.left = `${event.clientX - rect.width}px`;
   dragPreview.style.margin = '0';
   dragPreview.style.padding = '0';
   dragPreview.style.border = 'none';
   dragPreview.style.background = 'transparent';
   dragPreview.style.boxShadow = 'none';
   dragPreview.style.pointerEvents = 'none';
+  dragPreview.style.zIndex = '100002';
   dragPreview.style.width = `${rect.width}px`;
   dragPreview.style.height = `${rect.height}px`;
-  dragPreview.style.transform = 'scale(0.5)';
+  dragPreview.style.transform = 'scale(1)';
   dragPreview.style.transformOrigin = 'top left';
   document.body.appendChild(dragPreview);
-  event.dataTransfer.setDragImage(dragPreview, (rect.width * 0.5) / 2, (rect.height * 0.5) / 2);
-  requestAnimationFrame(() => {
-    if (dragPreview.parentNode) dragPreview.parentNode.removeChild(dragPreview);
-  });
+  dragPreviewEl = dragPreview;
+
+  event.dataTransfer.setDragImage(transparentDragImage, 0, 0);
+  dragMoveHandler = (e) => {
+    if (!dragPreviewEl) return;
+    dragPreviewEl.style.top = `${e.clientY - rect.height}px`;
+    dragPreviewEl.style.left = `${e.clientX - rect.width}px`;
+  };
+  window.addEventListener("dragover", dragMoveHandler);
 };
 
 const QuizToaster = ({ quiz, onAnswer }) => {
@@ -156,6 +184,8 @@ export const Dashboard = () => {
   const [intelTarget, setIntelTarget] = useState('');
   const [intelItem, setIntelItem] = useState('missile');
   const [cooldowns, setCooldowns] = useState({});
+
+  useEffect(() => () => clearDragPreview(), []);
 
   const me = Object.values(gameState.players).find(p => p.country === myCountry);
   const isFarmingPhase = gameState.phase === 1;
@@ -450,6 +480,7 @@ export const Dashboard = () => {
                     e.dataTransfer.setData('itemId', itemId);
                     setScaledDragImage(e, e.currentTarget);
                   }}
+                  onDragEnd={clearDragPreview}
                   onClick={() => { if (canActivateCyber) activateDeflect(); }}
                   style={{ position: 'relative', overflow: 'hidden', cursor: canActivateCyber ? 'pointer' : (isDeflecting ? 'not-allowed' : 'default') }}
                 >
