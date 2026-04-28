@@ -6,6 +6,7 @@ import { Lobby } from './components/HUD/Lobby';
 import { useGameStore } from './store/gameStore';
 import './styles/index.css';
 import './styles/hud.css';
+import './styles/retro.css';
 
 function App() {
   const { hasJoined, gameState } = useGameStore();
@@ -20,6 +21,7 @@ function App() {
         <WorldMap />
         <Dashboard />
       </div>
+      <div className="crt-overlay" />
     </div>
   );
 }

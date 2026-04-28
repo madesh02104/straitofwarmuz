@@ -1,0 +1,41 @@
+/* CRT Monitor Effect */
+.crt-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 99999;
+  background: 
+    linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), 
+    linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+  background-size: 100% 4px, 3px 100%;
+  box-shadow: inset 0 0 100px rgba(0,0,0,0.85);
+  animation: crtFlicker 0.15s infinite;
+}
+
+@keyframes crtFlicker {
+  0% { opacity: 0.95; }
+  50% { opacity: 1; }
+  100% { opacity: 0.95; }
+}
+
+/* Retro Pixel Cursors using SVG Data URIs */
+body {
+  cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><rect x="11" y="0" width="2" height="10" fill="white"/><rect x="11" y="14" width="2" height="10" fill="white"/><rect x="0" y="11" width="10" height="2" fill="white"/><rect x="14" y="11" width="10" height="2" fill="white"/><rect x="11" y="11" width="2" height="2" fill="red"/></svg>') 12 12, crosshair !important;
+}
+
+button, a, input, .clickable, .inv-item, .market-item, .nav-btn, .war-toggle {
+  cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><rect x="0" y="0" width="8" height="8" fill="white"/><rect x="8" y="8" width="8" height="8" fill="white"/><rect x="16" y="16" width="8" height="8" fill="white"/></svg>') 0 0, pointer !important;
+}
+
+/* Arcade Blink Effect for Call To Actions */
+@keyframes arcade-blink {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+
+.blink-text, .war-toggle:not(.armed), .join-btn {
+  animation: arcade-blink 1.2s infinite;
+}

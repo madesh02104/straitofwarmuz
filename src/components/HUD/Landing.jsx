@@ -539,6 +539,7 @@ export const Landing = () => {
                   <Users size={22} color="#FFFFFF" />
                   <div style={{ textAlign: "left" }}>
                     <div
+                      className="join-btn"
                       style={{
                         fontWeight: 900,
                         fontSize: "0.8rem",
