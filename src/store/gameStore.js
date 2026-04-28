@@ -20,6 +20,7 @@ export const useGameStore = create((set, get) => ({
   notification: null,
   worldEvent: null,
   spyResult: null,
+  joinBlockedMessage: null,
   isReady: false,
   hasJoined: false,
   bgmVolume: 0.4,
@@ -29,8 +30,9 @@ export const useGameStore = create((set, get) => ({
   // Actions
   joinMatch: (name) => {
     socket.emit("joinMatch", { name });
-    set({ hasJoined: true });
   },
+
+  dismissJoinBlockedMessage: () => set({ joinBlockedMessage: null }),
 
   toggleReady: () => {
     const { isReady } = get();
@@ -106,7 +108,20 @@ socket.on("gameState", (state) => {
 });
 
 socket.on("assignedCountry", (country) => {
-  useGameStore.setState({ myCountry: country });
+  useGameStore.setState({
+    myCountry: country,
+    hasJoined: true,
+    joinBlockedMessage: null,
+  });
+});
+
+socket.on("joinDenied", (data) => {
+  useGameStore.setState({
+    hasJoined: false,
+    myCountry: null,
+    isReady: false,
+    joinBlockedMessage: data?.message || "Room unavailable. Please try again later.",
+  });
 });
 
 socket.on("quiz", (quiz) => {

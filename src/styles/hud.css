@@ -1851,6 +1851,24 @@ body {
   border-top: none;
 }
 
+.landing-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  background: rgba(0, 0, 0, 0.72);
+  backdrop-filter: blur(4px);
+  z-index: 100001;
+}
+
+.landing-modal {
+  box-shadow:
+    0 24px 80px rgba(0, 0, 0, 0.7),
+    inset 0 0 50px rgba(88, 166, 255, 0.05);
+}
+
 /* Lobby player slot — battlefield variant */
 .war-slot {
   position: relative;

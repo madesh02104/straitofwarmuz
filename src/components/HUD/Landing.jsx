@@ -1,6 +1,6 @@
 import React, { useState, useLayoutEffect } from "react";
 import { useGameStore } from "../../store/gameStore";
-import { Shield, Globe, Users, ChevronRight, Maximize } from "lucide-react";
+import { Shield, Globe, Users, ChevronRight, Maximize, X } from "lucide-react";
 import gsap from "gsap";
 
 import missileImg from "../../assets/missile.webp";
@@ -21,6 +21,10 @@ const blockyExplosion = `polygon(
 export const Landing = () => {
   const [name, setName] = useState("");
   const joinMatch = useGameStore((state) => state.joinMatch);
+  const joinBlockedMessage = useGameStore((state) => state.joinBlockedMessage);
+  const dismissJoinBlockedMessage = useGameStore(
+    (state) => state.dismissJoinBlockedMessage,
+  );
 
   useLayoutEffect(() => {
     gsap.set(".anim-jet", { left: "100%", x: 220, right: "auto" });
@@ -276,10 +280,38 @@ export const Landing = () => {
             justifyContent: "center",
           }}
         >
-          <div style={{ position: "absolute", inset: 0, background: "#8B0000", clipPath: blockyExplosion }} />
-          <div style={{ position: "absolute", inset: "20%", background: "#FF0000", clipPath: blockyExplosion }} />
-          <div style={{ position: "absolute", inset: "40%", background: "#FF9900", clipPath: blockyExplosion }} />
-          <div style={{ position: "absolute", inset: "60%", background: "#555555", clipPath: blockyExplosion }} />
+          <div
+            style={{
+              position: "absolute",
+              inset: 0,
+              background: "#8B0000",
+              clipPath: blockyExplosion,
+            }}
+          />
+          <div
+            style={{
+              position: "absolute",
+              inset: "20%",
+              background: "#FF0000",
+              clipPath: blockyExplosion,
+            }}
+          />
+          <div
+            style={{
+              position: "absolute",
+              inset: "40%",
+              background: "#FF9900",
+              clipPath: blockyExplosion,
+            }}
+          />
+          <div
+            style={{
+              position: "absolute",
+              inset: "60%",
+              background: "#555555",
+              clipPath: blockyExplosion,
+            }}
+          />
         </div>
 
         <img
@@ -334,10 +366,38 @@ export const Landing = () => {
             justifyContent: "center",
           }}
         >
-          <div style={{ position: "absolute", inset: 0, background: "#D21404", clipPath: blockyExplosion }} />
-          <div style={{ position: "absolute", inset: "15%", background: "#FF9900", clipPath: blockyExplosion }} />
-          <div style={{ position: "absolute", inset: "30%", background: "#FFFF00", clipPath: blockyExplosion }} />
-          <div style={{ position: "absolute", inset: "45%", background: "#FFFFFF", clipPath: blockyExplosion }} />
+          <div
+            style={{
+              position: "absolute",
+              inset: 0,
+              background: "#D21404",
+              clipPath: blockyExplosion,
+            }}
+          />
+          <div
+            style={{
+              position: "absolute",
+              inset: "15%",
+              background: "#FF9900",
+              clipPath: blockyExplosion,
+            }}
+          />
+          <div
+            style={{
+              position: "absolute",
+              inset: "30%",
+              background: "#FFFF00",
+              clipPath: blockyExplosion,
+            }}
+          />
+          <div
+            style={{
+              position: "absolute",
+              inset: "45%",
+              background: "#FFFFFF",
+              clipPath: blockyExplosion,
+            }}
+          />
         </div>
       </div>
 
@@ -393,9 +453,9 @@ export const Landing = () => {
             }}
           >
             <li>
-              <strong style={{ color: "#00FFFF" }}>1. Join</strong>{" "}
-              Enter your name and join the game. You'll be assigned a country on
-              the world map.
+              <strong style={{ color: "#00FFFF" }}>1. Join</strong> Enter your
+              name and join the game. You'll be assigned a country on the world
+              map.
             </li>
             <li>
               <strong style={{ color: "#FFFF00" }}>2. Prepare (2 min)</strong>{" "}
@@ -403,9 +463,7 @@ export const Landing = () => {
               cheaper gear.
             </li>
             <li>
-              <strong style={{ color: "#FF0000" }}>
-                3. Attack (1 min)
-              </strong>{" "}
+              <strong style={{ color: "#FF0000" }}>3. Attack (1 min)</strong>{" "}
               Drag weapons from your inventory onto enemy countries to attack
               them.
             </li>
@@ -456,7 +514,9 @@ export const Landing = () => {
               STRAIT OF WARMUZ
             </h1>
             <div className="war-divider">
-              <span style={{ fontSize: "0.6rem", letterSpacing: 2 }}>GLOBAL STRATEGY GAME</span>
+              <span style={{ fontSize: "0.6rem", letterSpacing: 2 }}>
+                GLOBAL STRATEGY GAME
+              </span>
             </div>
             <p
               style={{
@@ -467,7 +527,7 @@ export const Landing = () => {
                 textTransform: "uppercase",
                 fontFamily: "var(--font-display)",
                 fontWeight: 700,
-                whiteSpace: "nowrap"
+                whiteSpace: "nowrap",
               }}
             >
               One world map · Last one standing wins
@@ -591,6 +651,81 @@ export const Landing = () => {
           <span className="war-led" /> SERVER ONLINE
         </div>
       </div>
+
+      {joinBlockedMessage && (
+        <div className="landing-modal-backdrop">
+          <div
+            className="landing-modal war-frame"
+            style={{
+              position: "relative",
+              width: "min(520px, calc(100vw - 32px))",
+              padding: "1.8rem",
+              borderRadius: 10,
+              zIndex: 20,
+            }}
+          >
+            <div className="war-frame__corners" />
+            <button
+              type="button"
+              onClick={dismissJoinBlockedMessage}
+              aria-label="Close join status popup"
+              style={{
+                position: "absolute",
+                top: 14,
+                right: 14,
+                width: 36,
+                height: 36,
+                display: "grid",
+                placeItems: "center",
+                border: "2px solid var(--accent-blue)",
+                background: "#050a10",
+                color: "var(--accent-blue)",
+                cursor: "pointer",
+              }}
+            >
+              <X size={18} />
+            </button>
+
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                gap: 14,
+                paddingRight: "2.4rem",
+              }}
+            >
+              <div
+                style={{
+                  color: "var(--accent-red)",
+                  fontFamily: "var(--font-display)",
+                  fontSize: "0.9rem",
+                  fontWeight: 900,
+                  letterSpacing: 3,
+                  textTransform: "uppercase",
+                }}
+              >
+                Room Full
+              </div>
+              <div className="war-divider">
+                <span style={{ fontSize: "0.58rem", letterSpacing: 2 }}>
+                  Command Center Notice
+                </span>
+              </div>
+              <p
+                style={{
+                  margin: 0,
+                  color: "var(--text-main)",
+                  fontSize: "0.66rem",
+                  lineHeight: 1.8,
+                  letterSpacing: 0.5,
+                }}
+              >
+                {joinBlockedMessage}
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

@@ -28,7 +28,9 @@ io.on('connection', (socket) => {
 
   socket.on('joinMatch', (data) => {
     if (game.lobbyState !== 'waiting') {
-      socket.emit('error', { message: 'Battle already in progress.' });
+      socket.emit('joinDenied', {
+        message: 'Room is full. Please wait for the current match to finish.',
+      });
       return;
     }
     const player = game.addPlayer(socket.id, data.name);
@@ -36,7 +38,9 @@ io.on('connection', (socket) => {
       socket.emit('assignedCountry', player.country);
       io.emit('gameState', game.getSnapshot());
     } else {
-      socket.emit('lobbyFull');
+      socket.emit('joinDenied', {
+        message: 'Room is full. Please wait for the next lobby to open.',
+      });
     }
   });
 
