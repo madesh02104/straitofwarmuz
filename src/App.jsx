@@ -4,6 +4,8 @@ import { Dashboard } from './components/HUD/Dashboard';
 import { Landing } from './components/HUD/Landing';
 import { Lobby } from './components/HUD/Lobby';
 import { useGameStore } from './store/gameStore';
+import { BGMPlayer } from './components/Audio/BGMPlayer';
+import { VolumeControl } from './components/Audio/VolumeControl';
 import './styles/index.css';
 import './styles/hud.css';
 import './styles/retro.css';
@@ -22,6 +24,8 @@ function App() {
         <Dashboard />
       </div>
       <div className="crt-overlay" />
+      <BGMPlayer />
+      <VolumeControl />
     </div>
   );
 }

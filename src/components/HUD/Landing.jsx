@@ -453,7 +453,7 @@ export const Landing = () => {
                 textShadow: "4px 4px 0px #000",
               }}
             >
-              COUNTRYSIDE
+              STRAIT OF WARMUZ
             </h1>
             <div className="war-divider">
               <span style={{ fontSize: "0.6rem", letterSpacing: 2 }}>GLOBAL STRATEGY GAME</span>

@@ -4,36 +4,16 @@ import {
   CheckCircle,
   XCircle,
   Shield,
-  Volume2,
-  VolumeX,
   Users,
 } from "lucide-react";
 import { CountdownTakeover } from "./CountdownTakeover";
 
 export const Lobby = () => {
-  const { gameState, isReady, toggleReady } = useGameStore();
+  const { gameState, isReady, toggleReady, sfxVolume, isMuted } = useGameStore();
   const players = Object.values(gameState.players);
   const readyCount = players.filter((p) => p.isReady).length;
 
-  const [isMuted, setIsMuted] = useState(false);
-  const audioRef = useRef(null);
   const hasCountdownSoundPlayed = useRef(false);
-
-  useEffect(() => {
-    const audio = new Audio("/lobbby.wav");
-    audio.loop = true;
-    audio.volume = isMuted ? 0 : 0.3;
-    audio.play().catch((e) => console.warn("Audio disabled by browser:", e));
-    audioRef.current = audio;
-    return () => {
-      audio.pause();
-      audio.currentTime = 0;
-    };
-  }, [isMuted]);
-
-  useEffect(() => {
-    if (audioRef.current) audioRef.current.volume = isMuted ? 0 : 0.3;
-  }, [isMuted]);
 
   useEffect(() => {
     if (
@@ -42,14 +22,14 @@ export const Lobby = () => {
     ) {
       hasCountdownSoundPlayed.current = true;
       const countdownAudio = new Audio("/5_sec_countdown.wav");
-      countdownAudio.volume = isMuted ? 0 : 0.6;
+      countdownAudio.volume = isMuted ? 0 : sfxVolume;
       countdownAudio
         .play()
         .catch((e) => console.warn("Countdown audio play failed", e));
     } else if (gameState.lobbyState === "waiting") {
       hasCountdownSoundPlayed.current = false;
     }
-  }, [gameState.lobbyState, isMuted]);
+  }, [gameState.lobbyState, isMuted, sfxVolume]);
 
   if (gameState.lobbyState === "starting") {
     return <CountdownTakeover matchStartTime={gameState.matchStartTime} />;
@@ -78,23 +58,6 @@ export const Lobby = () => {
         }}
       >
         <div className="war-frame__corners" />
-
-        <button
-          className="mute-btn"
-          onClick={() => setIsMuted((prev) => !prev)}
-          style={{
-            position: "absolute",
-            top: 16,
-            right: 16,
-            background: "transparent",
-            border: "none",
-            color: "var(--text-muted)",
-            cursor: "pointer",
-          }}
-          title={isMuted ? "Unmute" : "Mute"}
-        >
-          {isMuted ? <VolumeX size={20} /> : <Volume2 size={20} />}
-        </button>
 
         <div
           className="lobby-header"

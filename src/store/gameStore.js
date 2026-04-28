@@ -22,6 +22,9 @@ export const useGameStore = create((set, get) => ({
   spyResult: null,
   isReady: false,
   hasJoined: false,
+  bgmVolume: 0.4,
+  sfxVolume: 0.5,
+  isMuted: false,
 
   // Actions
   joinMatch: (name) => {
@@ -64,11 +67,17 @@ export const useGameStore = create((set, get) => ({
   activateDeflect: () => {
     socket.emit("activateDeflect");
   },
+
+  setBgmVolume: (vol) => set({ bgmVolume: vol }),
+  setSfxVolume: (vol) => set({ sfxVolume: vol }),
+  toggleMute: () => set((state) => ({ isMuted: !state.isMuted })),
 }));
 
 export const playSound = (file) => {
+  const { sfxVolume, isMuted } = useGameStore.getState();
+  if (isMuted) return;
   const audio = new Audio(`/${file}`);
-  audio.volume = 0.5;
+  audio.volume = sfxVolume;
   audio.play().catch(e => console.warn('Audio disabled by browser:', e));
 };
 
