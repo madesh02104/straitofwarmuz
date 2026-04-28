@@ -1,463 +1,1541 @@
 [
   {
-    "country": "India",
-    "question": "What is the absolute meta for Indian street food hygiene?",
+    "country": "Australia",
+    "question": "What is the most common way to greet a total stranger?",
     "options": [
-      "Sterile",
-      "Barehands",
-      "Lab-grade",
-      "Nanobots"
-    ],
-    "answer": 1
-  },
-  {
-    "country": "India",
-    "question": "How do Indian aunties hit you with emotional damage?",
-    "options": [
-      "Ghosting",
-      "Comparisons",
-      "Diss-tracks",
-      "Memes"
-    ],
-    "answer": 1
-  },
-  {
-    "country": "India",
-    "question": "What s the main character energy of an Indian wedding?",
-    "options": [
-      "Acoustic",
-      "Chaos",
-      "Eloping",
-      "Zoom"
-    ],
-    "answer": 1
-  },
-  {
-    "country": "Pakistan",
-    "question": "What is the literal flex of Pakistani weddings?",
-    "options": [
-      "Celery",
-      "Biryani",
-      "Quiet",
-      "Potluck"
-    ],
-    "answer": 1
-  },
-  {
-    "country": "Pakistan",
-    "question": "How do neighbors handle a sudden power blackout?",
-    "options": [
-      "Panic",
-      "Screaming",
-      "Gossiping",
-      "Selling"
+      "Silence",
+      "Handshake with gloves",
+      "G'day mate",
+      "Formal bow"
     ],
     "answer": 2
   },
   {
-    "country": "Pakistan",
-    "question": "What s the definitive form of stress relief during a match against India?",
+    "country": "Australia",
+    "question": "What is the standard 'backyard confidence test' in Australia?",
     "options": [
-      "Meditation",
-      "Screaming",
-      "Golf-claps",
-      "Rage-quit"
-    ],
-    "answer": 1
-  },
-  {
-    "country": "Russia",
-    "question": "What is the ultimate Russian winter drip?",
-    "options": [
-      "Tank-top",
-      "Tracksuits",
-      "Heated-Gucci",
-      "North-Face"
-    ],
-    "answer": 1
-  },
-  {
-    "country": "Russia",
-    "question": "How do they handle a minor inconveniences in Russia?",
-    "options": [
-      "Emailing",
-      "Ignoring",
-      "Crying",
-      "Calling-HR"
-    ],
-    "answer": 1
-  },
-  {
-    "country": "Russia",
-    "question": "What s the go-to beverage when the temperature hits negative 40?",
-    "options": [
-      "Matcha",
-      "Vodka",
-      "Sparkling",
-      "Soy-milk"
-    ],
-    "answer": 1
-  },
-  {
-    "country": "China",
-    "question": "What is the actual meta in Chinese factory lore?",
-    "options": [
-      "Vibing",
-      "996-Grind",
-      "3-day-week",
-      "Clay-pots"
-    ],
-    "answer": 1
-  },
-  {
-    "country": "China",
-    "question": "How are transactions done because cash is so last season?",
-    "options": [
-      "Pokémon-cards",
-      "WeChat-QR",
-      "Gold-bricks",
-      "Checks"
-    ],
-    "answer": 1
-  },
-  {
-    "country": "China",
-    "question": "What s the ultimate status symbol for Chinese parents?",
-    "options": [
-      "TikToker",
-      "Child-PhD",
-      "Gaming-PCs",
-      "Viral-dancer"
-    ],
-    "answer": 1
-  },
-  {
-    "country": "Israel",
-    "question": "What is the default volume for a casual conversation?",
-    "options": [
-      "Whispering",
-      "Telepathy",
-      "Screaming",
-      "Letters"
+      "Planting a tulip",
+      "Counting grass blades",
+      "Checking for spiders",
+      "Building a skyscraper"
     ],
     "answer": 2
   },
   {
-    "country": "Israel",
-    "question": "How do Israelis solve literal tech problems?",
+    "country": "Australia",
+    "question": "What is the only essential gear for an Australian beach trip?",
     "options": [
-      "Crying",
-      "Lobbying",
-      "Startup",
-      "IT-ticket"
-    ],
-    "answer": 2
-  },
-  {
-    "country": "Israel",
-    "question": "What s the supreme spread that will start a war if insulted?",
-    "options": [
-      "Peanut-butter",
-      "Avocado",
-      "Hummus",
-      "Ranch"
-    ],
-    "answer": 2
-  },
-  {
-    "country": "Iran",
-    "question": "How long does a standard Persian goodbye take at the door?",
-    "options": [
-      "Two-seconds",
-      "Irish-exit",
-      "45-minutes",
-      "High-five"
-    ],
-    "answer": 2
-  },
-  {
-    "country": "Iran",
-    "question": "What s the most high-stakes flex you can legally do at an Iranian dinner?",
-    "options": [
-      "Steal-Tahdig",
-      "Boiled-chicken",
-      "Store-cake",
-      "Leave-early"
+      "Esky and sunscreen",
+      "Winter coat",
+      "Laptop bag",
+      "Formal tuxedo"
     ],
     "answer": 0
   },
   {
-    "country": "Iran",
-    "question": "What is the true power source of the entire nation?",
+    "country": "Australia",
+    "question": "What is the national response to seeing a magpie in spring?",
     "options": [
-      "Red-Bull",
-      "Black-Tea",
-      "Solar",
-      "Iced-coffee"
+      "Sing it a song",
+      "Protect your head",
+      "Ask for directions",
+      "Give it a hug"
     ],
     "answer": 1
   },
   {
-    "country": "USA",
-    "question": "How does the USA measure distance?",
+    "country": "Australia",
+    "question": "How long does a standard Australian barbecue last?",
     "options": [
-      "Metric",
-      "Football-fields",
-      "Parsecs",
-      "Bananas"
+      "One week",
+      "Five minutes",
+      "Exactly sixty seconds",
+      "The whole afternoon"
+    ],
+    "answer": 3
+  },
+  {
+    "country": "Australia",
+    "question": "What is the official summer health warning?",
+    "options": [
+      "Slip Slop Slap",
+      "Stay in the snow",
+      "Wear more wool",
+      "Drink hot soup"
+    ],
+    "answer": 0
+  },
+  {
+    "country": "Australia",
+    "question": "What is the national footwear of choice?",
+    "options": [
+      "High heels",
+      "Clown shoes",
+      "Thongs",
+      "Steel-toe boots"
+    ],
+    "answer": 2
+  },
+  {
+    "country": "Australia",
+    "question": "If an Australian says 'arvo', what time of day is it?",
+    "options": [
+      "Afternoon",
+      "Midnight",
+      "Sunrise",
+      "Lunchtime"
+    ],
+    "answer": 0
+  },
+  {
+    "country": "Australia",
+    "question": "What is the spawn rate of terrifying wildlife in your backyard?",
+    "options": [
+      "Once a century",
+      "Never",
+      "Only in zoos",
+      "Every single day"
+    ],
+    "answer": 3
+  },
+  {
+    "country": "Australia",
+    "question": "What is the primary ingredient in the spread Australians love but tourists hate?",
+    "options": [
+      "Vegemite",
+      "Strawberry",
+      "Sugar",
+      "Chocolate"
+    ],
+    "answer": 0
+  },
+  {
+    "country": "Brazil",
+    "question": "How is football (soccer) treated in Brazil?",
+    "options": [
+      "A mystery",
+      "Like a chore",
+      "As a religion",
+      "Completely ignored"
+    ],
+    "answer": 2
+  },
+  {
+    "country": "Brazil",
+    "question": "What happens if you show up to a Brazilian party exactly on time?",
+    "options": [
+      "You are early",
+      "The door is locked",
+      "Free pizza",
+      "It is over"
+    ],
+    "answer": 0
+  },
+  {
+    "country": "Brazil",
+    "question": "What is the ultimate beach-day snack in Brazil?",
+    "options": [
+      "Hot tea",
+      "Aca\u00ed",
+      "Beef jerky",
+      "Boiled cabbage"
     ],
     "answer": 1
   },
   {
-    "country": "USA",
-    "question": "What s the ultimate flex in the American healthcare system?",
+    "country": "Brazil",
+    "question": "What is the most likely soundtrack at a family gathering?",
     "options": [
-      "Free-checkups",
-      "Uber-to-ER",
-      "Paid-visits",
-      "Doc-bots"
+      "Total silence",
+      "Very loud music",
+      "Rain sounds",
+      "Opera"
     ],
     "answer": 1
   },
   {
-    "country": "USA",
-    "question": "What s the main side-quest behavior at a Walmart at 2 AM?",
+    "country": "Brazil",
+    "question": "What is the energy level at a neighborhood barbecue?",
     "options": [
-      "Nodding",
-      "Boss-battle",
-      "Silent-disco",
-      "Philosophy"
+      "Sleepy",
+      "All day party",
+      "Ten minute meeting",
+      "Library quiet"
     ],
     "answer": 1
   },
   {
-    "country": "Japan",
-    "question": "What is the actual daily grind for a Tokyo salaryman?",
+    "country": "Brazil",
+    "question": "How quickly are roles assigned in a street football game?",
     "options": [
-      "Napping",
-      "Overwork",
-      "Zen-garden",
-      "Arcades"
+      "Instantly",
+      "After three weeks",
+      "Never happens",
+      "Via email"
+    ],
+    "answer": 0
+  },
+  {
+    "country": "Brazil",
+    "question": "What is the social rule regarding saying 'no' to food at a host's house?",
+    "options": [
+      "Illegal",
+      "Highly encouraged",
+      "It is easy",
+      "Almost impossible"
+    ],
+    "answer": 3
+  },
+  {
+    "country": "Brazil",
+    "question": "What does a weather app in Brazil usually mean by 'sunny'?",
+    "options": [
+      "Light rain",
+      "Gray clouds",
+      "Blizzard",
+      "Hotter than expected"
+    ],
+    "answer": 3
+  },
+  {
+    "country": "Brazil",
+    "question": "What is the standard soundtrack of city traffic?",
+    "options": [
+      "Meditative silence",
+      "Symphony of horns",
+      "Birds chirping",
+      "Lullabies"
     ],
     "answer": 1
   },
   {
-    "country": "Japan",
-    "question": "What happens if a Japanese train is 30 seconds late?",
+    "country": "Brazil",
+    "question": "What is the only valid currency during the week of Carnaval?",
     "options": [
-      "Casual",
-      "Apologies",
-      "Cancelled",
-      "Party"
+      "Glitter",
+      "Gold bars",
+      "Checks",
+      "Bitcoins"
+    ],
+    "answer": 0
+  },
+  {
+    "country": "China",
+    "question": "How do people pay for things because cash is ancient history?",
+    "options": [
+      "Trading shells",
+      "WeChat QR code",
+      "Gold bricks",
+      "IOUs"
     ],
     "answer": 1
   },
   {
-    "country": "Japan",
-    "question": "How advanced are Japanese toilets?",
+    "country": "China",
+    "question": "What is the most common late-night fuel for students?",
     "options": [
-      "Hole",
-      "Musical",
-      "Porcelain",
-      "No-plumbing"
+      "Protein shakes",
+      "Five-course meals",
+      "Instant noodles",
+      "Celery sticks"
+    ],
+    "answer": 2
+  },
+  {
+    "country": "China",
+    "question": "What is the standard bargaining technique at local markets?",
+    "options": [
+      "The three-round battle",
+      "Paying double",
+      "No negotiation",
+      "Writing a letter"
+    ],
+    "answer": 0
+  },
+  {
+    "country": "China",
+    "question": "What is the '996' grind in office culture?",
+    "options": [
+      "Nine minute lunch",
+      "Nine hours sleep",
+      "Working 9-to-9",
+      "Nine days holiday"
+    ],
+    "answer": 2
+  },
+  {
+    "country": "China",
+    "question": "How is a restaurant bill usually settled among friends?",
+    "options": [
+      "Leaving without paying",
+      "Rock paper scissors",
+      "Trading pokemon cards",
+      "The QR dash"
+    ],
+    "answer": 3
+  },
+  {
+    "country": "China",
+    "question": "What is a typical Chinese family group chat like?",
+    "options": [
+      "Formal emails",
+      "Just Morse code",
+      "500 messages daily",
+      "Zero messages"
+    ],
+    "answer": 2
+  },
+  {
+    "country": "China",
+    "question": "What is the meal strategy in a massive city like Shanghai?",
+    "options": [
+      "Hunting",
+      "Delivery in minutes",
+      "Cook for hours",
+      "Eat once a week"
+    ],
+    "answer": 1
+  },
+  {
+    "country": "China",
+    "question": "What is holiday traffic like in China?",
+    "options": [
+      "Bicycles only",
+      "Empty roads",
+      "Flying cars",
+      "Mega migration"
+    ],
+    "answer": 3
+  },
+  {
+    "country": "China",
+    "question": "What is the ultimate status symbol for Chinese parents?",
+    "options": [
+      "A gaming PC",
+      "High score",
+      "A Child PhD",
+      "Cool skateboard"
+    ],
+    "answer": 2
+  },
+  {
+    "country": "China",
+    "question": "What is the most addictive snack in a Chinese office?",
+    "options": [
+      "Sunflower seeds",
+      "Raw onions",
+      "Broccoli",
+      "Plain ice"
+    ],
+    "answer": 0
+  },
+  {
+    "country": "France",
+    "question": "What is the standard response to a tourist speaking English?",
+    "options": [
+      "Extreme side-eye",
+      "A free tour",
+      "A huge hug",
+      "Applause"
+    ],
+    "answer": 0
+  },
+  {
+    "country": "France",
+    "question": "What is the proper way to cross the road in Paris?",
+    "options": [
+      "Running and screaming",
+      "With chic confidence",
+      "Crawling",
+      "Waiting for hours"
     ],
     "answer": 1
   },
   {
     "country": "France",
-    "question": "What is the default response when slightly inconvenienced?",
+    "question": "What is a French person's superpower in a queue?",
     "options": [
-      "Yelp-review",
-      "Strike",
+      "Dancing",
+      "Cutting in line",
+      "Falling asleep",
+      "Mild complaining"
+    ],
+    "answer": 3
+  },
+  {
+    "country": "France",
+    "question": "What is a dramatic weather reaction in a French city?",
+    "options": [
+      "Wearing a swimsuit",
+      "Stylish umbrella",
+      "Running indoors",
+      "Panic buying milk"
+    ],
+    "answer": 1
+  },
+  {
+    "country": "France",
+    "question": "What is the most serious topic of debate in France?",
+    "options": [
+      "Keyboard layout",
+      "Shoelace color",
+      "The best baguette",
+      "Lightbulb brands"
+    ],
+    "answer": 2
+  },
+  {
+    "country": "France",
+    "question": "What is a classic Parisian breakfast?",
+    "options": [
+      "Bowl of cereal",
+      "Large steak",
+      "Protein shake",
+      "Coffee and cigarette"
+    ],
+    "answer": 3
+  },
+  {
+    "country": "France",
+    "question": "What is the default response to a minor inconvenience?",
+    "options": [
       "Smiling",
+      "A strike",
+      "Buying a gift",
+      "Write a poem"
+    ],
+    "answer": 1
+  },
+  {
+    "country": "France",
+    "question": "What is the quickest way to sound like a local?",
+    "options": [
+      "Using a megaphone",
+      "Shouting",
+      "Saying 'Bonjour' first",
+      "Whistling"
+    ],
+    "answer": 2
+  },
+  {
+    "country": "France",
+    "question": "What is the minimum expectation for lunch?",
+    "options": [
+      "A proper meal",
+      "Just a cracker",
+      "Skipping it",
+      "Eating at desk"
+    ],
+    "answer": 0
+  },
+  {
+    "country": "France",
+    "question": "What is the unofficial office break activity?",
+    "options": [
+      "Speed dating",
+      "Coffee and opinions",
+      "Taking a nap",
+      "Lifting weights"
+    ],
+    "answer": 1
+  },
+  {
+    "country": "Germany",
+    "question": "What happens if you are one minute late to a meeting?",
+    "options": [
+      "You are forgotten",
+      "It is fine",
+      "Noted forever",
+      "Free cake"
+    ],
+    "answer": 2
+  },
+  {
+    "country": "Germany",
+    "question": "How do people feel if you cross the street on a red light?",
+    "options": [
+      "They ignore it",
+      "They judge you",
+      "They cheer",
+      "They follow you"
+    ],
+    "answer": 1
+  },
+  {
+    "country": "Germany",
+    "question": "What is the national reaction to a train delay?",
+    "options": [
+      "Group dancing",
+      "National discussion",
+      "Total silence",
+      "Celebrating"
+    ],
+    "answer": 1
+  },
+  {
+    "country": "Germany",
+    "question": "What is the most iconic snack pairing?",
+    "options": [
+      "Apple and salt",
+      "Cake and ketchup",
+      "Rice and water",
+      "Pretzel and beer"
+    ],
+    "answer": 3
+  },
+  {
+    "country": "Germany",
+    "question": "What is the rule on the Autobahn?",
+    "options": [
+      "Speed limit everywhere",
+      "Move right if slow",
+      "No cars allowed",
+      "Bicycles only"
+    ],
+    "answer": 1
+  },
+  {
+    "country": "Germany",
+    "question": "What is the classic Sunday challenge?",
+    "options": [
+      "Street parties",
+      "Free shopping day",
+      "Loud music day",
+      "Everything is closed"
+    ],
+    "answer": 3
+  },
+  {
+    "country": "Germany",
+    "question": "What is considered a perfectly valid lunch?",
+    "options": [
+      "Cup of air",
+      "Sausage and beer",
+      "Fruit salad",
+      "Just a lollipop"
+    ],
+    "answer": 1
+  },
+  {
+    "country": "Germany",
+    "question": "What is the stereotype about German humor?",
+    "options": [
+      "Too many jokes",
+      "Very slapstick",
+      "Constant laughing",
+      "Non-existent"
+    ],
+    "answer": 3
+  },
+  {
+    "country": "Germany",
+    "question": "What is the local superpower regarding planning?",
+    "options": [
+      "No plans ever",
+      "Calendar precision",
+      "Last minute guesses",
+      "Flipping a coin"
+    ],
+    "answer": 1
+  },
+  {
+    "country": "Germany",
+    "question": "What is the difficulty level of recycling?",
+    "options": [
+      "No bins exist",
+      "Color-coded boss fight",
+      "Only one bin",
+      "Throw it anywhere"
+    ],
+    "answer": 1
+  },
+  {
+    "country": "India",
+    "question": "How do Indian aunties inflict emotional damage?",
+    "options": [
+      "Ghosting you",
+      "With comparisons",
+      "Sending memes",
+      "Writing a book"
+    ],
+    "answer": 1
+  },
+  {
+    "country": "India",
+    "question": "What always happens before dessert at a family function?",
+    "options": [
+      "A nap",
+      "Total silence",
+      "One more roti",
+      "Group yoga"
+    ],
+    "answer": 2
+  },
+  {
+    "country": "India",
+    "question": "What do relatives ask you immediately after hello?",
+    "options": [
+      "Favorite color",
+      "WiFi password",
+      "Nothing",
+      "Your career plan"
+    ],
+    "answer": 3
+  },
+  {
+    "country": "India",
+    "question": "What is an Indian mom's standard weather forecast?",
+    "options": [
+      "Wear shorts",
+      "Sunbathe",
+      "Go swimming",
+      "Take a shawl"
+    ],
+    "answer": 3
+  },
+  {
+    "country": "India",
+    "question": "What is the secret ingredient in street food flavor?",
+    "options": [
+      "Robots",
+      "Silver spoons",
+      "A laboratory",
+      "The bare hands"
+    ],
+    "answer": 3
+  },
+  {
+    "country": "India",
+    "question": "What is the only answer to 'Have you eaten?'",
+    "options": [
+      "Eat more",
+      "I am fasting",
+      "Maybe later",
+      "Send email"
+    ],
+    "answer": 0
+  },
+  {
+    "country": "India",
+    "question": "How do you summon a neighborhood crowd instantly?",
+    "options": [
+      "Whisper a secret",
+      "Start a cricket argument",
+      "Read a book",
+      "Ring a small bell"
+    ],
+    "answer": 1
+  },
+  {
+    "country": "India",
+    "question": "What is the ultimate boss level of Indian traffic?",
+    "options": [
+      "A red light",
+      "Empty roads",
+      "A traffic cop",
+      "A cow crossing"
+    ],
+    "answer": 3
+  },
+  {
+    "country": "India",
+    "question": "What is the unofficial national startup idea?",
+    "options": [
+      "Pet grooming",
+      "A food delivery app",
+      "Selling sand",
+      "Space travel"
+    ],
+    "answer": 1
+  },
+  {
+    "country": "India",
+    "question": "What is the main energy of an Indian wedding?",
+    "options": [
+      "Deep silence",
+      "Beautiful chaos",
+      "Very small group",
+      "Sleepy"
+    ],
+    "answer": 1
+  },
+  {
+    "country": "Iran",
+    "question": "How long does a Persian goodbye last at the front door?",
+    "options": [
+      "A quick wink",
+      "45 minutes",
+      "They never leave",
+      "Two seconds"
+    ],
+    "answer": 1
+  },
+  {
+    "country": "Iran",
+    "question": "What is impossible to find at a Persian dinner table?",
+    "options": [
+      "Rice",
+      "Small portions",
+      "Yogurt",
+      "Tea"
+    ],
+    "answer": 1
+  },
+  {
+    "country": "Iran",
+    "question": "What is the tea protocol at any social gathering?",
+    "options": [
+      "Refill forever",
+      "One sip only",
+      "Drink it cold",
+      "Skip the cup"
+    ],
+    "answer": 0
+  },
+  {
+    "country": "Iran",
+    "question": "What is 'Tarof' in a nutshell?",
+    "options": [
+      "Being rude",
+      "A tax rule",
+      "A dance move",
+      "Polite chaos"
+    ],
+    "answer": 3
+  },
+  {
+    "country": "Iran",
+    "question": "How do you become family at an Iranian dinner?",
+    "options": [
+      "Leave early",
+      "Eat nothing",
+      "Bring a cat",
+      "Compliment the rice"
+    ],
+    "answer": 3
+  },
+  {
+    "country": "Iran",
+    "question": "What is the real championship at family events?",
+    "options": [
+      "Video games",
+      "Poetry recital",
+      "Eating competition",
+      "Quiet sitting"
+    ],
+    "answer": 1
+  },
+  {
+    "country": "Iran",
+    "question": "What is the national power source?",
+    "options": [
+      "Solar panels",
+      "Iced coffee",
+      "Energy drinks",
+      "Black tea"
+    ],
+    "answer": 3
+  },
+  {
+    "country": "Iran",
+    "question": "What is the highest stakes flex at an Iranian dinner?",
+    "options": [
+      "Eating salad",
+      "Drinking water",
+      "Checking your watch",
+      "Stealing the Tahdig"
+    ],
+    "answer": 3
+  },
+  {
+    "country": "Iran",
+    "question": "What starts a friendly argument instantly?",
+    "options": [
+      "Math problems",
+      "Shoe size",
+      "The weather",
+      "Best kebab city"
+    ],
+    "answer": 3
+  },
+  {
+    "country": "Iran",
+    "question": "What is the standard weekend activity?",
+    "options": [
+      "Studying alone",
+      "Watching paint dry",
+      "Staying in bed",
+      "Picnic in nature"
+    ],
+    "answer": 3
+  },
+  {
+    "country": "Israel",
+    "question": "How do Israelis handle any minor problem?",
+    "options": [
+      "Create a startup",
+      "Wait for help",
+      "Ignore it",
+      "Cry about it"
+    ],
+    "answer": 0
+  },
+  {
+    "country": "Israel",
+    "question": "What is a sacred item on a Friday afternoon?",
+    "options": [
+      "A laptop",
+      "Frozen pizza",
+      "A gym bag",
+      "Fresh Challah"
+    ],
+    "answer": 3
+  },
+  {
+    "country": "Israel",
+    "question": "What is the default volume for a 'quiet' conversation?",
+    "options": [
+      "Screaming",
+      "Mute",
+      "Telepathy",
+      "Whispering"
+    ],
+    "answer": 0
+  },
+  {
+    "country": "Israel",
+    "question": "What is the speed of forming an opinion in Israel?",
+    "options": [
+      "Immediate",
+      "Ten years",
+      "After a meeting",
+      "Never"
+    ],
+    "answer": 0
+  },
+  {
+    "country": "Israel",
+    "question": "What spread is worth starting a war over if insulted?",
+    "options": [
+      "Butter",
+      "Hummus",
+      "Mayonnaise",
+      "Jam"
+    ],
+    "answer": 1
+  },
+  {
+    "country": "Israel",
+    "question": "What is the pace of a family debate?",
+    "options": [
+      "Rapid fire",
+      "One word",
+      "Silent",
+      "Slow motion"
+    ],
+    "answer": 0
+  },
+  {
+    "country": "Israel",
+    "question": "What is the 'startup meeting' speed?",
+    "options": [
+      "Slowly",
+      "Needed it yesterday",
+      "Next year",
+      "When we feel like"
+    ],
+    "answer": 1
+  },
+  {
+    "country": "Israel",
+    "question": "What is a national-level breakfast argument?",
+    "options": [
+      "Spoon size",
+      "Coffee brand",
+      "The best Shakshuka",
+      "Toast thickness"
+    ],
+    "answer": 2
+  },
+  {
+    "country": "Israel",
+    "question": "What is the social battery setting at dinner?",
+    "options": [
+      "Airplane mode",
+      "Max volume",
+      "Silent",
+      "Low power"
+    ],
+    "answer": 1
+  },
+  {
+    "country": "Israel",
+    "question": "How do you react to bad software UX?",
+    "options": [
+      "Call a plumber",
+      "Accept it",
+      "Delete everything",
+      "Build a better app"
+    ],
+    "answer": 3
+  },
+  {
+    "country": "Japan",
+    "question": "How advanced are the toilets in Japan?",
+    "options": [
+      "Just wood",
+      "Made of paper",
+      "They sing",
+      "They are holes"
+    ],
+    "answer": 2
+  },
+  {
+    "country": "Japan",
+    "question": "What happens if a train is 20 seconds late?",
+    "options": [
+      "It is normal",
+      "Nothing happens",
+      "Official apologies",
+      "A party"
+    ],
+    "answer": 2
+  },
+  {
+    "country": "Japan",
+    "question": "What is the convenience store power level?",
+    "options": [
+      "Only water",
+      "No snacks",
+      "Closed weekends",
+      "Everything open late"
+    ],
+    "answer": 3
+  },
+  {
+    "country": "Japan",
+    "question": "What is the meeting punctuality rule?",
+    "options": [
+      "Early is on time",
+      "Whenever",
+      "Ten minutes late",
+      "Tomorrow"
+    ],
+    "answer": 0
+  },
+  {
+    "country": "Japan",
+    "question": "What is the acceptable behavior on a train?",
+    "options": [
+      "Absolute silence",
+      "Loud phone calls",
+      "Karaoke",
+      "Dancing"
+    ],
+    "answer": 0
+  },
+  {
+    "country": "Japan",
+    "question": "What is the reality for a Tokyo salaryman?",
+    "options": [
+      "Playing arcades",
+      "Constant napping",
+      "Gardening",
+      "Intense overwork"
+    ],
+    "answer": 3
+  },
+  {
+    "country": "Japan",
+    "question": "What is the boss fight at a Ramen shop?",
+    "options": [
+      "Choosing a seat",
+      "Finding a spoon",
+      "Customizing broth",
+      "Paying for water"
+    ],
+    "answer": 2
+  },
+  {
+    "country": "Japan",
+    "question": "What is a classic vending machine flex?",
+    "options": [
+      "Requires a password",
+      "Hot and cold drinks",
+      "Only empty cans",
+      "Selling air"
+    ],
+    "answer": 1
+  },
+  {
+    "country": "Japan",
+    "question": "What do you do with your trash in public?",
+    "options": [
+      "Take it home",
+      "Bury it",
+      "Eat it",
+      "Drop it anywhere"
+    ],
+    "answer": 0
+  },
+  {
+    "country": "Japan",
+    "question": "What is the level of effort in school clubs?",
+    "options": [
+      "Once a year",
+      "None",
+      "Optional maybe",
+      "Daily practice"
+    ],
+    "answer": 3
+  },
+  {
+    "country": "North Korea",
+    "question": "How do you pick a trendy haircut?",
+    "options": [
+      "State-approved menu",
+      "Pinterest",
+      "Whatever you want",
+      "Infinite freedom"
+    ],
+    "answer": 0
+  },
+  {
+    "country": "North Korea",
+    "question": "What is the primary topic of the news?",
+    "options": [
+      "Video game reviews",
+      "The Supreme Leader",
+      "Celebrity gossip",
+      "Weather in Hawaii"
+    ],
+    "answer": 1
+  },
+  {
+    "country": "North Korea",
+    "question": "What is the internet search experience like?",
+    "options": [
+      "Intranet only",
+      "5G Google",
+      "Global access",
       "TikTok"
     ],
-    "answer": 1
+    "answer": 0
   },
   {
-    "country": "France",
-    "question": "How do French people perceive tourists asking for directions in English?",
+    "country": "North Korea",
+    "question": "What is the main protagonist of the country?",
     "options": [
-      "Free-map",
-      "Side-eye",
-      "Singing",
-      "Croissant"
-    ],
-    "answer": 1
-  },
-  {
-    "country": "France",
-    "question": "What is breakfast if you live in Paris?",
-    "options": [
-      "Buffet",
-      "Coffee-Cig",
-      "Pancakes",
-      "Raw-eggs"
-    ],
-    "answer": 1
-  },
-  {
-    "country": "Brazil",
-    "question": "What happens if you try to start an event in Brazil exactly on time?",
-    "options": [
-      "Early",
-      "Alone",
-      "Shut-down",
-      "Upgraded"
-    ],
-    "answer": 1
-  },
-  {
-    "country": "Brazil",
-    "question": "What s the only valid currency during the week of Carnaval?",
-    "options": [
-      "Crypto",
-      "Glitter",
-      "Gold-coins",
-      "Monopoly"
-    ],
-    "answer": 1
-  },
-  {
-    "country": "Brazil",
-    "question": "How is football treated relative to normal life?",
-    "options": [
-      "Hobby",
-      "Religion",
-      "Ignored",
-      "Chess"
-    ],
-    "answer": 1
-  },
-  {
-    "country": "Australia",
-    "question": "What s the spawn rate of horrifying wildlife in your backyard?",
-    "options": [
-      "Zero",
-      "Everyday",
-      "Zoos-only",
-      "Full-moon"
-    ],
-    "answer": 1
-  },
-  {
-    "country": "Australia",
-    "question": "How do Australians communicate affection?",
-    "options": [
-      "Poems",
-      "Insults",
-      "Handshakes",
-      "Bowing"
-    ],
-    "answer": 1
-  },
-  {
-    "country": "Australia",
-    "question": "What is the national meta for footwear?",
-    "options": [
-      "Designer",
-      "Steel-toe",
-      "Thongs",
-      "Barefoot"
-    ],
-    "answer": 2
-  },
-  {
-    "country": "Germany",
-    "question": "What is the German concept of humor?",
-    "options": [
-      "Slapstick",
-      "Non-existent",
-      "Stand-up",
-      "Dad-jokes"
-    ],
-    "answer": 1
-  },
-  {
-    "country": "Germany",
-    "question": "What happens if you cross the street when the light is red but there are no cars?",
-    "options": [
-      "Chill",
-      "Judged",
-      "High-five",
-      "RGB-mode"
-    ],
-    "answer": 1
-  },
-  {
-    "country": "Germany",
-    "question": "What is considered a valid lunch?",
-    "options": [
-      "Salad",
-      "Sausage-Beer",
-      "Gourmet",
-      "Protein"
-    ],
-    "answer": 1
-  },
-  {
-    "country": "UK",
-    "question": "What is the absolute pinnacle of British cuisine?",
-    "options": [
-      "Wellington",
-      "Kebab",
-      "Caviar",
-      "Oysters"
-    ],
-    "answer": 1
-  },
-  {
-    "country": "UK",
-    "question": "How do they handle a minor heatwave of 25°C?",
-    "options": [
-      "Normal",
-      "Meltdown",
-      "Winter-coats",
-      "Migrate"
-    ],
-    "answer": 1
-  },
-  {
-    "country": "UK",
-    "question": "What is the highest form of British politeness?",
-    "options": [
-      "Apologizing",
-      "Bowing",
-      "Compliments",
-      "Tip-toeing"
+      "The Great Leader",
+      "A pop star",
+      "An athlete",
+      "A YouTuber"
     ],
     "answer": 0
   },
   {
     "country": "North Korea",
-    "question": "What is the average internet search experience like?",
+    "question": "What is the safest communication style?",
     "options": [
-      "5G-Google",
-      "Intranet-Only",
-      "TikTok",
-      "Crypto"
+      "Prank calls",
+      "Chaotic jokes",
+      "Loud rants",
+      "Very cautious"
+    ],
+    "answer": 3
+  },
+  {
+    "country": "North Korea",
+    "question": "What is the policy on political memes?",
+    "options": [
+      "Do not try",
+      "Weekly contest",
+      "State sponsored",
+      "Post daily"
+    ],
+    "answer": 0
+  },
+  {
+    "country": "North Korea",
+    "question": "What is a typical street parade like?",
+    "options": [
+      "Clowns only",
+      "Highly scripted",
+      "No one shows up",
+      "Random dancing"
     ],
     "answer": 1
   },
   {
     "country": "North Korea",
-    "question": "How do you get a trendy haircut?",
+    "question": "How do you access 'foreign' movies?",
     "options": [
-      "Pinterest",
-      "State-Approved",
-      "Shaved",
-      "Wild"
+      "Netflix",
+      "Cable TV",
+      "Cinema multiplex",
+      "You don't"
+    ],
+    "answer": 3
+  },
+  {
+    "country": "North Korea",
+    "question": "What is the best small talk topic?",
+    "options": [
+      "Careful and formal",
+      "Sports stats",
+      "Local gossip",
+      "Sarcastic jokes"
+    ],
+    "answer": 0
+  },
+  {
+    "country": "North Korea",
+    "question": "What is the definition of social media?",
+    "options": [
+      "Non-existent",
+      "Twitter",
+      "Instagram",
+      "Facebook"
+    ],
+    "answer": 0
+  },
+  {
+    "country": "Pakistan",
+    "question": "What happens during a sudden power blackout?",
+    "options": [
+      "Total panic",
+      "Everyone sleeps",
+      "Calling the police",
+      "Immediate gossip"
+    ],
+    "answer": 3
+  },
+  {
+    "country": "Pakistan",
+    "question": "What is the standard answer to traffic delays?",
+    "options": [
+      "Google maps",
+      "Clock sync",
+      "Inshallah arrival",
+      "Teleportation"
+    ],
+    "answer": 2
+  },
+  {
+    "country": "Pakistan",
+    "question": "What is considered a 'light snack'?",
+    "options": [
+      "Half a biryani",
+      "A glass of water",
+      "One grape",
+      "A toothpick"
+    ],
+    "answer": 0
+  },
+  {
+    "country": "Pakistan",
+    "question": "What is guaranteed at every dawat (feast)?",
+    "options": [
+      "Quiet eating",
+      "Salad only",
+      "Tiny portions",
+      "Forced second plate"
+    ],
+    "answer": 3
+  },
+  {
+    "country": "Pakistan",
+    "question": "What is the definitive flex at a wedding?",
+    "options": [
+      "No food",
+      "A quiet ceremony",
+      "A potluck",
+      "The Biryani"
+    ],
+    "answer": 3
+  },
+  {
+    "country": "Pakistan",
+    "question": "What turns tea into a social event?",
+    "options": [
+      "A timer app",
+      "A spreadsheet",
+      "Total silence",
+      "Paratha plus chai"
+    ],
+    "answer": 3
+  },
+  {
+    "country": "Pakistan",
+    "question": "What is the neighborhood news source?",
+    "options": [
+      "The radio",
+      "Balcony gossip",
+      "Newspapers",
+      "Carrier pigeons"
     ],
     "answer": 1
   },
   {
-    "country": "North Korea",
-    "question": "What is the main protagonist energy allowed in the country?",
+    "country": "Pakistan",
+    "question": "What is the mood during a match against India?",
     "options": [
-      "Vloggers",
-      "Supreme-Leader",
-      "Generals",
-      "Pop-stars"
+      "Silent mode",
+      "Very calm",
+      "Maximum stress",
+      "Sleeping"
+    ],
+    "answer": 2
+  },
+  {
+    "country": "Pakistan",
+    "question": "What starts first at a wedding?",
+    "options": [
+      "The exit",
+      "The silent vows",
+      "The guest list",
+      "The dance battle"
+    ],
+    "answer": 3
+  },
+  {
+    "country": "Pakistan",
+    "question": "What is the official beverage of life?",
+    "options": [
+      "Strong Chai",
+      "Lemonade",
+      "Coffee",
+      "Sparkling water"
+    ],
+    "answer": 0
+  },
+  {
+    "country": "Russia",
+    "question": "What is a Russian grandma's (Babushka) ultimate buff?",
+    "options": [
+      "Infinite soup",
+      "Flying",
+      "Laser eyes",
+      "Teleportation"
+    ],
+    "answer": 0
+  },
+  {
+    "country": "Russia",
+    "question": "What is standard winter small talk?",
+    "options": [
+      "Minus-20 is fine",
+      "Buying shorts",
+      "Beach plans",
+      "Sunburn tips"
+    ],
+    "answer": 0
+  },
+  {
+    "country": "Russia",
+    "question": "What is the emergency fix for a bad day?",
+    "options": [
+      "Very strong tea",
+      "Scented candles",
+      "Yoga",
+      "A cupcake"
+    ],
+    "answer": 0
+  },
+  {
+    "country": "Russia",
+    "question": "What is the neighborhood superhero vehicle?",
+    "options": [
+      "A golf cart",
+      "A skateboard",
+      "A scooter",
+      "A Lada"
+    ],
+    "answer": 3
+  },
+  {
+    "country": "Russia",
+    "question": "What is the expression on public transport?",
+    "options": [
+      "Singing",
+      "Serious mode",
+      "Big smile",
+      "Laughing"
+    ],
+    "answer": 1
+  },
+  {
+    "country": "Russia",
+    "question": "What is the go-to drink when it hits negative 40?",
+    "options": [
+      "Milkshake",
+      "Soda",
+      "Iced latte",
+      "Vodka"
+    ],
+    "answer": 3
+  },
+  {
+    "country": "Russia",
+    "question": "What makes a road trip complete?",
+    "options": [
+      "Classical music",
+      "Total silence",
+      "Sunflower seeds",
+      "No snacks"
+    ],
+    "answer": 2
+  },
+  {
+    "country": "Russia",
+    "question": "What is the ultimate winter drip (fashion)?",
+    "options": [
+      "A tuxedo",
+      "Full tracksuit",
+      "Summer dress",
+      "Beach shorts"
+    ],
+    "answer": 1
+  },
+  {
+    "country": "Russia",
+    "question": "How do people handle minor inconveniences?",
+    "options": [
+      "Ignoring it",
+      "Writing a review",
+      "Calling HR",
+      "Crying"
+    ],
+    "answer": 0
+  },
+  {
+    "country": "Russia",
+    "question": "What is the cure for cold weather?",
+    "options": [
+      "A fan",
+      "Opening windows",
+      "Eating ice",
+      "Another layer"
+    ],
+    "answer": 3
+  },
+  {
+    "country": "UK",
+    "question": "How do they handle a minor heatwave of 25\u00b0C?",
+    "options": [
+      "Wearing coats",
+      "Staying normal",
+      "National meltdown",
+      "Going skiing"
+    ],
+    "answer": 2
+  },
+  {
+    "country": "UK",
+    "question": "What is the main feature of a weather app?",
+    "options": [
+      "Certain sunshine",
+      "Sandstorm alert",
+      "No data",
+      "Likely rain"
+    ],
+    "answer": 3
+  },
+  {
+    "country": "UK",
+    "question": "What is the standard workday lunch?",
+    "options": [
+      "Steak",
+      "Nothing",
+      "A five-course feast",
+      "A meal deal"
+    ],
+    "answer": 3
+  },
+  {
+    "country": "UK",
+    "question": "What is the sacred behavior in public?",
+    "options": [
+      "Shouting",
+      "Pushing ahead",
+      "Queuing politely",
+      "Running"
+    ],
+    "answer": 2
+  },
+  {
+    "country": "UK",
+    "question": "What is the highest form of politeness?",
+    "options": [
+      "Bowing",
+      "Handstands",
+      "Constant apologizing",
+      "Gift giving"
+    ],
+    "answer": 2
+  },
+  {
+    "country": "UK",
+    "question": "What is the standard fuel for any meeting?",
+    "options": [
+      "Energy drinks",
+      "Soup",
+      "Tea",
+      "Milkshakes"
+    ],
+    "answer": 2
+  },
+  {
+    "country": "UK",
+    "question": "What is the polite way to disagree?",
+    "options": [
+      "Interesting point",
+      "Shut up",
+      "You are wrong",
+      "Table flip"
+    ],
+    "answer": 0
+  },
+  {
+    "country": "UK",
+    "question": "What is the response to rain?",
+    "options": [
+      "Carry on",
+      "Panic",
+      "Cancel everything",
+      "Scream"
+    ],
+    "answer": 0
+  },
+  {
+    "country": "UK",
+    "question": "What is the pinnacle of late-night cuisine?",
+    "options": [
+      "Caviar",
+      "A Kebab",
+      "A salad",
+      "Fine dining"
+    ],
+    "answer": 1
+  },
+  {
+    "country": "UK",
+    "question": "How fast does a football fan's mood swing?",
+    "options": [
+      "Once a year",
+      "Never",
+      "Per minute",
+      "Every decade"
+    ],
+    "answer": 2
+  },
+  {
+    "country": "USA",
+    "question": "How does the USA measure any distance?",
+    "options": [
+      "Lightyears",
+      "Metric system",
+      "Football fields",
+      "Centimeters"
+    ],
+    "answer": 2
+  },
+  {
+    "country": "USA",
+    "question": "What is the default size for a soda?",
+    "options": [
+      "A bucket",
+      "Small",
+      "A teaspoon",
+      "A shot glass"
+    ],
+    "answer": 0
+  },
+  {
+    "country": "USA",
+    "question": "What is the sacred game-day food?",
+    "options": [
+      "Boiled rice",
+      "Steamed kale",
+      "Plain water",
+      "Chicken wings"
+    ],
+    "answer": 3
+  },
+  {
+    "country": "USA",
+    "question": "What is the official language of group chats?",
+    "options": [
+      "Memes",
+      "Formal Latin",
+      "Haikus",
+      "Morse code"
+    ],
+    "answer": 0
+  },
+  {
+    "country": "USA",
+    "question": "What is the ultimate flex in the healthcare system?",
+    "options": [
+      "Doctor robots",
+      "Free visits",
+      "Taking an Uber to ER",
+      "No bills"
+    ],
+    "answer": 2
+  },
+  {
+    "country": "USA",
+    "question": "What appears in every suburban garage?",
+    "options": [
+      "A space shuttle",
+      "Nothing",
+      "A museum",
+      "Mystery boxes"
+    ],
+    "answer": 3
+  },
+  {
+    "country": "USA",
+    "question": "What is a common coffee order confidence?",
+    "options": [
+      "Just water",
+      "Soup",
+      "Ten word latte",
+      "Small black"
+    ],
+    "answer": 2
+  },
+  {
+    "country": "USA",
+    "question": "What is the national airport challenge?",
+    "options": [
+      "Sitting still",
+      "The gate sprint",
+      "Walking slowly",
+      "Reading poetry"
+    ],
+    "answer": 1
+  },
+  {
+    "country": "USA",
+    "question": "What is the main side-quest at Walmart at 2 AM?",
+    "options": [
+      "Studying math",
+      "Sleeping",
+      "Silent meditation",
+      "A boss battle"
+    ],
+    "answer": 3
+  },
+  {
+    "country": "USA",
+    "question": "What is peak weekend planning?",
+    "options": [
+      "A tea ceremony",
+      "A massive road trip",
+      "A quiet nap",
+      "Writing a book"
     ],
     "answer": 1
   }

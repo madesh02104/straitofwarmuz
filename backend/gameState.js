@@ -159,6 +159,7 @@ class GameState {
     this.battleLogs = [];
     this.lastEventTime = Date.now();
     this.quizTimers = {};
+    this.quizHistory = {};
     this.streaks = {};
     this.finalRankings = null;
   }
@@ -214,6 +215,7 @@ class GameState {
     };
 
     this.streaks[socketId] = 0;
+    this.quizHistory[socketId] = new Set();
     this.scheduleNextQuiz(socketId);
     this.refreshLobbyCountdown();
     return this.players[socketId];
@@ -226,6 +228,7 @@ class GameState {
         this.availableCountries.push(p.country);
       }
       delete this.players[socketId];
+      delete this.quizHistory[socketId];
       this.refreshLobbyCountdown();
       return true;
     }
@@ -357,8 +360,22 @@ class GameState {
             (q) => q.country === p.country,
           );
           if (questions.length) {
+            const askedSet = this.quizHistory[id] || new Set();
+            let availableQuestions = questions.filter(
+              (q) => !askedSet.has(q.question),
+            );
+
+            if (availableQuestions.length === 0) {
+              askedSet.clear();
+              availableQuestions = questions;
+            }
+
             const quiz =
-              questions[Math.floor(Math.random() * questions.length)];
+              availableQuestions[
+                Math.floor(Math.random() * availableQuestions.length)
+              ];
+            askedSet.add(quiz.question);
+            this.quizHistory[id] = askedSet;
             if (io) io.to(id).emit("quiz", quiz);
           }
         } catch (e) {
@@ -699,6 +716,7 @@ class GameState {
       nuke: 4,
     };
     this.quizTimers = {};
+    this.quizHistory = {};
     this.streaks = {};
     this.battleLogs = [];
     this.finalRankings = null;
