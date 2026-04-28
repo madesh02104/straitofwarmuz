@@ -642,6 +642,45 @@ export const Landing = () => {
                 for fullscreen.
               </span>
             </div>
+
+            <div
+              className="war-frame"
+              style={{
+                marginTop: "1rem",
+                padding: "0.8rem",
+                borderRadius: 8,
+              }}
+            >
+              <div className="war-frame__corners" />
+              <div
+                style={{
+                  color: "var(--accent-blue)",
+                  fontFamily: "var(--font-display)",
+                  fontSize: "0.54rem",
+                  fontWeight: 900,
+                  letterSpacing: 2,
+                  textTransform: "uppercase",
+                  marginBottom: 10,
+                }}
+              >
+                Keyboard Shortcuts
+              </div>
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "1fr 1fr",
+                  gap: "8px 12px",
+                  fontSize: "0.5rem",
+                  color: "var(--text-main)",
+                  letterSpacing: 1,
+                }}
+              >
+                <span><strong style={{ color: "var(--accent-yellow)" }}>Enter</strong> Join game</span>
+                <span><strong style={{ color: "var(--accent-yellow)" }}>Space</strong> Ready toggle</span>
+                <span><strong style={{ color: "var(--accent-yellow)" }}>M</strong> Mute or unmute</span>
+                <span><strong style={{ color: "var(--accent-yellow)" }}>Esc</strong> Close popups</span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
