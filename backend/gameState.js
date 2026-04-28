@@ -114,8 +114,13 @@ class GameState {
   constructor() {
     this.lobbyState = "waiting";
     this.startTime = null;
+    this.matchStartTime = null;
     this.duration = 180000;
     this.phaseDuration = 120000;
+    this.lobbyAutoStartDuration = 6 * 60 * 1000;
+    this.postGameKickDuration = 60 * 1000;
+    this.lobbyAutoStartAt = null;
+    this.postGameKickAt = null;
     this.players = {};
     this.countries = [
       "USA",
@@ -158,6 +163,18 @@ class GameState {
     this.finalRankings = null;
   }
 
+  endGame(now = Date.now()) {
+    if (this.lobbyState !== "ended") {
+      this.lobbyState = "ended";
+    }
+    if (!this.finalRankings) {
+      this.finalRankings = this.computeRankings();
+    }
+    if (!this.postGameKickAt) {
+      this.postGameKickAt = now + this.postGameKickDuration;
+    }
+  }
+
   addPlayer(socketId, name) {
     if (Object.keys(this.players).length >= 6) return null;
     if (this.availableCountries.length === 0) return null;
@@ -198,6 +215,7 @@ class GameState {
 
     this.streaks[socketId] = 0;
     this.scheduleNextQuiz(socketId);
+    this.refreshLobbyCountdown();
     return this.players[socketId];
   }
 
@@ -208,6 +226,7 @@ class GameState {
         this.availableCountries.push(p.country);
       }
       delete this.players[socketId];
+      this.refreshLobbyCountdown();
       return true;
     }
     return false;
@@ -227,9 +246,36 @@ class GameState {
     if (Object.keys(this.players).length > 1 && allReady) {
       this.lobbyState = "starting";
       this.matchStartTime = Date.now() + 5500; // 5.5s to compensate for shatter transition
+      this.lobbyAutoStartAt = null;
       return true;
     }
     return false;
+  }
+
+  forceStartMatch() {
+    if (Object.keys(this.players).length > 1) {
+      this.lobbyState = "starting";
+      this.matchStartTime = Date.now() + 5500;
+      this.lobbyAutoStartAt = null;
+      return true;
+    }
+    return false;
+  }
+
+  refreshLobbyCountdown() {
+    const playerCount = Object.keys(this.players).length;
+    if (this.lobbyState !== "waiting") {
+      this.lobbyAutoStartAt = null;
+      return;
+    }
+
+    if (playerCount >= 2) {
+      if (!this.lobbyAutoStartAt) {
+        this.lobbyAutoStartAt = Date.now() + this.lobbyAutoStartDuration;
+      }
+    } else {
+      this.lobbyAutoStartAt = null;
+    }
   }
 
   scheduleNextQuiz(socketId) {
@@ -242,10 +288,25 @@ class GameState {
   }
 
   tick(io) {
+    const now = Date.now();
+
+    if (this.lobbyState === "waiting") {
+      this.refreshLobbyCountdown();
+      if (
+        this.lobbyAutoStartAt &&
+        now >= this.lobbyAutoStartAt &&
+        Object.keys(this.players).length > 1
+      ) {
+        this.forceStartMatch();
+        return;
+      }
+    }
+
     if (this.lobbyState === "starting") {
-      if (Date.now() >= this.matchStartTime) {
+      if (now >= this.matchStartTime) {
         this.lobbyState = "active";
-        this.startTime = Date.now();
+        this.startTime = now;
+        this.postGameKickAt = null;
         for (const id in this.players) {
           this.quizTimers[id] = this.startTime + 10000;
         }
@@ -254,14 +315,22 @@ class GameState {
       }
     }
 
+    if (this.lobbyState === "ended") {
+      if (this.postGameKickAt && now >= this.postGameKickAt) {
+        if (io) {
+          io.emit("returnToHome");
+        }
+        this.resetGame();
+      }
+      return;
+    }
+
     if (this.lobbyState !== "active") return;
 
-    const now = Date.now();
     const elapsed = now - this.startTime;
 
     if (elapsed >= this.duration) {
-      this.lobbyState = "ended";
-      this.finalRankings = this.computeRankings();
+      this.endGame(now);
       return;
     }
 
@@ -323,8 +392,8 @@ class GameState {
 
     const alive = Object.values(this.players).filter((p) => p.hp > 0);
     if (alive.length <= 1 && this.lobbyState === "active") {
-      this.lobbyState = "ended";
-      this.finalRankings = this.computeRankings();
+      this.endGame(now);
+      return;
     }
   }
 
@@ -594,6 +663,8 @@ class GameState {
     return {
       lobbyState: this.lobbyState,
       matchStartTime: this.matchStartTime,
+      lobbyAutoStartAt: this.lobbyAutoStartAt,
+      postGameKickAt: this.postGameKickAt,
       duration: this.duration,
       timeRemaining: this.startTime
         ? Math.max(0, this.duration - elapsed)
@@ -610,6 +681,8 @@ class GameState {
     this.lobbyState = "waiting";
     this.startTime = null;
     this.matchStartTime = null;
+    this.lobbyAutoStartAt = null;
+    this.postGameKickAt = null;
     this.players = {};
     this.availableCountries = [...this.countries];
     this.marketStock = {

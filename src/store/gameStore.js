@@ -10,6 +10,8 @@ export const useGameStore = create((set, get) => ({
   gameState: {
     players: {},
     lobbyState: "waiting",
+    lobbyAutoStartAt: null,
+    postGameKickAt: null,
     duration: 180000,
     timeRemaining: 180000,
     phase: 1,
@@ -33,6 +35,28 @@ export const useGameStore = create((set, get) => ({
   },
 
   dismissJoinBlockedMessage: () => set({ joinBlockedMessage: null }),
+
+  returnToHome: () =>
+    set({
+      gameState: {
+        players: {},
+        lobbyState: "waiting",
+        lobbyAutoStartAt: null,
+        postGameKickAt: null,
+        duration: 180000,
+        timeRemaining: 180000,
+        phase: 1,
+        marketStock: {},
+      },
+      myCountry: null,
+      activeQuiz: null,
+      notification: null,
+      worldEvent: null,
+      spyResult: null,
+      isReady: false,
+      hasJoined: false,
+      joinBlockedMessage: null,
+    }),
 
   toggleReady: () => {
     const { isReady } = get();
@@ -80,30 +104,36 @@ export const playSound = (file) => {
   if (isMuted) return;
   const audio = new Audio(`/${file}`);
   audio.volume = sfxVolume;
-  audio.play().catch(e => console.warn('Audio disabled by browser:', e));
+  audio.play().catch((e) => console.warn("Audio disabled by browser:", e));
 };
 
 // Global Socket Listeners
 socket.on("gameState", (state) => {
   const prev = useGameStore.getState().gameState;
   const myCountry = useGameStore.getState().myCountry;
-  
+
   if (prev && prev.lobbyState !== "ended" && state.lobbyState === "ended") {
     // True winner is Rank 1
-    const isWinner = state.rankings && state.rankings[0] && state.rankings[0].country === myCountry;
+    const isWinner =
+      state.rankings &&
+      state.rankings[0] &&
+      state.rankings[0].country === myCountry;
     if (isWinner) {
-      playSound('win.wav');
+      playSound("win.wav");
     } else {
-      playSound('lose.wav');
+      playSound("lose.wav");
     }
   }
   if (prev && prev.phase === 1 && state.phase === 2) {
-    playSound('war_begin.wav');
+    playSound("war_begin.wav");
   }
 
   const mySocketId = socket.id;
-  const myServerPlayer = state.players && mySocketId ? state.players[mySocketId] : null;
-  const nextIsReady = myServerPlayer ? !!myServerPlayer.isReady : useGameStore.getState().isReady;
+  const myServerPlayer =
+    state.players && mySocketId ? state.players[mySocketId] : null;
+  const nextIsReady = myServerPlayer
+    ? !!myServerPlayer.isReady
+    : useGameStore.getState().isReady;
   useGameStore.setState({ gameState: state, isReady: nextIsReady });
 });
 
@@ -120,7 +150,8 @@ socket.on("joinDenied", (data) => {
     hasJoined: false,
     myCountry: null,
     isReady: false,
-    joinBlockedMessage: data?.message || "Room unavailable. Please try again later.",
+    joinBlockedMessage:
+      data?.message || "Room unavailable. Please try again later.",
   });
 });
 
@@ -130,18 +161,18 @@ socket.on("quiz", (quiz) => {
 
 socket.on("notification", (data) => {
   if (data.message && data.message.startsWith("R&D Complete:")) {
-    playSound('rd_complete.wav');
-  } else if (data.type === 'error') {
-    playSound('lose.wav');
+    playSound("rd_complete.wav");
+  } else if (data.type === "error") {
+    playSound("lose.wav");
   } else {
-    playSound('blip.mp3');
+    playSound("blip.mp3");
   }
   useGameStore.setState({ notification: data });
   setTimeout(() => useGameStore.setState({ notification: null }), 3000);
 });
 
 socket.on("worldEvent", (data) => {
-  playSound('blip.mp3');
+  playSound("blip.mp3");
   useGameStore.setState({ worldEvent: data });
   setTimeout(() => useGameStore.setState({ worldEvent: null }), 5000);
 });
@@ -149,29 +180,34 @@ socket.on("worldEvent", (data) => {
 socket.on("spyResult", (data) => {
   const state = useGameStore.getState();
   const currentLogs = state.intelLogs || [];
-  const countryName = state.gameState?.players[data.target]?.country || 'Unknown';
+  const countryName =
+    state.gameState?.players[data.target]?.country || "Unknown";
   const entry = { ...data, countryName, time: Date.now() };
 
-  useGameStore.setState({ 
+  useGameStore.setState({
     spyResult: data,
-    intelLogs: [entry, ...currentLogs].slice(0, 20) // Keep last 20 reports
+    intelLogs: [entry, ...currentLogs].slice(0, 20), // Keep last 20 reports
   });
   setTimeout(() => useGameStore.setState({ spyResult: null }), 5000);
 });
 
 socket.on("attackEvent", (data) => {
   if (data.deflected) {
-    playSound('glitch.wav');
+    playSound("glitch.wav");
     if (!data.firewallBlocked) {
-      playSound('bomb.wav');
+      playSound("bomb.wav");
     } else {
-      playSound('glass_break.wav'); // Firewall blocked it
+      playSound("glass_break.wav"); // Firewall blocked it
     }
   } else if (data.success) {
-    playSound('bomb.wav');
+    playSound("bomb.wav");
   } else {
-    playSound('glass_break.wav');
+    playSound("glass_break.wav");
   }
   // Bubbled to WorldMap via custom window event for convenience
   window.dispatchEvent(new CustomEvent("attackEvent", { detail: data }));
+});
+
+socket.on("returnToHome", () => {
+  useGameStore.getState().returnToHome();
 });

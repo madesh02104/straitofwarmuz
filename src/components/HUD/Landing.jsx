@@ -720,7 +720,12 @@ export const Landing = () => {
                   letterSpacing: 0.5,
                 }}
               >
-                {joinBlockedMessage}
+                {joinBlockedMessage}{" "}
+                <span
+                  style={{ color: "var(--accent-yellow)", fontWeight: 900 }}
+                >
+                  (Max wait: 5 minutes)
+                </span>
               </p>
             </div>
           </div>

@@ -121,7 +121,7 @@ io.on('connection', (socket) => {
       if (game.lobbyState === 'active') {
         const alive = Object.values(game.players).filter((p) => p.hp > 0);
         if (alive.length <= 1) {
-          game.lobbyState = 'ended';
+          game.endGame(Date.now());
         }
       }
     }

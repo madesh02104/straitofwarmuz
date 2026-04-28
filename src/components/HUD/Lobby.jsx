@@ -8,12 +8,32 @@ import {
 } from "lucide-react";
 import { CountdownTakeover } from "./CountdownTakeover";
 
+const formatCountdown = (ms) => {
+  if (!ms || ms <= 0) return "00:00";
+  const totalSeconds = Math.ceil(ms / 1000);
+  const minutes = Math.floor(totalSeconds / 60);
+  const seconds = totalSeconds % 60;
+  return `${minutes.toString().padStart(2, "0")}:${seconds
+    .toString()
+    .padStart(2, "0")}`;
+};
+
 export const Lobby = () => {
   const { gameState, isReady, toggleReady, sfxVolume, isMuted } = useGameStore();
   const players = Object.values(gameState.players);
   const readyCount = players.filter((p) => p.isReady).length;
+  const [now, setNow] = useState(() => Date.now());
+  const autoStartRemaining =
+    gameState.lobbyAutoStartAt && players.length >= 2
+      ? Math.max(0, gameState.lobbyAutoStartAt - now)
+      : 0;
 
   const hasCountdownSoundPlayed = useRef(false);
+
+  useEffect(() => {
+    const id = setInterval(() => setNow(Date.now()), 500);
+    return () => clearInterval(id);
+  }, []);
 
   useEffect(() => {
     if (
@@ -44,6 +64,59 @@ export const Lobby = () => {
         pointerEvents: "auto",
       }}
     >
+      {gameState.lobbyState === "waiting" && autoStartRemaining > 0 && (
+        <div
+          className="war-frame"
+          style={{
+            position: "absolute",
+            top: 28,
+            left: "50%",
+            transform: "translateX(-50%)",
+            width: "min(420px, calc(100vw - 40px))",
+            padding: "16px 20px",
+            borderRadius: 10,
+            zIndex: 3,
+            textAlign: "center",
+          }}
+        >
+          <div className="war-frame__corners" />
+          <div
+            style={{
+              fontFamily: "var(--font-display)",
+              fontSize: "0.56rem",
+              letterSpacing: 3,
+              color: "var(--text-muted)",
+              textTransform: "uppercase",
+            }}
+          >
+            Game Starts In
+          </div>
+          <div
+            style={{
+              marginTop: 8,
+              fontFamily: "var(--font-display)",
+              fontSize: "1.15rem",
+              fontWeight: 900,
+              letterSpacing: 4,
+              color: "var(--accent-yellow)",
+              textTransform: "uppercase",
+            }}
+          >
+            {formatCountdown(autoStartRemaining)}
+          </div>
+          <div
+            style={{
+              marginTop: 8,
+              fontSize: "0.5rem",
+              color: "var(--text-muted)",
+              letterSpacing: 1,
+            }}
+          >
+            Match launches when all players are ready or when this timer ends.
+          </div>
+        </div>
+      )}
+
       <div
         className="lobby-content war-frame"
         style={{

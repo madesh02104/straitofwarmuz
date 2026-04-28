@@ -147,7 +147,7 @@ export const Dashboard = () => {
   const {
     gameState, myCountry, activeQuiz, submitQuiz,
     buyItem, researchItem, spy, activateDeflect,
-    notification, worldEvent, spyResult, intelLogs
+    notification, worldEvent, spyResult, intelLogs, returnToHome
   } = useGameStore();
 
   const uiRef = useRef();
@@ -207,6 +207,16 @@ export const Dashboard = () => {
     const int = setInterval(() => setNow(Date.now()), 250);
     return () => clearInterval(int);
   }, []);
+
+  useEffect(() => {
+    if (
+      gameState.lobbyState === 'ended' &&
+      gameState.postGameKickAt &&
+      now >= gameState.postGameKickAt
+    ) {
+      returnToHome();
+    }
+  }, [gameState.lobbyState, gameState.postGameKickAt, now, returnToHome]);
 
   useEffect(() => {
     if (me && me.deflectingUntil) {
@@ -276,6 +286,10 @@ export const Dashboard = () => {
   const isLast5Sec = phaseTimeRemaining > 0 && phaseTimeRemaining <= 5000;
   const timerGlow = isLast5Sec ? '0 0 15px var(--accent-red)' : 'none';
   const timerColor = isLast5Sec ? 'var(--accent-red)' : 'var(--text-bright)';
+  const postGameKickRemaining =
+    gameState.postGameKickAt && gameState.lobbyState === 'ended'
+      ? Math.max(0, gameState.postGameKickAt - now)
+      : 0;
 
   return (
     <div className="hud-container" ref={uiRef}>
@@ -294,6 +308,27 @@ export const Dashboard = () => {
           <div className="rankings-content">
             <Globe size={48} className="winner-icon" />
             <div className="winner-label">MATCH OVER</div>
+            <div
+              style={{
+                marginTop: '10px',
+                marginBottom: '18px',
+                display: 'inline-flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                gap: '6px',
+                padding: '10px 16px',
+                border: '1px solid rgba(255,255,255,0.14)',
+                background: 'rgba(255,255,255,0.04)',
+                borderRadius: '8px',
+              }}
+            >
+              <span style={{ fontSize: '0.5rem', letterSpacing: '2px', color: 'var(--text-muted)', textTransform: 'uppercase' }}>
+                Kicking You Out In
+              </span>
+              <span style={{ fontSize: '0.9rem', fontWeight: 900, letterSpacing: '3px', color: 'var(--accent-red)' }}>
+                {formatTime(postGameKickRemaining)}
+              </span>
+            </div>
             <div className="rankings-list">
               {displayRankings.map((entry) => (
                 <div key={entry.rank} className={`ranking-row ${entry.survived ? 'survived' : 'eliminated'} ${entry.country === myCountry ? 'is-me' : ''}`}>
