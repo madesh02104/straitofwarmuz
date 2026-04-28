@@ -738,7 +738,10 @@ const CountryMesh = React.memo(({ feature, myCountry, onFocus }) => {
             className="map-tactical-overlay"
             style={{ pointerEvents: "none" }}
           >
-            <div className="map-country-label">{owner.country}</div>
+            <div className="map-country-label">
+              {owner.country}
+              {isMyCountry ? " (YOU)" : ""}
+            </div>
             <div className="map-hp-bar">
               <div
                 className="map-hp-fill"

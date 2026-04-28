@@ -125,10 +125,10 @@ const QuizToaster = ({ quiz, onAnswer }) => {
   return (
     <div className="quiz-toaster">
       <div className="quiz-header">
-        <HelpCircle size={16} /> <span>INTEL QUIZ (+0.5x MULTIPLIER)</span>
+        <HelpCircle size={19} /> <span>INTEL QUIZ (+0.5x MULTIPLIER)</span>
         <div className="quiz-timer-mini">{timeLeft}s</div>
       </div>
-      <div style={{ width: '100%', height: '4px', background: 'rgba(255,255,255,0.1)', borderRadius: '2px', margin: '4px 0 8px 0', overflow: 'hidden' }}>
+      <div style={{ width: '100%', height: '5px', background: 'rgba(255,255,255,0.1)', borderRadius: '2px', margin: '6px 0 10px 0', overflow: 'hidden' }}>
         <div style={{ height: '100%', width: `${percentage}%`, background: barColor, transition: 'width 1s linear, background-color 0.3s' }} />
       </div>
       <p className="quiz-question-mini">{quiz.question}</p>
