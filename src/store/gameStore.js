@@ -1,6 +1,41 @@
 import { create } from "zustand";
 import { io } from "socket.io-client";
 
+const STORAGE_KEYS = {
+  muted: "countryside_muted",
+  bgm: "countryside_bgm_volume",
+  sfx: "countryside_sfx_volume",
+};
+
+const readBool = (key, fallback) => {
+  try {
+    const v = localStorage.getItem(key);
+    if (v === null) return fallback;
+    return v === "true";
+  } catch {
+    return fallback;
+  }
+};
+
+const readNum = (key, fallback) => {
+  try {
+    const v = localStorage.getItem(key);
+    if (v === null) return fallback;
+    const n = parseFloat(v);
+    return Number.isFinite(n) ? n : fallback;
+  } catch {
+    return fallback;
+  }
+};
+
+const writeStorage = (key, value) => {
+  try {
+    localStorage.setItem(key, String(value));
+  } catch {
+    // ignore
+  }
+};
+
 const socket = io(
   import.meta.env.VITE_API_URL || "https://countryside-lhf0.onrender.com",
 );
@@ -25,9 +60,9 @@ export const useGameStore = create((set, get) => ({
   joinBlockedMessage: null,
   isReady: false,
   hasJoined: false,
-  bgmVolume: 0.4,
-  sfxVolume: 0.5,
-  isMuted: false,
+  bgmVolume: readNum(STORAGE_KEYS.bgm, 0.4),
+  sfxVolume: readNum(STORAGE_KEYS.sfx, 0.5),
+  isMuted: readBool(STORAGE_KEYS.muted, false),
 
   // Actions
   joinMatch: (name) => {
@@ -94,9 +129,20 @@ export const useGameStore = create((set, get) => ({
     socket.emit("activateDeflect");
   },
 
-  setBgmVolume: (vol) => set({ bgmVolume: vol }),
-  setSfxVolume: (vol) => set({ sfxVolume: vol }),
-  toggleMute: () => set((state) => ({ isMuted: !state.isMuted })),
+  setBgmVolume: (vol) => {
+    writeStorage(STORAGE_KEYS.bgm, vol);
+    set({ bgmVolume: vol });
+  },
+  setSfxVolume: (vol) => {
+    writeStorage(STORAGE_KEYS.sfx, vol);
+    set({ sfxVolume: vol });
+  },
+  toggleMute: () =>
+    set((state) => {
+      const next = !state.isMuted;
+      writeStorage(STORAGE_KEYS.muted, next);
+      return { isMuted: next };
+    }),
 }));
 
 export const playSound = (file) => {
@@ -206,6 +252,19 @@ socket.on("attackEvent", (data) => {
   }
   // Bubbled to WorldMap via custom window event for convenience
   window.dispatchEvent(new CustomEvent("attackEvent", { detail: data }));
+
+  const st = useGameStore.getState();
+  const isAttackPhase = st.gameState?.lobbyState === "active" && st.gameState?.phase === 2;
+  if (isAttackPhase) {
+    const root = document.getElementById("root");
+    if (root) {
+      root.classList.remove("shake-active");
+      requestAnimationFrame(() => {
+        root.classList.add("shake-active");
+        window.setTimeout(() => root.classList.remove("shake-active"), 650);
+      });
+    }
+  }
 });
 
 socket.on("returnToHome", () => {
