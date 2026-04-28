@@ -109,7 +109,7 @@ export const Lobby = () => {
             style={{
               fontFamily: "var(--font-display)",
               fontWeight: 900,
-              fontSize: "1.08rem",
+              fontSize: "1.25rem",
               letterSpacing: 4,
               margin: "4px 0",
               textTransform: "uppercase",
@@ -159,7 +159,7 @@ export const Lobby = () => {
                           <span
                             style={{
                               marginLeft: 6,
-                              fontSize: "0.39rem",
+                              fontSize: "0.5rem",
                               color: "var(--accent-yellow)",
                               letterSpacing: 1,
                             }}
@@ -187,7 +187,7 @@ export const Lobby = () => {
                       flex: 1,
                       textAlign: "center",
                       fontFamily: "var(--font-display)",
-                      fontSize: "0.43rem",
+                      fontSize: "0.55rem",
                       color: "var(--text-muted)",
                       letterSpacing: 1,
                       fontWeight: 800,
@@ -217,7 +217,7 @@ export const Lobby = () => {
           </label>
           <p
             style={{
-              fontSize: "0.43rem",
+              fontSize: "0.55rem",
               color: "var(--text-muted)",
               marginTop: 12,
               textAlign: "center",
@@ -245,7 +245,7 @@ export const Lobby = () => {
                 textAlign: "center",
                 letterSpacing: 2,
                 fontFamily: "var(--font-display)",
-                fontSize: "0.48rem",
+                fontSize: "0.65rem",
                 fontWeight: 900,
               }}
             >
@@ -287,12 +287,12 @@ export const Lobby = () => {
                     border: `1px solid ${item.border}`,
                   }}
                 >
-                  <strong style={{ color: item.color, letterSpacing: 0 }}>
+                  <strong style={{ color: item.color, letterSpacing: 1, fontSize: "0.6rem" }}>
                     {item.label}
                   </strong>
                   <br />
                   <span
-                    style={{ color: "var(--text-muted)", fontSize: "0.43rem" }}
+                    style={{ color: "var(--text-muted)", fontSize: "0.5rem" }}
                   >
                     {item.desc}
                   </span>

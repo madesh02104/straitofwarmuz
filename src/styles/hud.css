@@ -1880,13 +1880,13 @@ body {
 .war-slot__name {
   font-family: var(--font-display);
   font-weight: 800;
-  font-size: 0.57rem;
+  font-size: 0.65rem;
   letter-spacing: 0.50px;
   color: var(--text-main);
 }
 
 .war-slot__country {
-  font-size: 0.42rem;
+  font-size: 0.5rem;
   font-weight: 700;
   letter-spacing: 1.00px;
   text-transform: uppercase;
@@ -1895,7 +1895,7 @@ body {
 
 .war-slot__rank {
   font-family: var(--font-display);
-  font-size: 0.39rem;
+  font-size: 0.48rem;
   font-weight: 800;
   letter-spacing: 1.00px;
   padding: 4px 8px;
@@ -1943,7 +1943,7 @@ body {
   font-family: var(--font-display);
   font-weight: 900;
   letter-spacing: 2.00px;
-  font-size: 0.57rem;
+  font-size: 0.65rem;
   color: var(--accent-red);
   text-transform: uppercase;
   transition: all 0.3s;

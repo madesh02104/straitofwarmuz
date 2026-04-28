@@ -287,11 +287,11 @@ function drawFlagOnCanvas(ctx, w, h, key) {
       ctx.fillRect(w * 0.25, 0, w * 0.75, h);
       ctx.fillStyle = "#FFFFFF";
       ctx.beginPath();
-      ctx.arc(w * 0.57, h * 0.5, h * 0.27, -1.2, 1.2);
+      ctx.arc(w * 0.57, h * 0.5, h * 0.27, 0, Math.PI * 2);
       ctx.fill();
       ctx.fillStyle = "#01411C";
       ctx.beginPath();
-      ctx.arc(w * 0.64, h * 0.5, h * 0.24, -1.2, 1.2);
+      ctx.arc(w * 0.64, h * 0.5, h * 0.24, 0, Math.PI * 2);
       ctx.fill();
       ctx.fillStyle = "#FFFFFF";
       drawStar(ctx, w * 0.75, h * 0.5, h * 0.1, 5);
@@ -616,9 +616,16 @@ const CountryMesh = React.memo(({ feature, myCountry, onFocus }) => {
       const cx = (min.x + max.x) / 2;
       const cy = (min.y + max.y) / 2;
 
+      const name = feature.properties.name || feature.properties.ADMIN;
+      const countryKey = name ? normalize(name) : "";
+
       let texW = rangeX;
       let texH = rangeX / 2.0; // 512x256 flag = 2.0 aspect ratio
-      if (texH < rangeY) {
+      
+      if (countryKey === "russia" || countryKey === "brazil") {
+        texW = rangeX;
+        texH = rangeY;
+      } else if (texH < rangeY) {
         texH = rangeY;
         texW = rangeY * 2.0;
       }

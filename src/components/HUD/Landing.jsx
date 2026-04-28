@@ -461,12 +461,13 @@ export const Landing = () => {
             <p
               style={{
                 color: "var(--text-muted)",
-                letterSpacing: 3,
+                letterSpacing: 1,
                 marginTop: 16,
-                fontSize: "0.55rem",
+                fontSize: "0.45rem",
                 textTransform: "uppercase",
                 fontFamily: "var(--font-display)",
                 fontWeight: 700,
+                whiteSpace: "nowrap"
               }}
             >
               One world map · Last one standing wins
