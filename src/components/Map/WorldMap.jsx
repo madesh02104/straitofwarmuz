@@ -1383,9 +1383,18 @@ const JetAnimation = ({ evt }) => {
           targetX: evt.end.x + perpX * lateral,
           targetY: evt.end.y + perpY * lateral,
         };
-        // eslint-disable-next-line react-hooks/exhaustive-deps
       }),
-    [],
+    [
+      evt.start.x,
+      evt.start.y,
+      evt.end.x,
+      evt.end.y,
+      extX,
+      extY,
+      perpX,
+      perpY,
+      tAtTarget,
+    ],
   );
 
   const radarShots = useState(() =>
@@ -1694,7 +1703,6 @@ const TankAnimation = ({ evt }) => {
 
   // Defense refs
   const stickyBombRef = useRef();
-  const stickyBombMatRef = useRef();
   const tankExplosionRef = useRef();
 
   const tankPos = evt.tankSpawn || [
@@ -2143,6 +2151,7 @@ const FLASH_LAYER_COUNT = 2;
 const NukeAnimation = ({ evt }) => {
   const duration = 3000;
   const startRef = useRef(null);
+  const nukeTex = loadAttackTexture(ATTACK_TEXTURE_URLS.nuke);
 
   const targetX = evt.deflected ? evt.start.x : evt.end.x;
   const targetY = evt.deflected ? evt.start.y : evt.end.y;
@@ -2367,7 +2376,6 @@ const NukeAnimation = ({ evt }) => {
     }
   });
 
-  const nukeTex = loadAttackTexture(ATTACK_TEXTURE_URLS.nuke);
   return (
     <group raycast={nullRaycast}>
       <mesh

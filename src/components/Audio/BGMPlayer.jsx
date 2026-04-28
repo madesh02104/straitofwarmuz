@@ -10,33 +10,22 @@ const TRACKS = {
 };
 
 export const BGMPlayer = () => {
-  const { hasJoined, gameState, bgmVolume, isMuted } = useGameStore();
+  const hasJoined = useGameStore((s) => s.hasJoined);
+  const lobbyState = useGameStore((s) => s.gameState?.lobbyState);
+  const phase = useGameStore((s) => s.gameState?.phase);
+  const bgmVolume = useGameStore((s) => s.bgmVolume);
+  const isMuted = useGameStore((s) => s.isMuted);
   const audioRef = useRef(new Audio());
-  const [currentTrack, setCurrentTrack] = useState(null);
   const [audioBlocked, setAudioBlocked] = useState(false);
-
-  // Determine which track should be playing
-  useEffect(() => {
-    let nextTrack = null;
-
-    if (!hasJoined) {
-      nextTrack = TRACKS.LANDING;
-    } else if (gameState.lobbyState === 'waiting' || gameState.lobbyState === 'starting') {
-      nextTrack = TRACKS.LOBBY;
-    } else if (gameState.lobbyState === 'active') {
-      if (gameState.phase === 1) {
-        nextTrack = TRACKS.PHASE1;
-      } else if (gameState.phase === 2) {
-        nextTrack = TRACKS.PHASE2;
-      }
-    } else if (gameState.lobbyState === 'ended') {
-      nextTrack = TRACKS.VICTORY;
-    }
-
-    if (nextTrack !== currentTrack) {
-      setCurrentTrack(nextTrack);
-    }
-  }, [hasJoined, gameState.lobbyState, gameState.phase, currentTrack]);
+  const currentTrack = !hasJoined
+    ? TRACKS.LANDING
+    : (lobbyState === 'waiting' || lobbyState === 'starting')
+      ? TRACKS.LOBBY
+      : lobbyState === 'active'
+        ? (phase === 1 ? TRACKS.PHASE1 : phase === 2 ? TRACKS.PHASE2 : null)
+        : lobbyState === 'ended'
+          ? TRACKS.VICTORY
+          : null;
 
   // Handle playing the track
   useEffect(() => {

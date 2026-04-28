@@ -21,7 +21,6 @@ const formatCountdown = (ms) => {
 export const Lobby = () => {
   const { gameState, isReady, toggleReady, sfxVolume, isMuted } = useGameStore();
   const players = Object.values(gameState.players);
-  const readyCount = players.filter((p) => p.isReady).length;
   const [now, setNow] = useState(() => Date.now());
   const autoStartRemaining =
     gameState.lobbyAutoStartAt && players.length >= 2

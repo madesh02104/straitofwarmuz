@@ -162,16 +162,8 @@ export const Dashboard = () => {
   const isLobby = gameState.lobbyState === 'waiting' || gameState.lobbyState === 'starting';
   const hasAnimated = useRef(false);
 
-  const [cachedRankings, setCachedRankings] = useState(null);
-  const [cachedBattleLogs, setCachedBattleLogs] = useState(null);
-  useEffect(() => {
-    if (gameState.lobbyState === 'ended' && gameState.rankings) {
-      setCachedRankings(gameState.rankings);
-      setCachedBattleLogs(gameState.battleLogs || null);
-    }
-  }, [gameState.lobbyState, gameState.rankings, gameState.battleLogs]);
-  const displayRankings = cachedRankings;
-  const displayBattleLogs = cachedBattleLogs;
+  const displayRankings = gameState.lobbyState === 'ended' ? gameState.rankings : null;
+  const displayBattleLogs = gameState.lobbyState === 'ended' ? (gameState.battleLogs || null) : null;
 
   useEffect(() => {
     if (me && !hasAnimated.current) {
