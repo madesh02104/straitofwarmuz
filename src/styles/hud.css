@@ -492,6 +492,7 @@ body {
   flex-direction: column;
   gap: 5px;
   min-width: 100%;
+  flex: 1;
 }
 
 /* SWIPEABLE CONTAINER */
@@ -589,6 +590,7 @@ body {
   border-radius: 8px;
   padding: 4px;
   border: 1px solid rgba(255, 255, 255, 0.05);
+  flex: 1;
 }
 
 .paired-arrow {
@@ -639,11 +641,23 @@ body {
 .paired-card.attack-card {
   border-color: rgba(255, 68, 68, 0.2);
   background: rgba(255, 68, 68, 0.05);
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-template-rows: auto auto 1fr;
+  row-gap: 6px;
+  column-gap: 8px;
+  align-items: center;
 }
 
 .paired-card.defense-card {
   border-color: rgba(88, 166, 255, 0.2);
   background: rgba(88, 166, 255, 0.05);
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-template-rows: auto auto 1fr;
+  row-gap: 6px;
+  column-gap: 8px;
+  align-items: center;
 }
 
 .paired-card.empty-counter {
@@ -653,40 +667,55 @@ body {
 }
 
 .paired-card-top {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
+  display: contents;
   color: var(--text-main);
 }
 
+.paired-card > div[style*="marginTop"] {
+  grid-column: 1;
+  grid-row: 2;
+  margin-top: 0 !important;
+}
+.paired-card > .item-cost {
+  grid-column: 1;
+  grid-row: 2;
+  margin-top: 0 !important;
+}
+
 .item-name {
-  font-size: 0.45rem;
+  font-size: 0.55rem;
   font-weight: 700;
   line-height: 1.2;
+  grid-column: 1;
+  grid-row: 1;
+  align-self: start;
 }
 
 .item-cost {
-  font-size: 0.45rem;
+  font-size: 0.5rem;
   color: var(--accent-yellow);
-  margin-top: auto;
 }
 
 .item-stock {
-  font-size: 0.39rem;
+  font-size: 0.5rem;
   color: var(--text-muted);
 }
 
 .btn-buy,
 .btn-rd {
-  padding: 6px;
+  padding: 8px 14px;
   border: none;
   border-radius: 4px;
   background: var(--accent-blue);
   color: white;
   font-weight: 700;
   cursor: pointer;
-  font-size: 0.42rem;
-  margin-top: 2px;
+  font-size: 0.45rem;
+  grid-column: 1;
+  grid-row: 3;
+  justify-self: start;
+  align-self: end;
+  width: auto;
 }
 .attack-card .btn-buy, .attack-card .btn-rd {
   background: rgba(255, 68, 68, 0.2);
@@ -708,14 +737,17 @@ body {
 }
 
 .rd-progress {
-  padding: 6px;
+  padding: 6px 12px;
   font-size: 0.39rem;
   font-weight: 900;
   text-align: center;
   background: rgba(63, 185, 80, 0.2);
   color: var(--accent-green);
   border-radius: 4px;
-  margin-top: 4px;
+  grid-column: 1;
+  grid-row: 3;
+  justify-self: start;
+  align-self: end;
 }
 
 /* INTEL SECTION REDESIGN */
@@ -946,6 +978,11 @@ body {
   transform: translateY(-2px);
 }
 
+.inv-item:has(.inv-icon:not(.stocked)) {
+  filter: grayscale(100%) opacity(0.4);
+  cursor: not-allowed !important;
+}
+
 /* Base Icon Style */
 .inv-icon {
   width: 90px;
@@ -997,8 +1034,12 @@ body {
 }
 
 .paired-card-top .item-asset-icon {
-  width: 28px;
-  height: 28px;
+  width: 64px;
+  height: 64px;
+  grid-column: 2;
+  grid-row: 1 / 4;
+  align-self: center;
+  margin-left: auto;
 }
 
 /* Square vs Cyber Shapes */

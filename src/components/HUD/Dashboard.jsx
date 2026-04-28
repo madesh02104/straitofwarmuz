@@ -548,7 +548,7 @@ export const Dashboard = () => {
                         </div>
                         <div style={{ marginTop: 'auto', display: 'flex', alignItems: 'center', gap: '6px' }}>
                           <span className="item-cost" style={{ marginTop: 0 }}>{atkItem.marketCost} CP</span>
-                          <span style={{ color: 'rgba(255,255,255,0.2)', fontSize: "0.45rem" }}>|</span>
+                          <span style={{ color: 'rgba(255,255,255,0.2)', fontSize: "0.5rem" }}>|</span>
                           <span className="item-stock">
                             {atkId === 'nuke'
                               ? `Stock: ${(gameState.marketStock[atkId] || 0) === 0 ? '-/0' : `${me.nukeMarketBuilt ? 0 : 1}/${gameState.marketStock[atkId] || 0}`}`
@@ -580,7 +580,7 @@ export const Dashboard = () => {
                           </div>
                           <div style={{ marginTop: 'auto', display: 'flex', alignItems: 'center', gap: '6px' }}>
                             <span className="item-cost" style={{ marginTop: 0 }}>{defItem.marketCost} CP</span>
-                            <span style={{ color: 'rgba(255,255,255,0.2)', fontSize: "0.45rem" }}>|</span>
+                            <span style={{ color: 'rgba(255,255,255,0.2)', fontSize: "0.5rem" }}>|</span>
                             <span className="item-stock">Stock: {gameState.marketStock[defId] || 0}</span>
                           </div>
                           <button
