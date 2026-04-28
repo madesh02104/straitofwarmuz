@@ -359,6 +359,8 @@ function getFlagTexture(countryKey) {
   const texture = new THREE.CanvasTexture(canvas);
   texture.minFilter = THREE.LinearFilter;
   texture.magFilter = THREE.LinearFilter;
+  texture.wrapS = THREE.RepeatWrapping;
+  texture.wrapT = THREE.RepeatWrapping;
   texture.generateMipmaps = false;
   texture.needsUpdate = true;
   flagTextureCache.set(countryKey, texture);
@@ -587,17 +589,46 @@ const CountryMesh = React.memo(({ feature, myCountry, onFocus }) => {
       }
       const geo = new THREE.ShapeGeometry(shapes);
       geo.computeBoundingBox();
-      const { min, max } = geo.boundingBox;
+      let { min, max } = geo.boundingBox;
+
+      if (paths.length > 1) {
+        let maxArea = 0;
+        for (const polygon of paths) {
+          let pMinX = Infinity, pMinY = Infinity, pMaxX = -Infinity, pMaxY = -Infinity;
+          const coords = polygon[0];
+          for (let i = 0; i < coords.length; i++) {
+            const pt = mapCoordinates(coords[i][0], coords[i][1]);
+            if (pt[0] < pMinX) pMinX = pt[0];
+            if (pt[0] > pMaxX) pMaxX = pt[0];
+            if (pt[1] < pMinY) pMinY = pt[1];
+            if (pt[1] > pMaxY) pMaxY = pt[1];
+          }
+          const area = (pMaxX - pMinX) * (pMaxY - pMinY);
+          if (area > maxArea) {
+            maxArea = area;
+            min = new THREE.Vector3(pMinX, pMinY, 0);
+            max = new THREE.Vector3(pMaxX, pMaxY, 0);
+          }
+        }
+      }
       const rangeX = max.x - min.x || 1;
       const rangeY = max.y - min.y || 1;
+      const cx = (min.x + max.x) / 2;
+      const cy = (min.y + max.y) / 2;
+
+      let texW = rangeX;
+      let texH = rangeX / 2.0; // 512x256 flag = 2.0 aspect ratio
+      if (texH < rangeY) {
+        texH = rangeY;
+        texW = rangeY * 2.0;
+      }
+
       const pos = geo.attributes.position;
       const uv = geo.attributes.uv;
       for (let i = 0; i < pos.count; i++) {
-        uv.setXY(
-          i,
-          (pos.getX(i) - min.x) / rangeX,
-          (pos.getY(i) - min.y) / rangeY,
-        );
+        const u = (pos.getX(i) - cx) / texW + 0.5;
+        const v = (pos.getY(i) - cy) / texH + 0.5;
+        uv.setXY(i, u, v);
       }
       uv.needsUpdate = true;
       return geo;

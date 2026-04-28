@@ -888,30 +888,29 @@ body {
   border-color: var(--accent-blue);
 }
 
-/* INVENTORY DOCK — single-row layout */
+/* INVENTORY DOCK — two-row layout */
 .inventory-dock {
   position: fixed;
   bottom: 0;
   left: 0;
   width: 100vw;
-  min-height: 178px;
   background: linear-gradient(180deg, rgba(8, 16, 30, 0.97) 0%, rgba(5, 12, 24, 0.98) 100%);
   border-top: 1px solid rgba(88, 166, 255, 0.35);
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 8px 14px 10px;
+  padding: 6px 10px 8px;
   z-index: 20;
   box-shadow: 0 -6px 28px rgba(0, 0, 0, 0.5);
 }
 
-/* Split row wrapper: attacks left, defenses right */
+/* Split row wrapper: attacks top, defenses bottom */
 .inv-split-row {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 20px;
-  width: 100%;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  width: max-content;
   overflow-x: auto;
   overflow-y: hidden;
   padding-bottom: 4px;
@@ -929,14 +928,11 @@ body {
 .inv-group {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 8px;
 }
 
 .inv-divider {
-  width: 1px;
-  height: 108px;
-  background: linear-gradient(180deg, rgba(193, 150, 82, 0.1), rgba(193, 150, 82, 0.6), rgba(193, 150, 82, 0.1));
-  flex: 0 0 auto;
+  display: none;
 }
 
 /* Individual item slot */
@@ -944,13 +940,13 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 5px;
+  gap: 4px;
   padding: 2px 2px 4px;
-  border-radius: 12px;
+  border-radius: 8px;
   transition: all 0.18s ease;
   cursor: default;
   user-select: none;
-  min-width: 104px;
+  min-width: 68px;
   background: rgba(214, 198, 158, 0.08);
   border: 1px solid rgba(193, 150, 82, 0.24);
 }
@@ -985,8 +981,8 @@ body {
 
 /* Base Icon Style */
 .inv-icon {
-  width: 90px;
-  height: 90px;
+  width: 58px;
+  height: 58px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -996,14 +992,19 @@ body {
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3), 0 3px 10px rgba(0, 0, 0, 0.25);
 }
 
+.inv-icon .item-asset-icon {
+  width: 46px;
+  height: 46px;
+}
+
 .inv-badge {
   position: absolute;
   top: 0;
   font-family: var(--font-display);
-  font-size: 0.41rem;
+  font-size: 0.33rem;
   font-weight: 900;
   letter-spacing: 0.20px;
-  padding: 2px 6px;
+  padding: 1px 4px;
   border-radius: 999px;
   z-index: 4;
   pointer-events: none;
@@ -1090,7 +1091,7 @@ body {
 }
 
 .inv-name {
-  font-size: 0.41rem;
+  font-size: 0.35rem;
   font-weight: 700;
   color: #c9d1d9;
   text-transform: uppercase;
