@@ -1159,8 +1159,9 @@ const MissileAnimation = ({ evt }) => {
 
   const missileTex = loadAttackTexture(ATTACK_TEXTURE_URLS.missile);
   const domeTex = loadAttackTexture(ATTACK_TEXTURE_URLS.dome);
+  const aspect = missileTex.image ? missileTex.image.width / missileTex.image.height : 1;
   const missileSize = 16;
-  const missileXScale = dx > 0 ? -missileSize : missileSize;
+  const missileXScale = dx > 0 ? -missileSize * aspect : missileSize * aspect;
 
   return (
     <group raycast={nullRaycast}>
@@ -1530,8 +1531,9 @@ const JetAnimation = ({ evt }) => {
 
   const jetTex = loadAttackTexture(ATTACK_TEXTURE_URLS.jet);
   const radarTex = loadAttackTexture(ATTACK_TEXTURE_URLS.radar);
+  const aspect = jetTex.image ? jetTex.image.width / jetTex.image.height : 1;
   const size = 24;
-  const xScale = dx > 0 ? -size : size;
+  const xScale = dx > 0 ? -size * aspect : size * aspect;
   return (
     <group raycast={nullRaycast}>
       <mesh
@@ -1804,8 +1806,9 @@ const TankAnimation = ({ evt }) => {
 
   const tankTex = loadAttackTexture(ATTACK_TEXTURE_URLS.tank);
   const stickyBombTex = loadAttackTexture(ATTACK_TEXTURE_URLS.stickybomb);
+  const aspect = tankTex.image ? tankTex.image.width / tankTex.image.height : 1;
   const tankSize = 20;
-  const tankXScale = evt.end.x - tankX > 0 ? -tankSize : tankSize;
+  const tankXScale = evt.end.x - tankX > 0 ? -tankSize * aspect : tankSize * aspect;
 
   return (
     <group raycast={nullRaycast}>
@@ -2031,8 +2034,9 @@ const SubAnimation = ({ evt }) => {
 
   const subTex = loadAttackTexture(ATTACK_TEXTURE_URLS.sub);
   const navalmineTex = loadAttackTexture(ATTACK_TEXTURE_URLS.navalmine);
+  const aspect = subTex.image ? subTex.image.width / subTex.image.height : 1;
   const subSize = 15;
-  const subXScale = evt.end.x - subX > 0 ? -subSize : subSize;
+  const subXScale = evt.end.x - subX > 0 ? -subSize * aspect : subSize * aspect;
   return (
     <group raycast={nullRaycast}>
       <mesh
@@ -2234,9 +2238,10 @@ const NukeAnimation = ({ evt }) => {
         const t = p / fallEnd;
         const fallY = targetY + (1 - t) * 60;
         const sz = 20 + (32 - 20) * t;
+        const nukeAspect = nukeTex.image ? nukeTex.image.width / nukeTex.image.height : 1;
         nukeMeshRef.current.visible = true;
         nukeMeshRef.current.position.set(targetX, fallY, 5);
-        nukeMeshRef.current.scale.set(sz * nukeFlipSign, sz, 1);
+        nukeMeshRef.current.scale.set(sz * nukeFlipSign * nukeAspect, sz, 1);
       }
       return;
     }
