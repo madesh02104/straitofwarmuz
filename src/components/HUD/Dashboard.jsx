@@ -61,25 +61,13 @@ const getDamageLabel = (id) => {
   return '';
 };
 
-const transparentDragImage = (() => {
-  const img = new Image();
-  img.src =
-    "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==";
-  return img;
-})();
-
 let dragPreviewEl = null;
-let dragMoveHandler = null;
 
 const clearDragPreview = () => {
   if (dragPreviewEl && dragPreviewEl.parentNode) {
     dragPreviewEl.parentNode.removeChild(dragPreviewEl);
   }
   dragPreviewEl = null;
-  if (dragMoveHandler) {
-    window.removeEventListener("dragover", dragMoveHandler);
-  }
-  dragMoveHandler = null;
 };
 
 const setScaledDragImage = (event, sourceElement) => {
@@ -88,8 +76,9 @@ const setScaledDragImage = (event, sourceElement) => {
   const rect = iconEl.getBoundingClientRect();
   const dragPreview = iconEl.cloneNode(true);
   dragPreview.style.position = 'fixed';
-  dragPreview.style.top = `${event.clientY - rect.height}px`;
-  dragPreview.style.left = `${event.clientX - rect.width}px`;
+  dragPreview.style.top = '0';
+  dragPreview.style.left = '0';
+  dragPreview.style.opacity = '0.001';
   dragPreview.style.margin = '0';
   dragPreview.style.padding = '0';
   dragPreview.style.border = 'none';
@@ -104,13 +93,7 @@ const setScaledDragImage = (event, sourceElement) => {
   document.body.appendChild(dragPreview);
   dragPreviewEl = dragPreview;
 
-  event.dataTransfer.setDragImage(transparentDragImage, 0, 0);
-  dragMoveHandler = (e) => {
-    if (!dragPreviewEl) return;
-    dragPreviewEl.style.top = `${e.clientY - rect.height}px`;
-    dragPreviewEl.style.left = `${e.clientX - rect.width}px`;
-  };
-  window.addEventListener("dragover", dragMoveHandler);
+  event.dataTransfer.setDragImage(dragPreview, rect.width / 2, rect.height / 2);
 };
 
 const QuizToaster = ({ quiz, onAnswer }) => {
