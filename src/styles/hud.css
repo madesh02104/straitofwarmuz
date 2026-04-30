@@ -142,6 +142,30 @@ body {
   transform: translateY(-2px);
 }
 
+.info-circle-btn {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 2px solid var(--accent-blue);
+  background: #050a10;
+  color: var(--accent-blue);
+  font-family: var(--font-display);
+  font-size: 0.8rem;
+  font-weight: 900;
+  line-height: 1;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  text-transform: lowercase;
+}
+
+.info-circle-btn:hover {
+  background: rgba(88, 166, 255, 0.12);
+}
+
 .mode-btn:disabled {
   cursor: wait;
   opacity: 0.9;
@@ -918,6 +942,8 @@ body {
   padding: 6px 10px 8px;
   z-index: 20;
   box-shadow: 0 -6px 28px rgba(0, 0, 0, 0.5);
+  flex-direction: column;
+  gap: 6px;
 }
 
 /* Split row wrapper: attacks top, defenses bottom */
@@ -949,6 +975,16 @@ body {
 
 .inv-divider {
   display: none;
+}
+
+.inventory-hint {
+  font-family: var(--font-display);
+  font-size: 0.44rem;
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+  color: var(--accent-yellow);
+  text-align: center;
+  opacity: 0.95;
 }
 
 /* Individual item slot */
@@ -1936,6 +1972,18 @@ body {
   box-shadow:
     0 24px 80px rgba(0, 0, 0, 0.7),
     inset 0 0 50px rgba(88, 166, 255, 0.05);
+}
+
+.info-modal-steps {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  color: var(--text-main);
+  font-size: 0.62rem;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  line-height: 1.7;
 }
 
 /* Lobby player slot — battlefield variant */

@@ -1,4 +1,4 @@
-import React, { useState, useLayoutEffect } from "react";
+import React, { useState, useLayoutEffect, useEffect } from "react";
 import { useGameStore } from "../../store/gameStore";
 import { Shield, Globe, Users, ChevronRight, Maximize, X } from "lucide-react";
 import gsap from "gsap";
@@ -20,6 +20,7 @@ const blockyExplosion = `polygon(
 
 export const Landing = () => {
   const [name, setName] = useState("");
+  const [isInfoOpen, setIsInfoOpen] = useState(false);
   const joinMatch = useGameStore((state) => state.joinMatch);
   const isJoining = useGameStore((state) => state.isJoining);
   const isSocketConnected = useGameStore((state) => state.isSocketConnected);
@@ -27,6 +28,34 @@ export const Landing = () => {
   const dismissJoinBlockedMessage = useGameStore(
     (state) => state.dismissJoinBlockedMessage,
   );
+
+  const howToSteps = [
+    {
+      title: "1. Join",
+      color: "#00FFFF",
+      text: "Enter your name and join the game. You'll be assigned a country on the world map.",
+    },
+    {
+      title: "2. Prepare (2 min)",
+      color: "#FFFF00",
+      text: "Buy weapons and defenses from the market. Start R&D to unlock cheaper gear.",
+    },
+    {
+      title: "3. Attack (1 min)",
+      color: "#FF0000",
+      text: "Drag weapons from your inventory onto enemy countries to attack them.",
+    },
+    {
+      title: "4. Answer Quizzes",
+      color: "#FF9900",
+      text: "Answer strategy questions mid-game to earn bonus currency.",
+    },
+    {
+      title: "5. Survive",
+      color: "#CC00FF",
+      text: "Last country standing wins. Matching defenses automatically counter attacks.",
+    },
+  ];
 
   useLayoutEffect(() => {
     gsap.set(".anim-jet", { left: "100%", x: 220, right: "auto" });
@@ -188,6 +217,17 @@ export const Landing = () => {
 
     return () => tl.kill();
   }, []);
+
+  useEffect(() => {
+    if (!isInfoOpen) return undefined;
+    const onKeyDown = (e) => {
+      if (e.key === "Escape") {
+        setIsInfoOpen(false);
+      }
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [isInfoOpen]);
 
   const handleJoin = () => {
     if (isJoining) return;
@@ -455,30 +495,12 @@ export const Landing = () => {
               lineHeight: 1.8,
             }}
           >
-            <li>
-              <strong style={{ color: "#00FFFF" }}>1. Join</strong> Enter your
-              name and join the game. You'll be assigned a country on the world
-              map.
-            </li>
-            <li>
-              <strong style={{ color: "#FFFF00" }}>2. Prepare (2 min)</strong>{" "}
-              Buy weapons and defenses from the market. Start R&D to unlock
-              cheaper gear.
-            </li>
-            <li>
-              <strong style={{ color: "#FF0000" }}>3. Attack (1 min)</strong>{" "}
-              Drag weapons from your inventory onto enemy countries to attack
-              them.
-            </li>
-            <li>
-              <strong style={{ color: "#FF9900" }}>4. Answer Quizzes</strong>{" "}
-              Answer strategy questions mid-game to earn bonus currency.
-            </li>
-            <li>
-              <strong style={{ color: "#CC00FF" }}>5. Survive</strong> Last
-              country standing wins. Matching defenses automatically counter
-              attacks.
-            </li>
+            {howToSteps.map((step) => (
+              <li key={step.title}>
+                <strong style={{ color: step.color }}>{step.title}</strong>{" "}
+                {step.text}
+              </li>
+            ))}
           </ul>
         </div>
 
@@ -542,6 +564,14 @@ export const Landing = () => {
             style={{ padding: "1.8rem", borderRadius: 10 }}
           >
             <div className="war-frame__corners" />
+            <button
+              type="button"
+              className="info-circle-btn"
+              onClick={() => setIsInfoOpen(true)}
+              aria-label="Open game info"
+            >
+              i
+            </button>
 
             <div className="input-group" style={{ marginBottom: "1.2rem" }}>
               <label
@@ -783,6 +813,83 @@ export const Landing = () => {
                   (Max wait: 5 minutes)
                 </span>
               </p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {isInfoOpen && (
+        <div
+          className="landing-modal-backdrop"
+          onClick={() => setIsInfoOpen(false)}
+        >
+          <div
+            className="landing-modal war-frame"
+            onClick={(e) => e.stopPropagation()}
+            style={{
+              position: "relative",
+              width: "min(600px, calc(100vw - 32px))",
+              padding: "1.8rem",
+              borderRadius: 10,
+              zIndex: 20,
+            }}
+          >
+            <div className="war-frame__corners" />
+            <button
+              type="button"
+              onClick={() => setIsInfoOpen(false)}
+              aria-label="Close game info"
+              style={{
+                position: "absolute",
+                top: 14,
+                right: 14,
+                width: 36,
+                height: 36,
+                display: "grid",
+                placeItems: "center",
+                border: "2px solid var(--accent-blue)",
+                background: "#050a10",
+                color: "var(--accent-blue)",
+                cursor: "pointer",
+              }}
+            >
+              <X size={18} />
+            </button>
+
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                gap: 16,
+                paddingRight: "2.4rem",
+              }}
+            >
+              <div
+                style={{
+                  color: "var(--accent-blue)",
+                  fontFamily: "var(--font-display)",
+                  fontSize: "0.9rem",
+                  fontWeight: 900,
+                  letterSpacing: 3,
+                  textTransform: "uppercase",
+                }}
+              >
+                How to Play
+              </div>
+              <div className="war-divider">
+                <span style={{ fontSize: "0.58rem", letterSpacing: 2 }}>
+                  Mission Briefing
+                </span>
+              </div>
+
+              <ul className="info-modal-steps">
+                {howToSteps.map((step) => (
+                  <li key={`modal-${step.title}`}>
+                    <strong style={{ color: step.color }}>{step.title}</strong>{" "}
+                    {step.text}
+                  </li>
+                ))}
+              </ul>
             </div>
           </div>
         </div>

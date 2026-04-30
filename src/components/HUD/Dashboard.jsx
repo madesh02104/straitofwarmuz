@@ -525,6 +525,9 @@ export const Dashboard = () => {
             })}
           </div>
         </div>
+        <div className="inventory-hint">
+          DRAG AND DROP ATTACK WEAPONS ON ENEMY COUNTRIES
+        </div>
       </div>
       )}
 
