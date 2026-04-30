@@ -281,7 +281,17 @@ export const Dashboard = () => {
     setTouchStart(null);
   };
 
-  if (!me) return <div className="loading-hud">Connecting to Command Center...</div>;
+  if (!me) {
+    return (
+      <div className="loading-hud">
+        <div className="loading-hud-panel">
+          <span className="themed-spinner" aria-hidden="true" />
+          <span className="loading-hud-title">Connecting to Command Center...</span>
+          <span className="loading-hud-subtitle">Waiting for backend response</span>
+        </div>
+      </div>
+    );
+  }
 
   const tabNames = ['🌍 Market', '🔬 R&D', '👁️ Intel'];
 

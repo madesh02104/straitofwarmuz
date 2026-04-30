@@ -142,6 +142,11 @@ body {
   transform: translateY(-2px);
 }
 
+.mode-btn:disabled {
+  cursor: wait;
+  opacity: 0.9;
+}
+
 .btn-icon {
   color: var(--accent-blue);
 }
@@ -1277,6 +1282,70 @@ body {
   font-family: var(--font-display);
   font-size: 0.90rem;
   letter-spacing: 2.00px;
+}
+
+.loading-hud-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 24px 30px;
+  border: 1px solid rgba(88, 166, 255, 0.45);
+  background: rgba(0, 0, 0, 0.72);
+  box-shadow: inset 0 0 32px rgba(88, 166, 255, 0.08);
+}
+
+.loading-hud-title {
+  color: var(--accent-blue);
+  font-family: var(--font-display);
+  font-size: 0.72rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.loading-hud-subtitle {
+  color: var(--text-muted);
+  font-family: var(--font-display);
+  font-size: 0.48rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.themed-spinner {
+  width: 24px;
+  height: 24px;
+  border: 3px solid rgba(0, 255, 255, 0.2);
+  border-top-color: var(--accent-blue);
+  border-right-color: var(--accent-red);
+  border-radius: 50%;
+  display: inline-block;
+  animation: themedSpinnerSpin 0.85s linear infinite;
+  filter: drop-shadow(0 0 6px rgba(0, 255, 255, 0.4));
+}
+
+.themed-spinner--tiny {
+  width: 12px;
+  height: 12px;
+  border-width: 2px;
+}
+
+.join-status-text {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 6px;
+  max-width: 290px;
+  font-size: 0.46rem;
+  color: var(--accent-yellow);
+  letter-spacing: 1px;
+  line-height: 1.35;
+  text-transform: uppercase;
+}
+
+@keyframes themedSpinnerSpin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* END GAME RANKINGS */

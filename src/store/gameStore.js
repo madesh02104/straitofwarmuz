@@ -58,6 +58,8 @@ export const useGameStore = create((set, get) => ({
   worldEvent: null,
   spyResult: null,
   joinBlockedMessage: null,
+  isJoining: false,
+  isSocketConnected: socket.connected,
   isReady: false,
   hasJoined: false,
   bgmVolume: readNum(STORAGE_KEYS.bgm, 0.4),
@@ -66,6 +68,7 @@ export const useGameStore = create((set, get) => ({
 
   // Actions
   joinMatch: (name) => {
+    set({ isJoining: true, joinBlockedMessage: null });
     socket.emit("joinMatch", { name });
   },
 
@@ -91,6 +94,7 @@ export const useGameStore = create((set, get) => ({
       isReady: false,
       hasJoined: false,
       joinBlockedMessage: null,
+      isJoining: false,
     }),
 
   toggleReady: () => {
@@ -187,6 +191,7 @@ socket.on("assignedCountry", (country) => {
   useGameStore.setState({
     myCountry: country,
     hasJoined: true,
+    isJoining: false,
     joinBlockedMessage: null,
   });
 });
@@ -196,9 +201,22 @@ socket.on("joinDenied", (data) => {
     hasJoined: false,
     myCountry: null,
     isReady: false,
+    isJoining: false,
     joinBlockedMessage:
       data?.message || "Room unavailable. Please try again later.",
   });
+});
+
+socket.on("connect", () => {
+  useGameStore.setState({ isSocketConnected: true });
+});
+
+socket.on("disconnect", () => {
+  useGameStore.setState({ isSocketConnected: false });
+});
+
+socket.on("connect_error", () => {
+  useGameStore.setState({ isSocketConnected: false });
 });
 
 socket.on("quiz", (quiz) => {

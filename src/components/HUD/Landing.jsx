@@ -21,6 +21,8 @@ const blockyExplosion = `polygon(
 export const Landing = () => {
   const [name, setName] = useState("");
   const joinMatch = useGameStore((state) => state.joinMatch);
+  const isJoining = useGameStore((state) => state.isJoining);
+  const isSocketConnected = useGameStore((state) => state.isSocketConnected);
   const joinBlockedMessage = useGameStore((state) => state.joinBlockedMessage);
   const dismissJoinBlockedMessage = useGameStore(
     (state) => state.dismissJoinBlockedMessage,
@@ -188,6 +190,7 @@ export const Landing = () => {
   }, []);
 
   const handleJoin = () => {
+    if (isJoining) return;
     if (!name.trim()) {
       gsap.to(".name-input", { x: 8, repeat: 5, yoyo: true, duration: 0.05 });
       return;
@@ -564,6 +567,7 @@ export const Landing = () => {
                   if (e.key === "Enter") handleJoin();
                 }}
                 maxLength={15}
+                disabled={isJoining}
                 style={{
                   width: "100%",
                   padding: "16px 16px",
@@ -583,6 +587,7 @@ export const Landing = () => {
               <button
                 className="mode-btn public"
                 onClick={handleJoin}
+                disabled={isJoining}
                 style={{
                   width: "100%",
                   display: "flex",
@@ -608,19 +613,30 @@ export const Landing = () => {
                     >
                       JOIN GAME
                     </div>
-                    <div
-                      style={{
-                        fontSize: "0.5rem",
-                        color: "var(--text-muted)",
-                        letterSpacing: 2,
-                        marginTop: 6,
-                      }}
-                    >
-                      Public match
-                    </div>
+                    {isJoining ? (
+                      <div className="join-status-text">
+                        <span className="themed-spinner themed-spinner--tiny" />
+                        wait while a backend spins up, it may take a minute at max
+                      </div>
+                    ) : (
+                      <div
+                        style={{
+                          fontSize: "0.5rem",
+                          color: "var(--text-muted)",
+                          letterSpacing: 2,
+                          marginTop: 6,
+                        }}
+                      >
+                        Public match
+                      </div>
+                    )}
                   </div>
                 </div>
-                <ChevronRight size={20} className="arrow" />
+                {isJoining ? (
+                  <span className="themed-spinner" aria-hidden="true" />
+                ) : (
+                  <ChevronRight size={20} className="arrow" />
+                )}
               </button>
             </div>
 
@@ -687,7 +703,8 @@ export const Landing = () => {
 
       <div className="war-status-strip">
         <div className="war-status-strip__cell">
-          <span className="war-led" /> SERVER ONLINE
+          <span className={`war-led ${isSocketConnected ? "" : "amber"}`} />
+          {isSocketConnected ? "SERVER ONLINE" : "SERVER CONNECTING"}
         </div>
       </div>
 
