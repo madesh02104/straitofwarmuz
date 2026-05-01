@@ -157,6 +157,18 @@ export const playSound = (file) => {
   audio.play().catch((e) => console.warn("Audio disabled by browser:", e));
 };
 
+const getShakeDelay = (data) => {
+  if (!data) return 0;
+  const impactDelayMap = {
+    missile: data.success ? 1000 : 700,
+    jet: data.success ? 900 : 700,
+    tank: data.success ? 550 : 800,
+    sub: data.success ? 800 : 900,
+    nuke: 950,
+  };
+  return impactDelayMap[data.itemId] ?? 800;
+};
+
 // Global Socket Listeners
 socket.on("gameState", (state) => {
   const prev = useGameStore.getState().gameState;
@@ -276,11 +288,14 @@ socket.on("attackEvent", (data) => {
   if (isAttackPhase) {
     const root = document.getElementById("root");
     if (root) {
-      root.classList.remove("shake-active");
-      requestAnimationFrame(() => {
-        root.classList.add("shake-active");
-        window.setTimeout(() => root.classList.remove("shake-active"), 650);
-      });
+      const shakeDelay = getShakeDelay(data);
+      window.setTimeout(() => {
+        root.classList.remove("shake-active");
+        requestAnimationFrame(() => {
+          root.classList.add("shake-active");
+          window.setTimeout(() => root.classList.remove("shake-active"), 650);
+        });
+      }, shakeDelay);
     }
   }
 });

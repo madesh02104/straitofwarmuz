@@ -1,11 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useGameStore } from "../../store/gameStore";
-import {
-  CheckCircle,
-  XCircle,
-  Shield,
-  Users,
-} from "lucide-react";
+import { CheckCircle, XCircle, Shield, Users } from "lucide-react";
 import { CountdownTakeover } from "./CountdownTakeover";
 
 const formatCountdown = (ms) => {
@@ -19,7 +14,8 @@ const formatCountdown = (ms) => {
 };
 
 export const Lobby = () => {
-  const { gameState, isReady, toggleReady, sfxVolume, isMuted } = useGameStore();
+  const { gameState, isReady, toggleReady, sfxVolume, isMuted } =
+    useGameStore();
   const players = Object.values(gameState.players);
   const [now, setNow] = useState(() => Date.now());
   const autoStartRemaining =
@@ -140,6 +136,17 @@ export const Lobby = () => {
             color="var(--accent-blue)"
             style={{ marginBottom: 6 }}
           />
+          <p
+            style={{
+              margin: "0 0 8px 0",
+              fontSize: "0.52rem",
+              color: "var(--text-muted)",
+              letterSpacing: 1,
+              textTransform: "uppercase",
+            }}
+          >
+            Call your friends to start the match sooner
+          </p>
           <h2
             style={{
               fontFamily: "var(--font-display)",
@@ -322,7 +329,13 @@ export const Lobby = () => {
                     border: `1px solid ${item.border}`,
                   }}
                 >
-                  <strong style={{ color: item.color, letterSpacing: 1, fontSize: "0.6rem" }}>
+                  <strong
+                    style={{
+                      color: item.color,
+                      letterSpacing: 1,
+                      fontSize: "0.6rem",
+                    }}
+                  >
                     {item.label}
                   </strong>
                   <br />
